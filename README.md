@@ -18,7 +18,7 @@ Future top-level directories might cover other areas such as hardware, systems e
 
 ## Current Structure
 
-- `software/` - the current software domain-library workspace
+- `software/` - the current software domain-library workspace, including architecture, platform, and cyber-assurance overlays
 - `software/README.md` - detailed overview of the software libraries, overlays, rules, and examples
 
 ## Working Approach

@@ -24,6 +24,8 @@ It is organized as a self-contained workspace so it can evolve into:
 - `sql-domain/SqlDomain.sysml` - relational data overlay
 - `nosql-domain/NosqlDomain.sysml` - non-relational data overlay
 - `identity-security-domain/IdentitySecurityDomain.sysml` - trust, identity, exposure, and policy overlay
+- `cyber-assurance-domain/CyberAssuranceDomain.sysml` - neutral assurance, evidence, risk, vulnerability, and conformity overlay
+- `eu-cyber-resilience-overlay/EuCyberResilienceOverlay.sysml` - EU Cyber Resilience Act-oriented product assurance overlay built on `CyberAssuranceDomain`
 - `observability-domain/ObservabilityDomain.sysml` - logs, metrics, traces, health, and SLO overlay
 - `kubernetes-domain/KubernetesDomain.sysml` - Kubernetes deployment overlay built on `DistributedSystems`
 - `cloud-runtime-domain/CloudRuntimeDomain.sysml` - neutral cloud/runtime deployment overlay
@@ -39,6 +41,8 @@ It is organized as a self-contained workspace so it can evolve into:
 - `sql-domain/rules/sql-domain-rules.yaml` - SQL data rule catalog
 - `nosql-domain/rules/nosql-domain-rules.yaml` - NoSQL data rule catalog
 - `identity-security-domain/rules/identity-security-domain-rules.yaml` - identity and security rule catalog
+- `cyber-assurance-domain/rules/cyber-assurance-domain-rules.yaml` - assurance, evidence, and vulnerability-management rule catalog
+- `eu-cyber-resilience-overlay/rules/eu-cyber-resilience-overlay-rules.yaml` - CRA-oriented product assurance and reporting rule catalog
 - `observability-domain/rules/observability-domain-rules.yaml` - observability rule catalog
 - `kubernetes-domain/rules/kubernetes-domain-rules.yaml` - Kubernetes rule catalog
 - `cloud-runtime-domain/rules/cloud-runtime-domain-rules.yaml` - cloud runtime rule catalog
@@ -52,3 +56,6 @@ It is organized as a self-contained workspace so it can evolve into:
 - The examples are kept intentionally small so they remain easy to parse, inspect, and extend.
 - `spec42.toml` is not part of the domain-library concept itself. It is included only because the current Spec42 analysis flow treats a directory as a workspace when that file is present.
 - Transport-, serialization-, delivery-, security-, observability-, and platform-specific details should prefer dedicated overlays instead of accumulating in the core packages.
+- `IdentitySecurityDomain` remains the place for architecture-oriented security concepts such as trust boundaries, exposure, identities, and authorization.
+- `CyberAssuranceDomain` and `EuCyberResilienceOverlay` address assurance, evidence, vulnerability handling, conformity, and regulatory-specialization concerns without pushing those obligations into the identity/security kernel.
+- The CRA overlay is the first regulation-oriented specialization in this workspace and is intended to be a pattern that future framework-specific overlays can follow.
