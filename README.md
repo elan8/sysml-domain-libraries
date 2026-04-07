@@ -19,7 +19,9 @@ Future top-level directories might cover other areas such as hardware, systems e
 ## Current Structure
 
 - `software/` - the current software domain-library workspace, including architecture, platform, and cyber-assurance overlays
+- `robotics/` - a robotics domain-library workspace covering robot systems, runtime, safety, and ROS 2 overlays
 - `software/README.md` - detailed overview of the software libraries, overlays, rules, and examples
+- `robotics/README.md` - detailed overview of the robotics libraries, overlays, rules, and examples
 
 ## Working Approach
 
