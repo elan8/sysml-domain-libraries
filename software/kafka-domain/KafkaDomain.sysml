@@ -1,4 +1,5 @@
 package KafkaDomain {
+    import SoftwareCore::*;
     import MessagingDomain::*;
     import SerializationDomain::*;
 

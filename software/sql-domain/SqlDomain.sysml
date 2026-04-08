@@ -1,4 +1,5 @@
 package SqlDomain {
+    import SoftwareCore::*;
     import DistributedSystems::*;
 
     attribute def ConsistencyMode;
