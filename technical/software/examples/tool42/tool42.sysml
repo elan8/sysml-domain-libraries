@@ -501,4 +501,34 @@ package Tool42SystemModel {
 
     part tool42 : Tool42System;
 
+    view systemStructure : GeneralView {
+        expose Tool42SystemModel::tool42;
+    }
+
+    view implementationStructure : GeneralView {
+        expose Tool42SystemModel::Tool42Codebase;
+    }
+
+    view capabilitySurface : GeneralView {
+        expose Tool42SystemModel::Tool42CapabilitySurface;
+    }
+
+    view capabilityTraceability : GeneralView {
+        expose Tool42SystemModel::Tool42CapabilityImplementationMap;
+    }
+
+    view runtimeAndProtocolContext : GeneralView {
+        expose Tool42SystemModel::Tool42RuntimeContext;
+        expose Tool42SystemModel::Tool42ProtocolSurface;
+    }
+
+    view deliveryAndOperations : GeneralView {
+        expose Tool42SystemModel::Tool42DeliveryModel;
+        expose Tool42SystemModel::Tool42OperationalModel;
+    }
+
+    view requestHandlingBehavior : GeneralView {
+        expose Tool42SystemModel::Tool42BehaviorModel;
+    }
+
 }
