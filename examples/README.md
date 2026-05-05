@@ -19,6 +19,9 @@ Examples are organized under canonical library roots and include expected rule o
 - `technical/software/examples/missing-deployment/missing-deployment.sysml`
   - Purpose: intentionally incomplete deployable model.
   - Expected outcomes: expected to trigger `DS301` from `technical/software/distributed-systems/rules/distributed-systems-rules.yaml`.
+- `technical/software/examples/tool42/tool42.sysml`
+  - Purpose: realistic open-source tool modeling slice using distributed-systems, delivery-ops, observability, and security overlays.
+  - Expected outcomes: should satisfy basic service/release/observability/security vocabulary coverage and expose where relation semantics need extension.
 
 ## Usage Notes
 
