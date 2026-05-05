@@ -4,6 +4,7 @@ package CommunicationCore {
 
     attribute def SessionName;
     attribute def OperationName;
+    attribute def ContractName;
 
     part def CommunicationService :> Service;
 
@@ -28,4 +29,12 @@ package CommunicationCore {
     part def CommunicationOperation {
         attribute operationName : OperationName;
     }
+
+    part def OperationContract {
+        attribute contractName : ContractName;
+    }
+
+    part def InputContract :> OperationContract;
+    part def OutputContract :> OperationContract;
+    part def ErrorContract :> OperationContract;
 }

@@ -16,3 +16,8 @@ rules:
     category: protobuf
     title: Protobuf message should define a package name
     description: Every ProtobufMessage should define a package name to avoid ambiguous type ownership and naming collisions.
+  - id: SER201
+    severity: warning
+    category: contract
+    title: Serialized operation contract should identify payload schema
+    description: Serialized operation contracts should expose schema-backed input, output, and error payload intent when structured interchange is expected.

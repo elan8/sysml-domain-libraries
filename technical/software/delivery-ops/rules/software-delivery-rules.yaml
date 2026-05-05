@@ -21,3 +21,13 @@ rules:
     category: quality
     title: Software package should be covered by a test suite
     description: Important SoftwarePackage elements should have at least one associated TestSuite in the delivery model.
+  - id: SWD202
+    severity: warning
+    category: quality
+    title: Quality-gate capability should link to verification
+    description: Capabilities used as review, analysis, release, or quality gates should be linked to a TestSuite or equivalent verification artifact.
+  - id: SWD301
+    severity: warning
+    category: compatibility
+    title: Separately versioned components should declare compatibility
+    description: Components that are released separately but designed to work together should declare a CompatibilityContract with an explicit version policy.

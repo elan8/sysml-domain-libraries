@@ -1,0 +1,23 @@
+version: 1
+library: SoftwareCore
+rules:
+  - id: SWCORE001
+    severity: warning
+    category: interface
+    title: Operation interface should classify effect
+    description: OperationInterface specializations should declare an effectKind so consumers can distinguish read-only, command, analysis, and mutating behavior.
+  - id: SWCORE101
+    severity: warning
+    category: realization
+    title: Capability should identify its implementation
+    description: Externally exposed capabilities should be tied to implementing software components using CapabilityRealization or an equivalent architectural relation.
+  - id: SWCORE102
+    severity: warning
+    category: realization
+    title: Capability realization should identify source artifact when modeled
+    description: CapabilityRealization elements used for source-level traceability should identify the implementation artifact or source file that anchors the realization.
+  - id: SWCORE201
+    severity: warning
+    category: source
+    title: Source artifact should identify path
+    description: SourceArtifact and SourceFile elements should define sourcePath so model-to-code traceability can be resolved by tools.

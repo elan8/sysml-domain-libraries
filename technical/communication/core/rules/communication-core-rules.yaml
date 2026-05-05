@@ -1,0 +1,13 @@
+version: 1
+library: CommunicationCore
+rules:
+  - id: COM001
+    severity: warning
+    category: contract
+    title: Structured operation should declare contracts
+    description: CommunicationOperation elements that exchange structured data should declare input, output, and error contract intent using OperationContract specializations.
+  - id: COM101
+    severity: warning
+    category: binding
+    title: Protocol operation should declare a binding
+    description: Operations exposed across process or network boundaries should model the CommunicationBinding and endpoint/session context used for invocation.

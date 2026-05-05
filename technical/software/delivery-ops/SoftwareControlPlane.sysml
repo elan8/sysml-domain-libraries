@@ -6,6 +6,9 @@ package SoftwareControlPlane {
     attribute def HealthState;
     attribute def SliName;
     attribute def SloName;
+    attribute def SafetyPolicyName;
+    attribute def OutputPolicyName;
+    attribute def ValidationName;
 
     part def ConfigurationSource {
         attribute sourceName : Name;
@@ -24,6 +27,8 @@ package SoftwareControlPlane {
         attribute dependencyName : Name;
     }
 
+    part def ExternalToolDependency :> RuntimeDependency;
+
     part def IngressBoundary {
         attribute boundaryName : Name;
     }
@@ -40,6 +45,29 @@ package SoftwareControlPlane {
         attribute signalName : Name;
         attribute healthState : HealthState;
     }
+
+    part def ExecutionSafetyPolicy {
+        attribute policyName : SafetyPolicyName;
+    }
+
+    part def PreviewPolicy :> ExecutionSafetyPolicy;
+    part def ConfirmationPolicy :> ExecutionSafetyPolicy;
+    part def ApplyPolicy :> ExecutionSafetyPolicy;
+
+    part def ValidationStep {
+        attribute validationName : ValidationName;
+    }
+
+    part def ExecutionFailureOutcome {
+        attribute outcomeName : Name;
+    }
+
+    part def OutputHandlingPolicy {
+        attribute policyName : OutputPolicyName;
+    }
+
+    part def BoundedOutputPolicy :> OutputHandlingPolicy;
+    part def ExternalizedOutputPolicy :> OutputHandlingPolicy;
 
     part def ScalingPolicy {
         attribute target : ScalingTarget;

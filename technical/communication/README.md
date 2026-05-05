@@ -26,3 +26,4 @@ Use these packages when a model needs protocol, endpoint, channel, binding, or m
 - Communication libraries are technical and business-agnostic.
 - Software and business-domain libraries should import these communication libraries rather than redefining protocol concepts.
 - Package names for migrated v1 libraries remain stable to minimize import churn.
+- Use operation contracts and serialization payloads when operations exchange structured input, output, or error data.

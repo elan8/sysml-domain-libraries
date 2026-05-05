@@ -26,3 +26,18 @@ rules:
     category: dependencies
     title: External endpoint should be modeled explicitly
     description: Dependencies on external runtime endpoints should be represented using ExternalEndpoint rather than remaining implicit.
+  - id: SWC202
+    severity: warning
+    category: dependencies
+    title: External tool dependency should be modeled explicitly
+    description: Components that invoke local or remote tools should represent those runtime dependencies using ExternalToolDependency or an equivalent RuntimeDependency.
+  - id: SWC301
+    severity: warning
+    category: operations
+    title: Mutating operation should declare an execution safety policy
+    description: Operations that can change system or workspace state should declare an ExecutionSafetyPolicy such as preview, confirmation, apply, or validation intent.
+  - id: SWC302
+    severity: warning
+    category: operations
+    title: Bounded output should declare output handling
+    description: Operations with paginated, truncated, or externalized output should model an OutputHandlingPolicy so consumers understand how complete results are obtained.

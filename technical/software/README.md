@@ -30,6 +30,12 @@ Use these packages for service architecture, platform/runtime modeling, delivery
 
 ## Package Guidance
 
+### software-core
+
+- **When to use:** shared components, modules, source artifacts, interfaces, operation-effect classification, and capability-to-implementation traceability.
+- **Anti-patterns:** operation interfaces whose read-only, command, analysis, or mutating intent is implicit; capability models disconnected from implementation structure.
+- **Minimum checklist:** externally consumed operations identify their effect kind, and exposed capabilities identify implementing components or source artifacts when traceability matters.
+
 ### distributed-systems
 
 - **When to use:** service boundaries, API ownership, and deployment dependency reasoning.
