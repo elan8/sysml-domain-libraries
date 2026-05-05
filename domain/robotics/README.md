@@ -41,3 +41,41 @@ It is organized so it can evolve into:
 - Rule catalogs can be descriptive or executable and should stay focused on business-domain modeling quality.
 - Safety and assurance are explicit overlays rather than being folded into the robotics kernel.
 - Future overlays can add ecosystem-specific content without restructuring the core packages.
+
+## Package Guidance
+
+### robotics-core
+
+- **When to use:** establish robot, mission, environment, and criticality baseline before adding overlays.
+- **Anti-patterns:** starting with implementation overlays without a stable core vocabulary.
+- **Minimum checklist:** robot system named, mission profile present, operating environment declared.
+
+### structure, perception, actuation, control
+
+- **When to use:** represent physical architecture and closed-loop sensing/actuation behavior.
+- **Anti-patterns:** control loops defined without explicit feedback or actuator context.
+- **Minimum checklist:** key subsystems identified, sensing and actuation paths visible, at least one control-loop concept mapped.
+
+### autonomy and runtime
+
+- **When to use:** model behavior planning, execution lifecycle, and runtime operating modes.
+- **Anti-patterns:** autonomy intent modeled with no runtime ownership or execution context.
+- **Minimum checklist:** autonomy role declared, runtime lifecycle state represented, operational mode captured.
+
+### simulation and operations
+
+- **When to use:** validate system behavior and represent fleet/mission operations.
+- **Anti-patterns:** simulation model disconnected from mission or runtime assumptions.
+- **Minimum checklist:** simulation purpose explicit, mission operations owner identified, telemetry responsibilities scoped.
+
+### safety-assurance
+
+- **When to use:** hazards, mitigations, safety functions, and assurance argumentation.
+- **Anti-patterns:** safety claims without linked hazards or evidence-producing controls.
+- **Minimum checklist:** hazards modeled, mitigation strategy represented, assurance responsibility identified.
+
+## Rules And Quality
+
+- Rule catalogs live in each package `rules/` directory.
+- Severity interpretation and naming standards are defined in `docs/conventions.md`.
+- Use warning-level rules for early model shaping and error-level gates for release-readiness checks.
