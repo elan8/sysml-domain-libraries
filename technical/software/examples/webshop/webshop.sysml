@@ -28,5 +28,5 @@ package WebShopExample {
     satisfy eventDurability by webshopSystem.ordersEventsTopic;
     satisfy securityBoundary by webshopSystem.apiGateway;
 
-    allocate CheckoutService to CommerceCluster;
+    allocate webshopSystem.checkoutService to commerceCluster;
 }
