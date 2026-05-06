@@ -28,6 +28,9 @@ Examples are organized under canonical library roots and include expected rule o
 - `technical/software/examples/tool42/tool42.sysml`
   - Purpose: realistic local software-tool architecture slice using existing software, communication, delivery, observability, and security overlays.
   - Expected outcomes: should satisfy generic implementation-structure, capability-realization, operation-contract, runtime-dependency, release-compatibility, bounded-output, behavior-flow, and mutating-operation safety expectations without adding language-specific reusable vocabulary.
+- `technical/software/examples/webshop/webshop.sysml`
+  - Purpose: end-to-end webshop architecture, requirements, behavior, and sequence-view example composed from shared software libraries.
+  - Expected outcomes: should validate cross-package reuse of distributed service, SQL, Kubernetes, and interaction semantics.
 
 ## Usage Notes
 

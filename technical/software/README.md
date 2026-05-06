@@ -22,6 +22,7 @@ Use these packages for service architecture, platform/runtime modeling, delivery
 - `delivery-ops/SoftwareControlPlane.sysml` - control-plane orchestration vocabulary
 - `delivery-ops/SoftwareDelivery.sysml` - delivery pipeline and release vocabulary
 - `delivery-ops/ObservabilityDomain.sysml` - telemetry, traces, and SLO/SLA vocabulary
+- `interactions/SoftwareInteractions.sysml` - sequence and interaction modeling vocabulary
 - `security/IdentitySecurityDomain.sysml` - identity, authn/authz, and trust boundary vocabulary
 - `security/CyberAssuranceDomain.sysml` - security control and assurance vocabulary
 - `security/EuCyberResilienceOverlay.sysml` - CRA-focused compliance overlay vocabulary
