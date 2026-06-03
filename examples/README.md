@@ -7,9 +7,15 @@ Examples are organized under canonical library roots and include expected rule o
 - `domain/robotics/examples/minimal-robot/minimal-robot.sysml`
   - Purpose: smallest useful robotics baseline built from core and structure overlays.
   - Expected outcomes: should satisfy baseline modeling intent from `robotics-core` and structure overlays.
+- `domain/robotics/examples/inspection-rover/inspection-rover.sysml`
+  - Purpose: end-to-end robotics golden path from managed requirements through architecture, electronics, communication, safety assurance, and verification.
+  - Expected outcomes: should satisfy starter requirement, robotics, runtime, safety, electronics, and communication modeling intent.
 - `domain/robotics/examples/control-missing-feedback/control-missing-feedback.sysml`
   - Purpose: intentionally incomplete control model.
   - Expected outcomes: expected to trigger `CTRL002` from `domain/robotics/control/rules/robot-control-rules.yaml`.
+- `domain/robotics/examples/inspection-rover-missing-safety-verification/inspection-rover-missing-safety-verification.sysml`
+  - Purpose: intentionally incomplete safety traceability model.
+  - Expected outcomes: expected to trigger `REQ301` from `technical/systems-engineering/requirements/rules/requirement-management-rules.yaml` and `SAF003` from `domain/robotics/safety-assurance/rules/robot-safety-assurance-rules.yaml`.
 
 ## Software Examples
 
@@ -31,6 +37,15 @@ Examples are organized under canonical library roots and include expected rule o
 - `technical/software/examples/webshop/webshop.sysml`
   - Purpose: end-to-end webshop architecture, requirements, behavior, and sequence-view example composed from shared software libraries.
   - Expected outcomes: should validate cross-package reuse of distributed service, SQL, Kubernetes, and interaction semantics.
+
+## Systems Engineering Examples
+
+- `technical/systems-engineering/examples/minimal-traceability/minimal-traceability.sysml`
+  - Purpose: minimal stakeholder-to-system requirement traceability with satisfaction and verification coverage.
+  - Expected outcomes: should satisfy starter requirement-management intent from `technical/systems-engineering/requirements/rules/requirement-management-rules.yaml`.
+- `technical/systems-engineering/examples/missing-verification/missing-verification.sysml`
+  - Purpose: intentionally incomplete system requirement traceability model.
+  - Expected outcomes: expected to trigger `REQ301` from `technical/systems-engineering/requirements/rules/requirement-management-rules.yaml`.
 
 ## Usage Notes
 

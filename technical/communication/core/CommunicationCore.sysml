@@ -20,6 +20,10 @@ package CommunicationCore {
 
     part def CommunicationBinding {
         attribute bindingName : Name;
+        ref endpoint : CommunicationEndpoint;
+        ref channel : CommunicationChannel;
+        ref session : CommunicationSession;
+        ref operation : CommunicationOperation;
     }
 
     part def CommunicationSession {

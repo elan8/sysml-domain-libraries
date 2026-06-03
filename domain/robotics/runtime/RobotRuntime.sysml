@@ -2,6 +2,7 @@ package RobotRuntime {
     import RoboticsCore::*;
     import RobotControl::*;
     import RobotPerception::*;
+    import CommunicationCore::*;
 
     attribute def ChannelType;
     attribute def LifecyclePhase;
@@ -9,13 +10,19 @@ package RobotRuntime {
 
     part def RuntimeNode {
         attribute name : Name;
+        ref controller : Controller;
+        ref perceptionPipeline : PerceptionPipeline;
+        ref healthMonitor : HealthMonitor;
+        ref lifecycleState : LifecycleState;
     }
 
     part def ExecutionGraph {
         attribute name : Name;
+        ref runtimeNode : RuntimeNode;
+        ref runtimeChannel : RuntimeCommunicationChannel;
     }
 
-    part def CommunicationChannel {
+    part def RuntimeCommunicationChannel :> CommunicationCore::CommunicationChannel {
         attribute name : Name;
         attribute channelType : ChannelType;
     }

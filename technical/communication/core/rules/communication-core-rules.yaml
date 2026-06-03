@@ -11,3 +11,8 @@ rules:
     category: binding
     title: Protocol operation should declare a binding
     description: Operations exposed across process or network boundaries should model the CommunicationBinding and endpoint/session context used for invocation.
+  - id: COM201
+    severity: warning
+    category: binding
+    title: Communication binding should identify endpoint and channel
+    description: CommunicationBinding elements should identify the endpoint, channel, session, or operation context used for communication across runtime or network boundaries.

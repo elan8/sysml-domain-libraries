@@ -15,25 +15,16 @@ package MutatingOperationMissingSafetyExample {
 
     part editInput : SerializedInputContract {
         attribute :>> contractName = "edit request";
-        item :>> payload : JsonPayload {
-            attribute :>> mediaType = "application/json";
-            attribute :>> schema = "EditRequest";
-        }
+        ref payload : JsonPayload;
     }
 
     part editOutput : SerializedOutputContract {
         attribute :>> contractName = "edit result";
-        item :>> payload : JsonPayload {
-            attribute :>> mediaType = "application/json";
-            attribute :>> schema = "EditResult";
-        }
+        ref payload : JsonPayload;
     }
 
     part editError : SerializedErrorContract {
         attribute :>> contractName = "edit error";
-        item :>> payload : JsonPayload {
-            attribute :>> mediaType = "application/json";
-            attribute :>> schema = "EditError";
-        }
+        ref payload : JsonPayload;
     }
 }

@@ -3,6 +3,6 @@ package MissingDeploymentExample {
 
     // Intentionally incomplete: service has no modeled deployment allocation.
     part orphanService : Service {
-        attribute serviceName = "orphan-service";
+        attribute :>> serviceName = "orphan-service";
     }
 }

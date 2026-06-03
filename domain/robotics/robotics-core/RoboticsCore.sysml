@@ -11,6 +11,10 @@ package RoboticsCore {
     part def RobotSystem {
         attribute name : Name;
         attribute criticality : CriticalityLevel;
+        ref mission : MissionProfile;
+        ref operatingEnvironment : OperatingEnvironment;
+        ref operatingMode : RobotMode;
+        ref powerSource : PowerSource;
     }
 
     part def Subsystem {

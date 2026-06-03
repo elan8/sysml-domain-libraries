@@ -8,6 +8,11 @@ package RobotControl {
     part def ControlLoop {
         attribute name : Name;
         attribute controlType : ControlType;
+        ref controller : Controller;
+        ref command : ActuationCommand;
+        ref feedback : FeedbackSignal;
+        ref setpoint : Setpoint;
+        ref targetActuator : Actuator;
     }
 
     part def Controller {

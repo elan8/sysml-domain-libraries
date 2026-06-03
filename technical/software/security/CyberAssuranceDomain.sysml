@@ -1,5 +1,6 @@
 package CyberAssuranceDomain {
     import SoftwareCore::*;
+    import SoftwareControlPlane::*;
     import SoftwareDelivery::*;
     import IdentitySecurityDomain::*;
     import ObservabilityDomain::*;

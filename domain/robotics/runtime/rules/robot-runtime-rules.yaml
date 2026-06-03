@@ -10,4 +10,9 @@ rules:
     severity: warning
     category: communication
     title: Execution graphs should define communication channels
-    description: ExecutionGraph elements should model CommunicationChannel concepts for runtime coordination clarity.
+    description: ExecutionGraph elements should model RuntimeCommunicationChannel or CommunicationChannel concepts for runtime coordination clarity.
+  - id: RUN003
+    severity: warning
+    category: allocation
+    title: Runtime nodes should identify executed functions
+    description: RuntimeNode elements should identify the Controller or PerceptionPipeline they execute so runtime structure can be traced to robot behavior.

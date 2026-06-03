@@ -15,6 +15,24 @@ It is organized so it can evolve into:
 - Start with `robotics-core/RoboticsCore.sysml` for the base robot, environment, mission, and operating-context concepts.
 - Add `structure/`, `perception/`, `actuation/`, and `control/` for core robot architecture.
 - Add `autonomy/`, `runtime/`, `simulation/`, `operations/`, and `safety-assurance/` when the model needs richer lifecycle, operational, or assurance detail.
+- For an end-to-end reference model, start with `examples/inspection-rover/inspection-rover.sysml`.
+
+## Golden Path Composition
+
+Use this import order when building a complete robotics model:
+
+- `technical/systems-engineering/requirements/RequirementManagement.sysml` for stakeholder, system, safety, and verification coverage.
+- `robotics-core/`, then `structure/`, `perception/`, `actuation/`, and `control/` for the robot architecture.
+- `runtime/` and `safety-assurance/` for execution, health, hazards, mitigations, and evidence.
+- `technical/electronics/` and `technical/communication/` for compute, power, channels, endpoints, and bindings.
+
+Minimum golden path checklist:
+
+- Model mission, environment, mode, and power context.
+- Model sensing, state estimates, actuation command, feedback, and control loop.
+- Model runtime node, health/lifecycle state, and communication channel.
+- Model hazards, fail-safe behavior, safety function, evidence, and verification.
+- Trace `UserRequirement` to `SystemRequirement` or `SafetyRequirement`, then `satisfy` and `verify` each active system requirement.
 
 ## Structure
 
@@ -33,6 +51,8 @@ It is organized so it can evolve into:
 - `control/rules/robot-control-rules.yaml` - control rule catalog
 - `runtime/rules/robot-runtime-rules.yaml` - runtime rule catalog
 - `safety-assurance/rules/robot-safety-assurance-rules.yaml` - safety and assurance rule catalog
+- `examples/inspection-rover/inspection-rover.sysml` - end-to-end golden path reference model
+- `examples/inspection-rover-missing-safety-verification/inspection-rover-missing-safety-verification.sysml` - intentionally incomplete safety verification example
 
 ## Notes
 

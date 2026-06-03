@@ -27,3 +27,11 @@ Use these packages when a model needs protocol, endpoint, channel, binding, or m
 - Software and business-domain libraries should import these communication libraries rather than redefining protocol concepts.
 - Package names for migrated v1 libraries remain stable to minimize import churn.
 - Use operation contracts and serialization payloads when operations exchange structured input, output, or error data.
+- For robotics or runtime models, use `CommunicationEndpoint`, `CommunicationChannel`, and `CommunicationBinding` to connect runtime communication intent to concrete protocol or transport detail.
+
+## Modeling Checklist
+
+- Model endpoints when a system crosses a process, network, device, or runtime boundary.
+- Model channels for telemetry, command, event, or session paths.
+- Model bindings when an operation depends on an endpoint, channel, session, or protocol context.
+- Add serialization contracts when payload structure matters for validation or integration.

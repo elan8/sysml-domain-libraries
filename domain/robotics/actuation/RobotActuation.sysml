@@ -11,6 +11,7 @@ package RobotActuation {
 
     part def DriveTrain :> Subsystem {
         attribute name : Name;
+        ref actuator : Actuator;
     }
 
     part def MotorController :> Subsystem {
@@ -23,5 +24,6 @@ package RobotActuation {
     part def ActuationCommand {
         attribute name : Name;
         attribute commandType : CommandType;
+        ref targetActuator : Actuator;
     }
 }

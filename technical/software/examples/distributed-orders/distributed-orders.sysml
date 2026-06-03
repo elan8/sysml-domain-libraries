@@ -1,21 +1,22 @@
 package DistributedOrdersExample {
     import DistributedSystems::*;
+    import SoftwareCore::*;
 
     part ordersApi : Service {
-        attribute serviceName = "orders-api";
+        attribute :>> serviceName = "orders-api";
     }
 
     part paymentsApi : Service {
-        attribute serviceName = "payments-api";
+        attribute :>> serviceName = "payments-api";
     }
 
     part nodeA : DeploymentNode {
-        attribute nodeName = "node-a";
-        attribute host = "orders.example.internal";
+        attribute :>> nodeName = "node-a";
+        attribute :>> host = "orders.example.internal";
     }
 
     part nodeB : DeploymentNode {
-        attribute nodeName = "node-b";
-        attribute host = "payments.example.internal";
+        attribute :>> nodeName = "node-b";
+        attribute :>> host = "payments.example.internal";
     }
 }

@@ -11,3 +11,8 @@ rules:
     category: estimation
     title: Perception pipelines should define a state estimate
     description: PerceptionPipeline elements should contribute to at least one StateEstimate for control or autonomy consumers.
+  - id: PER003
+    severity: warning
+    category: sensing
+    title: Perception pipelines should identify source sensors
+    description: PerceptionPipeline elements should identify at least one source Sensor so perception outputs can be traced back to sensing hardware.

@@ -159,26 +159,17 @@ package Tool42SystemModel {
 
     part workspaceDiscoveryContract : SerializedInputContract {
         attribute :>> contractName = "workspace discovery input";
-        item :>> payload : JsonPayload {
-            attribute :>> mediaType = "application/json";
-            attribute :>> schema = "WorkspaceParams";
-        }
+        ref payload : JsonPayload;
     }
 
     part standardResultContract : SerializedOutputContract {
         attribute :>> contractName = "structured tool result";
-        item :>> payload : JsonPayload {
-            attribute :>> mediaType = "application/json";
-            attribute :>> schema = "Tool42 structured content";
-        }
+        ref payload : JsonPayload;
     }
 
     part standardErrorContract : SerializedErrorContract {
         attribute :>> contractName = "structured tool error";
-        item :>> payload : JsonPayload {
-            attribute :>> mediaType = "application/json";
-            attribute :>> schema = "Tool42ErrorEnvelope";
-        }
+        ref payload : JsonPayload;
     }
 
     interface def WorkspaceDiscoveryInterface :> QueryInterface {

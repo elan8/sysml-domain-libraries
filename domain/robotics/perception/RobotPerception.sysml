@@ -20,6 +20,8 @@ package RobotPerception {
 
     part def PerceptionPipeline {
         attribute name : Name;
+        ref sourceSensor : Sensor;
+        ref stateEstimate : StateEstimate;
     }
 
     part def StateEstimate {

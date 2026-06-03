@@ -2,6 +2,7 @@ package RobotSafetyAssurance {
     import RoboticsCore::*;
     import RobotStructure::*;
     import RobotControl::*;
+    import RequirementManagement::*;
 
     attribute def HazardSeverity;
     attribute def SafetyCategory;
@@ -15,6 +16,9 @@ package RobotSafetyAssurance {
     part def SafetyFunction {
         attribute functionName : Name;
         attribute category : SafetyCategory;
+        ref mitigatedHazard : Hazard;
+        ref implementedBy : RiskControl;
+        ref evidence : VerificationEvidence;
     }
 
     part def SafetyBoundary {
@@ -23,6 +27,8 @@ package RobotSafetyAssurance {
 
     part def RiskControl {
         attribute controlName : Name;
+        ref mitigatedHazard : Hazard;
+        ref failSafeMode : FailSafeMode;
     }
 
     part def FailSafeMode {
@@ -31,6 +37,8 @@ package RobotSafetyAssurance {
 
     part def SafetyCase {
         attribute caseName : Name;
+        ref claim : SafetyFunction;
+        ref evidence : VerificationEvidence;
     }
 
     part def OperationalConstraint {

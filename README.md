@@ -11,6 +11,7 @@ Use these two roots as canonical import sources.
 
 - Business architecture and mission-level modeling: start in `domain/`.
 - Platform, software, communication, and electronics capabilities: start in `technical/`.
+- Requirements, verification, and traceability modeling: start with `technical/systems-engineering/README.md`.
 - Robotics system modeling: start with `domain/robotics/README.md`.
 - Software and platform capability modeling: start with `technical/software/README.md`.
 
@@ -53,4 +54,6 @@ Use these two roots as canonical import sources.
 
 - Naming and severity conventions: `docs/conventions.md`.
 - Rule-writing policy and model quality levels: `docs/conventions.md`.
+- Repository sanity and acceptance checks: `docs/quality-checks.md`.
+- SysML semantic validation: run `powershell -ExecutionPolicy Bypass -File .\scripts\validate-spec42.ps1`.
 - Cross-family examples and expected rule outcomes: see `examples/README.md`.

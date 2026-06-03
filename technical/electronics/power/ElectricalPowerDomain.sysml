@@ -12,11 +12,14 @@ package ElectricalPowerDomain {
         attribute voltage : VoltageValue;
         attribute currentBudget : CurrentValue;
         attribute powerClass : PowerClass;
+        ref suppliedLoad : LoadGroup;
     }
 
     part def VoltageRegulator :> ElectronicsComponent {
         attribute regulatorName : Name;
         attribute efficiencyClass : EfficiencyClass;
+        ref inputRail : PowerRail;
+        ref outputRail : PowerRail;
     }
 
     part def DcDcConverter :> ElectronicsComponent {
@@ -27,5 +30,6 @@ package ElectricalPowerDomain {
     part def LoadGroup {
         attribute loadName : Name;
         attribute currentBudget : CurrentValue;
+        ref suppliedBy : PowerRail;
     }
 }

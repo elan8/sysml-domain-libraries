@@ -11,3 +11,8 @@ rules:
     category: conversion
     title: Regulators and converters should define efficiency class
     description: VoltageRegulator and DcDcConverter should define efficiencyClass for thermal and battery-life estimates.
+  - id: PWR003
+    severity: warning
+    category: load
+    title: Power loads should identify supplied rail
+    description: LoadGroup and powered electronics elements should identify the PowerRail that supplies them so power budgets can be traced through the model.

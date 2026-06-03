@@ -22,7 +22,15 @@ Use these packages when a model needs electronics vocabulary for power, compute,
 ## Related Layers
 
 - Communication protocol libraries reside in `../communication/`.
-- Cross-cutting overlays remain outside electronics in `../../cross-cutting/` for this v1.
+- Requirements and verification libraries reside in `../systems-engineering/`.
+- Business-domain libraries, such as robotics, should compose electronics concepts for compute, power, I/O, and board-level implementation detail.
+
+## Modeling Checklist
+
+- Use `electronics-core/` for shared electronics components and electrical interfaces.
+- Use `power/` to make power rails, load groups, conversion, voltage, and current budgets explicit.
+- Use `compute/` to connect embedded compute units to firmware, memory, peripherals, and power rails.
+- Use `buses/` and `io/` when sensor, actuator, or board interfaces need implementation-level traceability.
 
 ## Notes
 

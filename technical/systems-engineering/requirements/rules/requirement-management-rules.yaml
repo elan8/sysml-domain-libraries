@@ -1,0 +1,28 @@
+version: 1
+library: RequirementManagement
+rules:
+  - id: REQ001
+    severity: warning
+    category: lifecycle
+    title: Managed requirement should declare status
+    description: ManagedRequirement usages should redefine status so lifecycle state is explicit for review, baseline, and release workflows.
+  - id: REQ101
+    severity: warning
+    category: traceability
+    title: Stakeholder requirement should derive system requirement
+    description: StakeholderRequirement and UserRequirement usages should derive at least one SystemRequirement so stakeholder intent is traceable to system obligations.
+  - id: REQ201
+    severity: warning
+    category: satisfaction
+    title: System requirement should be satisfied
+    description: SystemRequirement usages should be satisfied by at least one design, architecture, or implementation element.
+  - id: REQ301
+    severity: warning
+    category: verification
+    title: System requirement should be verified
+    description: SystemRequirement usages should be verified by at least one VerificationCase or linked to equivalent VerificationEvidence.
+  - id: REQ401
+    severity: warning
+    category: lifecycle
+    title: Inactive requirement should not be active target
+    description: Requirements marked rejected or obsolete should not be used as active satisfy or verify targets in release-ready models.
