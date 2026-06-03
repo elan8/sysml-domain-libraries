@@ -69,8 +69,8 @@ Use these packages for service architecture, platform/runtime modeling, delivery
 - **Anti-patterns:** data stores modeled without owning services, mixed consistency assumptions left implicit.
 - **Minimum checklist:** store ownership defined, data classification captured, consistency/retention intent stated.
 
-## Rules And Quality
+## Quality
 
-- Rule catalogs live beside each package in `rules/`.
-- Severity interpretation and naming standards are defined in `docs/conventions.md`.
-- Start with warning-level hygiene, then enforce error-level production gates in CI.
+- Validate SysML syntax and semantic consistency with `scripts/validate-spec42.ps1`.
+- Use the package guidance checklists above for modeling completeness until executable software-domain checks are available.
+- Do not add non-executable YAML rule catalogs; encode enforceable checks in Spec42 or another real validator first.

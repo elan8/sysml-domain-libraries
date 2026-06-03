@@ -13,7 +13,6 @@ Use these packages for requirements management, verification planning, traceabil
 ## Structure
 
 - `requirements/RequirementManagement.sysml` - shared requirement, verification, evidence, baseline, and traceability vocabulary
-- `requirements/rules/requirement-management-rules.yaml` - requirement management rule catalog
 
 ## Package Guidance
 
@@ -31,8 +30,8 @@ Use these packages for requirements management, verification planning, traceabil
 - Use `verification` cases with `objective { verify ... }` for every active system or safety requirement.
 - Use evidence and baselines when the model needs review, release, or audit readiness.
 
-## Rules And Quality
+## Quality
 
-- Rule catalogs live beside each package in `rules/`.
-- Severity interpretation and naming standards are defined in `docs/conventions.md`.
-- Start with warning-level hygiene, then promote coverage and lifecycle checks to error-level gates for production release baselines.
+- Validate SysML syntax and semantic consistency with `scripts/validate-spec42.ps1`.
+- Use the modeling checklist above for completeness until executable requirements-management checks are available.
+- Do not add non-executable YAML rule catalogs; encode enforceable checks in Spec42 or another real validator first.

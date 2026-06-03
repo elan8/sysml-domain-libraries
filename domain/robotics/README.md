@@ -46,11 +46,6 @@ Minimum golden path checklist:
 - `simulation/RobotSimulation.sysml` - simulation and hardware-in-the-loop overlay
 - `operations/RobotOperations.sysml` - fleet, telemetry, maintenance, and mission operations overlay
 - `safety-assurance/RobotSafetyAssurance.sysml` - hazards, safety functions, fail-safe behavior, and assurance overlay
-- `robotics-core/rules/robotics-core-rules.yaml` - core robotics rule catalog
-- `perception/rules/robot-perception-rules.yaml` - perception rule catalog
-- `control/rules/robot-control-rules.yaml` - control rule catalog
-- `runtime/rules/robot-runtime-rules.yaml` - runtime rule catalog
-- `safety-assurance/rules/robot-safety-assurance-rules.yaml` - safety and assurance rule catalog
 - `examples/inspection-rover/inspection-rover.sysml` - end-to-end golden path reference model
 - `examples/inspection-rover-missing-safety-verification/inspection-rover-missing-safety-verification.sysml` - intentionally incomplete safety verification example
 
@@ -58,7 +53,6 @@ Minimum golden path checklist:
 
 - The SysML files define reusable robotics concepts using ordinary package declarations and specialization.
 - Naming is normalized around a primary `name` attribute in base definitions; examples override values instead of redefining schemas.
-- Rule catalogs can be descriptive or executable and should stay focused on business-domain modeling quality.
 - Safety and assurance are explicit overlays rather than being folded into the robotics kernel.
 - Future overlays can add ecosystem-specific content without restructuring the core packages.
 
@@ -94,8 +88,8 @@ Minimum golden path checklist:
 - **Anti-patterns:** safety claims without linked hazards or evidence-producing controls.
 - **Minimum checklist:** hazards modeled, mitigation strategy represented, assurance responsibility identified.
 
-## Rules And Quality
+## Quality
 
-- Rule catalogs live in each package `rules/` directory.
-- Severity interpretation and naming standards are defined in `docs/conventions.md`.
-- Use warning-level rules for early model shaping and error-level gates for release-readiness checks.
+- Validate SysML syntax and semantic consistency with `scripts/validate-spec42.ps1`.
+- Use the golden path checklist above for modeling completeness until executable domain checks are available.
+- Do not add non-executable YAML rule catalogs; encode enforceable checks in Spec42 or another real validator first.

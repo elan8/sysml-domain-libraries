@@ -1,6 +1,6 @@
 # Example Index
 
-Examples are organized under canonical library roots and include expected rule outcomes for learning and CI validation.
+Examples are organized under canonical library roots and describe modeling intent for learning and Spec42 validation.
 
 ## Robotics Examples
 
@@ -12,25 +12,25 @@ Examples are organized under canonical library roots and include expected rule o
   - Expected outcomes: should satisfy starter requirement, robotics, runtime, safety, electronics, and communication modeling intent.
 - `domain/robotics/examples/control-missing-feedback/control-missing-feedback.sysml`
   - Purpose: intentionally incomplete control model.
-  - Expected outcomes: expected to trigger `CTRL002` from `domain/robotics/control/rules/robot-control-rules.yaml`.
+  - Expected outcomes: should remain syntactically and semantically valid while illustrating a modeling checklist gap.
 - `domain/robotics/examples/inspection-rover-missing-safety-verification/inspection-rover-missing-safety-verification.sysml`
   - Purpose: intentionally incomplete safety traceability model.
-  - Expected outcomes: expected to trigger `REQ301` from `technical/systems-engineering/requirements/rules/requirement-management-rules.yaml` and `SAF003` from `domain/robotics/safety-assurance/rules/robot-safety-assurance-rules.yaml`.
+  - Expected outcomes: should remain syntactically and semantically valid while illustrating missing safety verification evidence.
 
 ## Software Examples
 
 - `technical/software/examples/distributed-orders/distributed-orders.sysml`
   - Purpose: minimal service and deployment architecture.
-  - Expected outcomes: should satisfy allocation and interface expectations in `distributed-systems` rule catalog.
+  - Expected outcomes: should demonstrate service and deployment-node vocabulary composition.
 - `technical/software/examples/missing-deployment/missing-deployment.sysml`
   - Purpose: intentionally incomplete deployable model.
-  - Expected outcomes: expected to trigger `DS301` from `technical/software/distributed-systems/rules/distributed-systems-rules.yaml`.
+  - Expected outcomes: should remain syntactically and semantically valid while illustrating a missing deployment-allocation checklist gap.
 - `technical/software/examples/mutating-operation-missing-safety/mutating-operation-missing-safety.sysml`
   - Purpose: intentionally incomplete generic software operation model.
-  - Expected outcomes: expected to trigger `SWC301` from `technical/software/delivery-ops/rules/software-control-plane-rules.yaml`.
+  - Expected outcomes: should remain syntactically and semantically valid while illustrating missing execution-safety policy context.
 - `technical/software/examples/capability-missing-realization/capability-missing-realization.sysml`
   - Purpose: intentionally incomplete generic software capability model.
-  - Expected outcomes: expected to trigger `SWCORE101` from `technical/software/software-core/rules/software-core-rules.yaml`.
+  - Expected outcomes: should remain syntactically and semantically valid while illustrating missing capability-realization traceability.
 - `technical/software/examples/tool42/tool42.sysml`
   - Purpose: realistic local software-tool architecture slice using existing software, communication, delivery, observability, and security overlays.
   - Expected outcomes: should satisfy generic implementation-structure, capability-realization, operation-contract, runtime-dependency, release-compatibility, bounded-output, behavior-flow, and mutating-operation safety expectations without adding language-specific reusable vocabulary.
@@ -42,12 +42,12 @@ Examples are organized under canonical library roots and include expected rule o
 
 - `technical/systems-engineering/examples/minimal-traceability/minimal-traceability.sysml`
   - Purpose: minimal stakeholder-to-system requirement traceability with satisfaction and verification coverage.
-  - Expected outcomes: should satisfy starter requirement-management intent from `technical/systems-engineering/requirements/rules/requirement-management-rules.yaml`.
+  - Expected outcomes: should demonstrate requirement status, derivation, satisfaction, and verification usage.
 - `technical/systems-engineering/examples/missing-verification/missing-verification.sysml`
   - Purpose: intentionally incomplete system requirement traceability model.
-  - Expected outcomes: expected to trigger `REQ301` from `technical/systems-engineering/requirements/rules/requirement-management-rules.yaml`.
+  - Expected outcomes: should remain syntactically and semantically valid while illustrating a missing verification checklist gap.
 
 ## Usage Notes
 
 - Start with the minimal examples to understand library composition.
-- Use the intentionally failing examples to validate rule evaluation and explain diagnostics to modelers.
+- Use the intentionally incomplete examples to explain modeling checklist gaps to modelers.
