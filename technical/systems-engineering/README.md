@@ -7,12 +7,14 @@ Use these packages for requirements management, verification planning, traceabil
 ## Best Starting Points
 
 - Start with `requirements/RequirementManagement.sysml` for managed requirements, requirement status, requirement classes, verification cases, and traceability vocabulary.
+- Add `../units/MonetaryUnits.sysml` when requirements or analyses reference BOM cost or budget limits in a specific currency.
 - Add domain-specific libraries from `domain/` and implementation libraries from `technical/` when requirements need to be satisfied by architecture, software, electronics, communication, or robotics elements.
 - Use `domain/robotics/examples/inspection-rover/inspection-rover.sysml` as the first cross-domain reference model for requirement-to-verification traceability.
 
 ## Structure
 
 - `requirements/RequirementManagement.sysml` - shared requirement, verification, evidence, baseline, and traceability vocabulary
+- `../units/MonetaryUnits.sysml` - currency units and `MonetaryAmount` for cost and BOM attributes
 
 ## Package Guidance
 

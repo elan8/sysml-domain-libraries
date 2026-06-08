@@ -15,7 +15,7 @@ package RequirementManagement {
         enum obsolete;
     }
 
-    requirement def ManagedRequirement {
+    requirement def ManagedRequirement specializes Requirements::RequirementCheck {
         attribute requirementId : Identifier;
         attribute status : RequirementStatusKind;
     }
