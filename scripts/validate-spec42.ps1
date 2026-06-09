@@ -22,6 +22,7 @@ if (-not $Spec42Exe) {
 $arguments = @(
     "--library-path", (Join-Path $repoRoot "domain"),
     "--library-path", (Join-Path $repoRoot "technical"),
+    "--library-path", (Join-Path $repoRoot "generic"),
     "check", $repoRoot,
     "--workspace-root", $repoRoot
 )

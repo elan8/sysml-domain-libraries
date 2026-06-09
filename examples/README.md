@@ -40,10 +40,10 @@ Examples are organized under canonical library roots and describe modeling inten
 
 ## Systems Engineering Examples
 
-- `technical/systems-engineering/examples/minimal-traceability/minimal-traceability.sysml`
+- `generic/systems-engineering/examples/minimal-traceability/minimal-traceability.sysml`
   - Purpose: minimal stakeholder-to-system requirement traceability with satisfaction and verification coverage.
   - Expected outcomes: should demonstrate requirement status, derivation, satisfaction, and verification usage.
-- `technical/systems-engineering/examples/missing-verification/missing-verification.sysml`
+- `generic/systems-engineering/examples/missing-verification/missing-verification.sysml`
   - Purpose: intentionally incomplete system requirement traceability model.
   - Expected outcomes: should remain syntactically and semantically valid while illustrating a missing verification checklist gap.
 

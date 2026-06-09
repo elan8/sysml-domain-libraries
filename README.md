@@ -3,25 +3,31 @@
 This repository provides reusable SysML v2 libraries organized by modeling intent:
 
 - `domain/` for business-domain vocabulary.
-- `technical/` for business-agnostic technical capabilities.
+- `technical/` for business-agnostic technical capabilities (software, electronics, communication).
+- `generic/` for cross-domain foundation (requirements, units, traceability).
 
-Use these two roots as canonical import sources.
+Use these three roots as canonical import sources.
 
 ## Where To Start
 
 - Business architecture and mission-level modeling: start in `domain/`.
 - Platform, software, communication, and electronics capabilities: start in `technical/`.
-- Requirements, verification, and traceability modeling: start with `technical/systems-engineering/README.md`.
+- Requirements, verification, and traceability modeling: start with `generic/systems-engineering/README.md`.
 - Robotics system modeling: start with `domain/robotics/README.md`.
 - Software and platform capability modeling: start with `technical/software/README.md`.
 
 ## Canonical Path Policy
 
-- Prefer imports from `domain/**` and `technical/**`.
+- Prefer imports from `domain/**`, `technical/**`, and `generic/**`.
 - Treat legacy root paths as deprecated and migrate references to canonical roots.
 - Keep new libraries and examples under canonical roots only.
 
 ## Migration Map (Legacy -> Canonical)
+
+### Generic foundation
+
+- `technical/systems-engineering/` -> `generic/systems-engineering/`
+- `technical/units/` -> `generic/units/`
 
 ### Robotics
 

@@ -16,4 +16,4 @@ attribute bomCost : MonetaryAmount = 120 [EUR];
 
 BOM roll-ups and analysis constraints assume **one currency per sum** (no exchange rates).
 
-Pair with `technical/systems-engineering/requirements/RequirementManagement.sysml` when cost limits are expressed as managed system requirements.
+Pair with `generic/systems-engineering/requirements/RequirementManagement.sysml` when cost limits are expressed as managed system requirements.

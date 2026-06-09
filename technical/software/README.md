@@ -12,7 +12,7 @@ Use these packages for service architecture, platform/runtime modeling, delivery
 - Add `delivery-ops/` for release, control-plane, and observability concerns.
 - Add `security/` for identity and cyber-assurance overlays.
 - Add `data/` for relational and non-relational persistence vocabulary.
-- Add `../systems-engineering/requirements/RequirementManagement.sysml` when software capabilities need requirement satisfaction or verification traceability.
+- Add `../../generic/systems-engineering/requirements/RequirementManagement.sysml` when software capabilities need requirement satisfaction or verification traceability.
 - Add `../communication/` when software interfaces need protocol, endpoint, channel, or payload contracts.
 
 ## Structure

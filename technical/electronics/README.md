@@ -22,7 +22,7 @@ Use these packages when a model needs electronics vocabulary for power, compute,
 ## Related Layers
 
 - Communication protocol libraries reside in `../communication/`.
-- Requirements and verification libraries reside in `../systems-engineering/`.
+- Requirements and verification libraries reside in `../../generic/systems-engineering/`.
 - Business-domain libraries, such as robotics, should compose electronics concepts for compute, power, I/O, and board-level implementation detail.
 
 ## Modeling Checklist

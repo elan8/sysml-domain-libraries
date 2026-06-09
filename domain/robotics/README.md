@@ -21,7 +21,7 @@ It is organized so it can evolve into:
 
 Use this import order when building a complete robotics model:
 
-- `technical/systems-engineering/requirements/RequirementManagement.sysml` for stakeholder, system, safety, and verification coverage.
+- `generic/systems-engineering/requirements/RequirementManagement.sysml` for stakeholder, system, safety, and verification coverage.
 - `robotics-core/`, then `structure/`, `perception/`, `actuation/`, and `control/` for the robot architecture.
 - `runtime/` and `safety-assurance/` for execution, health, hazards, mitigations, and evidence.
 - `technical/electronics/` and `technical/communication/` for compute, power, channels, endpoints, and bindings.

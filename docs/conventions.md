@@ -6,7 +6,7 @@ This document standardizes naming and authoring conventions for all SysML librar
 
 - Business-domain libraries belong under `domain/`.
 - Technical capability libraries belong under `technical/`.
-- Cross-domain systems-engineering capabilities belong under `technical/systems-engineering/`.
+- Cross-domain foundation libraries (requirements, units, traceability) belong under `generic/`.
 - New files should not be added under deprecated legacy roots.
 
 ## Naming Standards
