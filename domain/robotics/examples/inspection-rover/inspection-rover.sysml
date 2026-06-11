@@ -1,5 +1,7 @@
 package InspectionRoverExample {
     import RequirementManagement::*;
+    import RequirementMetadata::*;
+    import ModelingMetadata::*;
     import RoboticsCore::*;
     import RobotStructure::*;
     import RobotPerception::*;
@@ -195,27 +197,31 @@ package InspectionRoverExample {
         ref testEvidence : VerificationEvidence;
     }
 
-    requirement inspectWarehouse : UserRequirement {
-        attribute :>> requirementId = "USR-IR-001";
-        attribute :>> status = RequirementStatusKind::approved;
+    requirement inspectWarehouse {
+        @RequirementRole { role = user; }
+        @RequirementIdentity { requirementId = "USR-IR-001"; }
+        @StatusInfo { status = done; }
         doc /* Operators shall be able to run routine autonomous warehouse inspections. */
     }
 
-    requirement patrolAisles : FunctionalRequirement {
-        attribute :>> requirementId = "SYS-IR-001";
-        attribute :>> status = RequirementStatusKind::approved;
+    requirement patrolAisles {
+        @RequirementRole { role = functional; }
+        @RequirementIdentity { requirementId = "SYS-IR-001"; }
+        @StatusInfo { status = done; }
         doc /* The inspection rover shall patrol warehouse aisles in autonomous patrol mode. */
     }
 
-    requirement reportTelemetry : PerformanceRequirement {
-        attribute :>> requirementId = "SYS-IR-002";
-        attribute :>> status = RequirementStatusKind::approved;
+    requirement reportTelemetry {
+        @RequirementRole { role = performance; }
+        @RequirementIdentity { requirementId = "SYS-IR-002"; }
+        @StatusInfo { status = done; }
         doc /* The inspection rover shall report runtime telemetry during patrol operations. */
     }
 
-    requirement stopForObstacles : SafetyRequirement {
-        attribute :>> requirementId = "SYS-IR-003";
-        attribute :>> status = RequirementStatusKind::approved;
+    requirement stopForObstacles {
+        @RequirementRole { role = safety; }
+        @RequirementIdentity { requirementId = "SYS-IR-003"; }
+        @StatusInfo { status = done; }
         doc /* The inspection rover shall enter controlled stop when an obstacle is detected in its path. */
     }
 
@@ -238,27 +244,21 @@ package InspectionRoverExample {
     satisfy reportTelemetry by telemetryChannel;
     satisfy stopForObstacles by obstacleStopFunction;
 
-    verification verifyPatrolCoverage : VerificationCase {
-        attribute :>> caseName = "verify-patrol-coverage";
-        attribute :>> method = "field-test";
+    verification verifyPatrolCoverage {
         subject systemUnderTest : RobotPlatform;
         objective {
             verify patrolAisles;
         }
     }
 
-    verification verifyTelemetryReporting : VerificationCase {
-        attribute :>> caseName = "verify-telemetry-reporting";
-        attribute :>> method = "integration-test";
+    verification verifyTelemetryReporting {
         subject systemUnderTest : RuntimeCommunicationChannel;
         objective {
             verify reportTelemetry;
         }
     }
 
-    verification verifyObstacleStop : VerificationCase {
-        attribute :>> caseName = "verify-obstacle-stop";
-        attribute :>> method = "safety-test";
+    verification verifyObstacleStop {
         subject systemUnderTest : SafetyFunction;
         objective {
             verify stopForObstacles;

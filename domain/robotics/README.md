@@ -21,7 +21,7 @@ It is organized so it can evolve into:
 
 Use this import order when building a complete robotics model:
 
-- `generic/systems-engineering/requirements/RequirementManagement.sysml` for stakeholder, system, safety, and verification coverage.
+- `generic/systems-engineering/requirements/RequirementMetadata.sysml` and OMG `ModelingMetadata::StatusInfo` for annotated standard requirements; `RequirementManagement.sysml` for evidence and baselines.
 - `robotics-core/`, then `structure/`, `perception/`, `actuation/`, and `control/` for the robot architecture.
 - `runtime/` and `safety-assurance/` for execution, health, hazards, mitigations, and evidence.
 - `technical/electronics/` and `technical/communication/` for compute, power, channels, endpoints, and bindings.
@@ -32,7 +32,7 @@ Minimum golden path checklist:
 - Model sensing, state estimates, actuation command, feedback, and control loop.
 - Model runtime node, health/lifecycle state, and communication channel.
 - Model hazards, fail-safe behavior, safety function, evidence, and verification.
-- Trace `UserRequirement` to `SystemRequirement` or `SafetyRequirement`, then `satisfy` and `verify` each active system requirement.
+- Trace user `@RequirementRole` needs to derived system requirements via `#derivation`, then `satisfy` and `verify` each active system requirement.
 
 ## Structure
 

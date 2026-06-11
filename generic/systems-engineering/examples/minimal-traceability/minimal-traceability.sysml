@@ -1,5 +1,7 @@
 package MinimalTraceabilityExample {
     import RequirementManagement::*;
+    import RequirementMetadata::*;
+    import ModelingMetadata::*;
 
     part def DeliverySystem {
         attribute systemName : Name;
@@ -9,15 +11,17 @@ package MinimalTraceabilityExample {
         attribute :>> systemName = "notification-service";
     }
 
-    requirement notifyCustomer : UserRequirement {
-        attribute :>> requirementId = "USR-001";
-        attribute :>> status = RequirementStatusKind::approved;
+    requirement notifyCustomer {
+        @RequirementRole { role = user; }
+        @RequirementIdentity { requirementId = "USR-001"; }
+        @StatusInfo { status = done; }
         doc /* Customers shall be notified when an order changes state. */
     }
 
-    requirement sendOrderUpdate : FunctionalRequirement {
-        attribute :>> requirementId = "SYS-001";
-        attribute :>> status = RequirementStatusKind::approved;
+    requirement sendOrderUpdate {
+        @RequirementRole { role = functional; }
+        @RequirementIdentity { requirementId = "SYS-001"; }
+        @StatusInfo { status = done; }
         doc /* The delivery system shall send an order update notification after state changes. */
     }
 
@@ -28,9 +32,7 @@ package MinimalTraceabilityExample {
 
     satisfy sendOrderUpdate by notificationService;
 
-    verification verifyOrderUpdateNotification : VerificationCase {
-        attribute :>> caseName = "verify-order-update-notification";
-        attribute :>> method = "integration-test";
+    verification verifyOrderUpdateNotification {
         subject systemUnderTest : DeliverySystem;
         objective {
             verify sendOrderUpdate;

@@ -5,7 +5,7 @@ Use these checks before publishing new or changed SysML libraries.
 ## Repository Sanity
 
 - `rg "package |library package" domain technical generic`
-- `rg "RequirementManagement|satisfy |verify |#derivation connection" domain technical generic`
+- `rg "RequirementMetadata|RequirementManagement|@StatusInfo|@RequirementRole|satisfy |verify |#derivation connection" domain technical generic`
 - `powershell -ExecutionPolicy Bypass -File .\scripts\validate-spec42.ps1`
 
 ## Library Expectations

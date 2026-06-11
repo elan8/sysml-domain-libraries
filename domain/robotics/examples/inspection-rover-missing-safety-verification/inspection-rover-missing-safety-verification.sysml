@@ -1,5 +1,7 @@
 package InspectionRoverMissingSafetyVerificationExample {
     import RequirementManagement::*;
+    import RequirementMetadata::*;
+    import ModelingMetadata::*;
     import RoboticsCore::*;
     import RobotStructure::*;
     import RobotSafetyAssurance::*;
@@ -27,15 +29,17 @@ package InspectionRoverMissingSafetyVerificationExample {
         attribute :>> category = "collision-avoidance";
     }
 
-    requirement inspectWarehouse : UserRequirement {
-        attribute :>> requirementId = "USR-IR-101";
-        attribute :>> status = RequirementStatusKind::approved;
+    requirement inspectWarehouse {
+        @RequirementRole { role = user; }
+        @RequirementIdentity { requirementId = "USR-IR-101"; }
+        @StatusInfo { status = done; }
         doc /* Operators shall be able to run routine autonomous warehouse inspections. */
     }
 
-    requirement stopForObstacles : SafetyRequirement {
-        attribute :>> requirementId = "SYS-IR-103";
-        attribute :>> status = RequirementStatusKind::approved;
+    requirement stopForObstacles {
+        @RequirementRole { role = safety; }
+        @RequirementIdentity { requirementId = "SYS-IR-103"; }
+        @StatusInfo { status = done; }
         doc /* The inspection rover shall enter controlled stop when an obstacle is detected in its path. */
     }
 

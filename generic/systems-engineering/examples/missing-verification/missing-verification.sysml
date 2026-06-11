@@ -1,5 +1,7 @@
 package MissingVerificationExample {
     import RequirementManagement::*;
+    import RequirementMetadata::*;
+    import ModelingMetadata::*;
 
     part def DeliverySystem {
         attribute systemName : Name;
@@ -9,15 +11,17 @@ package MissingVerificationExample {
         attribute :>> systemName = "notification-service";
     }
 
-    requirement notifyCustomer : UserRequirement {
-        attribute :>> requirementId = "USR-002";
-        attribute :>> status = RequirementStatusKind::approved;
+    requirement notifyCustomer {
+        @RequirementRole { role = user; }
+        @RequirementIdentity { requirementId = "USR-002"; }
+        @StatusInfo { status = done; }
         doc /* Customers shall receive timely order-state notifications. */
     }
 
-    requirement sendOrderUpdate : FunctionalRequirement {
-        attribute :>> requirementId = "SYS-002";
-        attribute :>> status = RequirementStatusKind::approved;
+    requirement sendOrderUpdate {
+        @RequirementRole { role = functional; }
+        @RequirementIdentity { requirementId = "SYS-002"; }
+        @StatusInfo { status = done; }
         doc /* The delivery system shall publish notification events for order-state changes. */
     }
 
