@@ -1,6 +1,7 @@
 package ElectricalPowerDomain {
     import SoftwareCore::*;
     import ElectronicsCore::*;
+    import ElectronicsInterconnection::*;
 
     attribute def VoltageValue;
     attribute def CurrentValue;
@@ -32,4 +33,14 @@ package ElectricalPowerDomain {
         attribute currentBudget : CurrentValue;
         ref suppliedBy : PowerRail;
     }
+
+    part def PowerDistributionNode :> ElectronicsComponent {
+        attribute nodeName : Name;
+        port railOut0 : PowerRailPort;
+        port railOut1 : PowerRailPort;
+        port railOut2 : PowerRailPort;
+    }
+
+    part def PowerLoadInterface :> ElectricalInterface;
 }
+

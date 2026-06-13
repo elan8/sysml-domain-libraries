@@ -8,7 +8,7 @@ Use these packages when a model needs electronics vocabulary for power, compute,
 
 - Start with `electronics-core/` for common electronics concepts.
 - Add `power/` for power sources, loads, conversion, and distribution.
-- Add `compute/`, `io/`, `buses/`, and `board/` as the model moves from logical electronics into implementation structure.
+- Add `compute/`, `io/`, `buses/`, `interconnection/`, and `board/` as the model moves from logical electronics into implementation structure.
 
 ## Structure
 
@@ -17,6 +17,7 @@ Use these packages when a model needs electronics vocabulary for power, compute,
 - `compute/` - embedded compute and firmware overlays (`EmbeddedComputeDomain`).
 - `io/` - digital/analog I/O and interface overlays (`ElectronicIoDomain`).
 - `buses/` - board-level bus and link overlays (`ElectronicBusDomain`).
+- `interconnection/` - SysML v2 physical port and interface definitions for buses, GPIO, PWM, and power rails (`ElectronicsInterconnection`).
 - `board/` - board assembly and integration overlays (`BoardIntegrationDomain`).
 
 ## Related Layers
@@ -31,6 +32,7 @@ Use these packages when a model needs electronics vocabulary for power, compute,
 - Use `power/` to make power rails, load groups, conversion, voltage, and current budgets explicit.
 - Use `compute/` to connect embedded compute units to firmware, memory, peripherals, and power rails.
 - Use `buses/` and `io/` when sensor, actuator, or board interfaces need implementation-level traceability.
+- Use `interconnection/` for typed `port def` and `interface def` wiring between electronics components.
 
 ## Notes
 

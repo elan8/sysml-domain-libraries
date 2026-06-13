@@ -22,4 +22,17 @@ package ElectronicIoDomain {
     part def SensorElectricalInterface :> ElectricalInterface;
 
     part def ActuatorElectricalInterface :> ElectricalInterface;
+
+    part def GpioChannel :> DigitalIoChannel;
+
+    part def PwmChannel :> DigitalIoChannel;
+
+    part def QuadratureEncoderChannel :> DigitalIoChannel;
+
+    part def CliffSensorInterface :> SensorElectricalInterface;
+
+    part def BumperSwitchInterface :> SensorElectricalInterface;
+
+    part def MotorDriveInterface :> ActuatorElectricalInterface;
 }
+

@@ -8,7 +8,7 @@ Use these packages when a model needs protocol, endpoint, channel, binding, or m
 
 - Start with `core/CommunicationCore.sysml` for neutral endpoint, channel, operation, session, and binding concepts.
 - Add `http/`, `grpc/`, `messaging/`, or `streaming/` when a model needs a concrete communication style.
-- Use `transport/`, `device-bus/`, and `industrial/` as scaffolds for lower-level or field-system communication detail.
+- Use `transport/`, `device-bus/`, `wireless/`, and `industrial/` as scaffolds for lower-level or field-system communication detail.
 
 ## Structure
 
@@ -19,6 +19,7 @@ Use these packages when a model needs protocol, endpoint, channel, binding, or m
 - `streaming/` - streaming broker specializations (`KafkaDomain`).
 - `transport/` - transport protocol scaffolds (TCP/UDP).
 - `device-bus/` - device and field bus scaffolds (USB).
+- `wireless/` - BLE and Wi-Fi communication overlays (`WirelessDomain`).
 - `industrial/` - industrial protocol scaffolds (Modbus/Profinet/EtherCAT).
 
 ## Notes
