@@ -4,37 +4,32 @@ This repository provides reusable SysML v2 **vocabulary** for things in the syst
 
 - `domain/` — business-domain vocabulary (e.g. robotics).
 - `technical/` — business-agnostic technical capabilities (software, electronics, communication).
-- `generic/` — cross-domain foundation units (`units/MonetaryUnits.sysml` only).
+- `generic/` — cross-domain foundation units (`MonetaryUnits`, `EngineeringUnits`).
 
-**How** to author, trace, review, and assure models lives in the sibling repository [`mbse-methodology`](../mbse-methodology/README.md) (Elan8 Method libraries, recipes, quality rules).
+**How** to author, trace, review, and assure models lives in the sibling repository [`mbse-methodology`](../mbse-methodology/README.md) (Elan8 Method). This repository must **not** depend on method packages.
 
 ## Where To Start
 
 - Business architecture and mission-level modeling: start in `domain/`.
 - Platform, software, communication, and electronics capabilities: start in `technical/`.
-- Requirements metadata, method concerns, viewpoints, recipes: sibling [`mbse-methodology`](../mbse-methodology/README.md).
+- Requirements metadata, method concerns, viewpoints, recipes: sibling [`mbse-methodology`](../mbse-methodology/README.md) (optional; separate product).
 - Robotics system modeling: start with `domain/robotics/README.md`.
 - Software and platform capability modeling: start with `technical/software/README.md`.
 
 ## Canonical Path Policy
 
 - Import vocabulary from `domain/**`, `technical/**`, and `generic/units/**`.
-- Import method packages from `../mbse-methodology/library` (`Elan8RequirementManagement`, `Elan8RequirementMetadata`, `Elan8Method`, `Elan8Viewpoints`).
+- Do not import `Elan8*` method packages from this repository.
 - Keep new domain/technical libraries and examples under these roots only.
 - Do not add systems-engineering / process packages here.
 
-## Sibling checkout (required for validation)
-
-```text
-elan8/
-  mbse-methodology/library/   # required by Spec42 validate script
-  sysml-domain-libraries/
-```
+## Validation
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\scripts\validate-spec42.ps1
 ```
 
+No sibling `mbse-methodology` checkout is required to validate this repository.
 ## Migration Map (Legacy -> Canonical)
 
 ### Generic foundation

@@ -23,7 +23,7 @@ Use these packages when a model needs electronics vocabulary for power, compute,
 ## Related Layers
 
 - Communication protocol libraries reside in `../communication/`.
-- Requirements and verification libraries reside in sibling `mbse-methodology/library` (Elan8 Method).
+- Requirements method libraries (roles, evidence patterns) are optional and live in sibling `mbse-methodology` — not a dependency of electronics vocabulary.
 - Business-domain libraries, such as robotics, should compose electronics concepts for compute, power, I/O, and board-level implementation detail.
 
 ## Modeling Checklist

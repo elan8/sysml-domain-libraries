@@ -2,11 +2,17 @@ package RobotSafetyAssurance {
     import RoboticsCore::*;
     import RobotStructure::*;
     import RobotControl::*;
-    import Elan8RequirementManagement::*;
 
     attribute def HazardSeverity;
     attribute def SafetyCategory;
     attribute def ConstraintType;
+    attribute def EvidenceUri;
+
+    part def VerificationEvidence {
+        doc /* Domain-local reference to external verification evidence (URI/name). Not an Elan8 Method package. */
+        attribute evidenceName : Name;
+        attribute evidenceUri : EvidenceUri;
+    }
 
     part def Hazard {
         attribute hazardName : Name;

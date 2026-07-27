@@ -40,15 +40,9 @@ Examples are organized under canonical library roots and describe modeling inten
 
 ## Systems Engineering / Method Examples
 
-SE teaching fixtures live only in sibling `mbse-methodology/examples/se-patterns/`:
-
-- `../mbse-methodology/examples/se-patterns/minimal-traceability/minimal-traceability.sysml`
-  - Purpose: minimal stakeholder-to-system requirement traceability with satisfaction and verification coverage.
-- `../mbse-methodology/examples/se-patterns/missing-verification/missing-verification.sysml`
-  - Purpose: intentionally incomplete system requirement traceability model.
+Method teaching fixtures live in the optional sibling `mbse-methodology` repository (not required to validate this repo).
 
 ## Usage Notes
 
 - Start with the minimal examples to understand library composition.
 - Use the intentionally incomplete examples to explain modeling checklist gaps to modelers.
-- For MBSE method guidance, recipes, and Elan8 libraries, see the sibling `mbse-methodology` repository.

@@ -12,7 +12,7 @@ Use these packages for service architecture, platform/runtime modeling, delivery
 - Add `delivery-ops/` for release, control-plane, and observability concerns.
 - Add `security/` for identity and cyber-assurance overlays.
 - Add `data/` for relational and non-relational persistence vocabulary.
-- Add sibling `mbse-methodology/library` (`Elan8RequirementManagement`, `Elan8RequirementMetadata`) when software capabilities need requirement satisfaction or verification traceability.
+- For method-style requirement roles and traceability metadata, use sibling `mbse-methodology` optionally; software vocabulary does not depend on it.
 - Add `../communication/` when software interfaces need protocol, endpoint, channel, or payload contracts.
 
 ## Structure

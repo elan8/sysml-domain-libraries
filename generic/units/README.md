@@ -1,12 +1,15 @@
-# Monetary Units
+# Units
 
-Cross-domain currency vocabulary for BOM, cost, and budget modeling.
+Cross-domain unit and quantity helpers that complement the OMG ISQ/SI standard library.
 
 ## Contents
 
-- **`MonetaryUnits`** — `MonetaryAmount` scalar type and currency unit attributes (EUR, USD, GBP, JPY, CHF, CNY)
+| Package | File | Purpose |
+| --- | --- | --- |
+| `MonetaryUnits` | `MonetaryUnits.sysml` | Currency-typed monetary amounts (EUR, USD, …) |
+| `EngineeringUnits` | `EngineeringUnits.sysml` | `Ah` / `mAh` charge and `ms` duration literals |
 
-## Usage
+## MonetaryUnits
 
 ```sysml
 private import MonetaryUnits::*;
@@ -14,6 +17,16 @@ private import MonetaryUnits::*;
 attribute bomCost : MonetaryAmount = 120 [EUR];
 ```
 
-BOM roll-ups and analysis constraints assume **one currency per sum** (no exchange rates).
+BOM roll-ups assume **one currency per sum** (no exchange rates).
 
-Pair with `Elan8RequirementManagement` / `Elan8RequirementMetadata` from sibling `mbse-methodology/library` when cost limits are expressed as managed system requirements.
+## EngineeringUnits
+
+```sysml
+private import EngineeringUnits::*;
+private import ISQ::*;
+
+attribute capacity : ElectricChargeValue = 12500 [mAh];
+attribute latency : DurationValue = 100 [ms];
+```
+
+Use these when models need milliampere-hour or millisecond literals that are not declared in the bundled OMG quantities library.
