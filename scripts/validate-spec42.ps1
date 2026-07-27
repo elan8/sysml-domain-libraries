@@ -8,10 +8,17 @@ param(
 $ErrorActionPreference = "Stop"
 
 $repoRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
+$methodLibrary = Join-Path $repoRoot "..\mbse-methodology\library"
+
+if (-not (Test-Path $methodLibrary)) {
+    throw "Required sibling mbse-methodology/library not found at $methodLibrary. Domain libraries depend on Elan8 Method packages (Elan8RequirementManagement, Elan8RequirementMetadata)."
+}
 
 if (-not $Spec42Exe) {
     if ($env:SPEC42_EXE) {
         $Spec42Exe = $env:SPEC42_EXE
+    } elseif (Test-Path "C:\Git\elan8\spec42\target\debug\spec42.exe") {
+        $Spec42Exe = "C:\Git\elan8\spec42\target\debug\spec42.exe"
     } elseif (Test-Path "C:\Git\spec42\target\debug\spec42.exe") {
         $Spec42Exe = "C:\Git\spec42\target\debug\spec42.exe"
     } else {
@@ -23,6 +30,7 @@ $arguments = @(
     "--library-path", (Join-Path $repoRoot "domain"),
     "--library-path", (Join-Path $repoRoot "technical"),
     "--library-path", (Join-Path $repoRoot "generic"),
+    "--library-path", (Resolve-Path $methodLibrary),
     "check", $repoRoot,
     "--workspace-root", $repoRoot
 )

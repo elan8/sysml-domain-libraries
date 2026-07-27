@@ -38,16 +38,17 @@ Examples are organized under canonical library roots and describe modeling inten
   - Purpose: end-to-end webshop architecture, requirements, behavior, and sequence-view example composed from shared software libraries.
   - Expected outcomes: should validate cross-package reuse of distributed service, SQL, Kubernetes, and interaction semantics.
 
-## Systems Engineering Examples
+## Systems Engineering / Method Examples
 
-- `generic/systems-engineering/examples/minimal-traceability/minimal-traceability.sysml`
+SE teaching fixtures live only in sibling `mbse-methodology/examples/se-patterns/`:
+
+- `../mbse-methodology/examples/se-patterns/minimal-traceability/minimal-traceability.sysml`
   - Purpose: minimal stakeholder-to-system requirement traceability with satisfaction and verification coverage.
-  - Expected outcomes: should demonstrate requirement status, derivation, satisfaction, and verification usage.
-- `generic/systems-engineering/examples/missing-verification/missing-verification.sysml`
+- `../mbse-methodology/examples/se-patterns/missing-verification/missing-verification.sysml`
   - Purpose: intentionally incomplete system requirement traceability model.
-  - Expected outcomes: should remain syntactically and semantically valid while illustrating a missing verification checklist gap.
 
 ## Usage Notes
 
 - Start with the minimal examples to understand library composition.
 - Use the intentionally incomplete examples to explain modeling checklist gaps to modelers.
+- For MBSE method guidance, recipes, and Elan8 libraries, see the sibling `mbse-methodology` repository.

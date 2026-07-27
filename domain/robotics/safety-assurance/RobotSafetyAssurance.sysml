@@ -2,7 +2,7 @@ package RobotSafetyAssurance {
     import RoboticsCore::*;
     import RobotStructure::*;
     import RobotControl::*;
-    import RequirementManagement::*;
+    import Elan8RequirementManagement::*;
 
     attribute def HazardSeverity;
     attribute def SafetyCategory;

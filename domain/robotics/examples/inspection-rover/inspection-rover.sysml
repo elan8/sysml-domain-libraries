@@ -1,6 +1,6 @@
 package InspectionRoverExample {
-    import RequirementManagement::*;
-    import RequirementMetadata::*;
+    import Elan8RequirementManagement::*;
+    import Elan8RequirementMetadata::*;
     import ModelingMetadata::*;
     import RoboticsCore::*;
     import RobotStructure::*;

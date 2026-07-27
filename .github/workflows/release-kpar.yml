@@ -1,0 +1,63 @@
+name: Release KPAR
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  pack-kpar:
+    name: Pack and release domain libraries KPAR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout domain libraries
+        uses: actions/checkout@v6
+
+      - name: Resolve version from tag
+        id: version
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Checkout Spec42 for kpar-pack
+        uses: actions/checkout@v6
+        with:
+          repository: elan8/spec42
+          path: spec42
+          ref: main
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: spec42
+
+      - name: Pack KPAR
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          ARTIFACT="elan8-domain-libraries-${VERSION}.kpar"
+          cd spec42
+          cargo run -p kpar --bin kpar-pack -- \
+            --root "${GITHUB_WORKSPACE}" \
+            --version "${VERSION}" \
+            --output "${GITHUB_WORKSPACE}/${ARTIFACT}"
+          cd "${GITHUB_WORKSPACE}"
+          sha256sum "${ARTIFACT}" > SHA256SUMS.txt
+          echo "artifact=${ARTIFACT}" >> "$GITHUB_ENV"
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${{ steps.version.outputs.tag }}"
+          gh release create "${TAG}" \
+            --title "Domain libraries ${TAG}" \
+            --notes "KerML Project Archive (KPAR) release of Elan8 domain libraries for Spec42 ${TAG}." \
+            "${ARTIFACT}" \
+            SHA256SUMS.txt
