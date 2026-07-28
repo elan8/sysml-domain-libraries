@@ -1,5 +1,6 @@
 package ElectronicsCore {
     import SoftwareCore::*;
+    private import ISQ::*;
 
     attribute def SignalKind;
     attribute def VoltageClass;
@@ -9,6 +10,8 @@ package ElectronicsCore {
 
     part def ElectronicsComponent :> SoftwareComponent {
         attribute componentName : Name;
+        attribute mass : MassValue;
+        attribute powerDraw : PowerValue;
     }
 
     part def ElectronicDevice :> ElectronicsComponent;

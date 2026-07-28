@@ -33,7 +33,7 @@ Run JSON output for automation with:
 powershell -ExecutionPolicy Bypass -File .\scripts\validate-spec42.ps1 -Format json
 ```
 
-Treat `domain/robotics/examples/inspection-rover/inspection-rover.sysml` as the golden path acceptance fixture.
+There is currently no cross-family golden-path acceptance fixture: `domain/` was emptied when `domain/robotics` (the previous fixture owner) was removed for quality reasons. Until a new domain library ships one, treat `technical/software/examples/webshop/webshop.sysml` as the richest available example, noting it only exercises `technical/**` (not a cross-family `domain/` + `technical/` composition).
 
 To inspect Spec42's bundled domain-completeness diagnostics as advisory output, run:
 

@@ -2,6 +2,7 @@ package ElectricalPowerDomain {
     import SoftwareCore::*;
     import ElectronicsCore::*;
     import ElectronicsInterconnection::*;
+    private import ISQ::*;
 
     attribute def VoltageValue;
     attribute def CurrentValue;
@@ -19,8 +20,26 @@ package ElectricalPowerDomain {
     part def VoltageRegulator :> ElectronicsComponent {
         attribute regulatorName : Name;
         attribute efficiencyClass : EfficiencyClass;
+        attribute outputVoltage : ElectricPotentialValue;
+        attribute quiescentPower : PowerValue;
         ref inputRail : PowerRail;
         ref outputRail : PowerRail;
+        port input : PowerRailPort;
+        port output : PowerRailPort;
+    }
+
+    part def BatteryPack :> ElectronicsComponent {
+        attribute nominalCapacity : ElectricChargeValue;
+        attribute nominalVoltage : ElectricPotentialValue;
+        port output : PowerRailPort;
+    }
+
+    part def BatteryManagementSystem :> ElectronicsComponent {
+        attribute maxChargeCurrent : ElectricCurrentValue;
+        attribute maxCellTemperature : ThermodynamicTemperatureValue;
+        attribute quiescentPower : PowerValue;
+        port bus : I2cPort;
+        port alert : GpioPort;
     }
 
     part def DcDcConverter :> ElectronicsComponent {

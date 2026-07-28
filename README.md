@@ -2,9 +2,9 @@
 
 This repository provides reusable SysML v2 **vocabulary** for things in the system:
 
-- `domain/` — business-domain vocabulary (e.g. robotics).
+- `domain/` — business-domain vocabulary. Currently empty: the prior `robotics` library was removed (thin scaffolding, no downstream consumers — see Migration Map) while technical-library quality is prioritized before the next domain library is added.
 - `technical/` — business-agnostic technical capabilities (software, electronics, communication).
-- `generic/` — cross-domain foundation units (`MonetaryUnits`, `EngineeringUnits`).
+- `generic/` — cross-domain foundation: units (`MonetaryUnits`, `EngineeringUnits`) and part procurement/traceability metadata (`PartProcurement`).
 
 **How** to author, trace, review, and assure models lives in the sibling repository [`mbse-methodology`](../mbse-methodology/README.md) (Elan8 Method). This repository must **not** depend on method packages.
 
@@ -13,7 +13,6 @@ This repository provides reusable SysML v2 **vocabulary** for things in the syst
 - Business architecture and mission-level modeling: start in `domain/`.
 - Platform, software, communication, and electronics capabilities: start in `technical/`.
 - Requirements metadata, method concerns, viewpoints, recipes: sibling [`mbse-methodology`](../mbse-methodology/README.md) (optional; separate product).
-- Robotics system modeling: start with `domain/robotics/README.md`.
 - Software and platform capability modeling: start with `technical/software/README.md`.
 
 ## Canonical Path Policy
@@ -37,18 +36,19 @@ No sibling `mbse-methodology` checkout is required to validate this repository.
 - `technical/systems-engineering/` / `generic/systems-engineering/` → **removed**; use `mbse-methodology/library/` (`Elan8RequirementManagement`, `Elan8RequirementMetadata`, …)
 - `technical/units/` → `generic/units/`
 
-### Robotics
+### Robotics (removed, 2026-07-28)
 
-- `robotics/robotics-core/RoboticsCore.sysml` → `domain/robotics/robotics-core/RoboticsCore.sysml`
-- `robotics/robot-structure/RobotStructure.sysml` → `domain/robotics/structure/RobotStructure.sysml`
-- `robotics/robot-perception/RobotPerception.sysml` → `domain/robotics/perception/RobotPerception.sysml`
-- `robotics/robot-actuation/RobotActuation.sysml` → `domain/robotics/actuation/RobotActuation.sysml`
-- `robotics/robot-control/RobotControl.sysml` → `domain/robotics/control/RobotControl.sysml`
-- `robotics/robot-autonomy/RobotAutonomy.sysml` → `domain/robotics/autonomy/RobotAutonomy.sysml`
-- `robotics/robot-runtime/RobotRuntime.sysml` → `domain/robotics/runtime/RobotRuntime.sysml`
-- `robotics/robot-simulation/RobotSimulation.sysml` → `domain/robotics/simulation/RobotSimulation.sysml`
-- `robotics/robot-operations/RobotOperations.sysml` → `domain/robotics/operations/RobotOperations.sysml`
-- `robotics/robot-safety-assurance/RobotSafetyAssurance.sysml` → `domain/robotics/safety-assurance/RobotSafetyAssurance.sysml`
+- The legacy `robotics/*` packages were migrated to `domain/robotics/*` (as below), then `domain/robotics/` itself was removed entirely: it had no downstream consumers (`sysml-robot-vacuum-cleaner` never imported it) and had not progressed past name/type scaffolding. Technical-library depth and quality are being prioritized before a new domain library is added.
+- `robotics/robotics-core/RoboticsCore.sysml` → *(removed)*
+- `robotics/robot-structure/RobotStructure.sysml` → *(removed)*
+- `robotics/robot-perception/RobotPerception.sysml` → *(removed)*
+- `robotics/robot-actuation/RobotActuation.sysml` → *(removed)*
+- `robotics/robot-control/RobotControl.sysml` → *(removed)*
+- `robotics/robot-autonomy/RobotAutonomy.sysml` → *(removed)*
+- `robotics/robot-runtime/RobotRuntime.sysml` → *(removed)*
+- `robotics/robot-simulation/RobotSimulation.sysml` → *(removed)*
+- `robotics/robot-operations/RobotOperations.sysml` → *(removed)*
+- `robotics/robot-safety-assurance/RobotSafetyAssurance.sysml` → *(removed)*
 
 ### Software
 

@@ -2,20 +2,15 @@
 
 Examples are organized under canonical library roots and describe modeling intent for learning and Spec42 validation.
 
-## Robotics Examples
+## Domain Examples
 
-- `domain/robotics/examples/minimal-robot/minimal-robot.sysml`
-  - Purpose: smallest useful robotics baseline built from core and structure overlays.
-  - Expected outcomes: should satisfy baseline modeling intent from `robotics-core` and structure overlays.
-- `domain/robotics/examples/inspection-rover/inspection-rover.sysml`
-  - Purpose: end-to-end robotics golden path from managed requirements through architecture, electronics, communication, safety assurance, and verification.
-  - Expected outcomes: should satisfy starter requirement, robotics, runtime, safety, electronics, and communication modeling intent.
-- `domain/robotics/examples/control-missing-feedback/control-missing-feedback.sysml`
-  - Purpose: intentionally incomplete control model.
-  - Expected outcomes: should remain syntactically and semantically valid while illustrating a modeling checklist gap.
-- `domain/robotics/examples/inspection-rover-missing-safety-verification/inspection-rover-missing-safety-verification.sysml`
-  - Purpose: intentionally incomplete safety traceability model.
-  - Expected outcomes: should remain syntactically and semantically valid while illustrating missing safety verification evidence.
+None currently. `domain/` was emptied when `domain/robotics` was removed for quality reasons (thin scaffolding, no downstream consumers); technical-library quality is being prioritized before a new domain library is added.
+
+## Electronics Examples
+
+- `technical/electronics/examples/motor-and-power-module/motor-and-power-module.sysml`
+  - Purpose: minimal motor/encoder/motor-driver and battery/BMS/regulator composition demonstrating `sum()`-derived mass/power rollups instead of hand-typed totals.
+  - Expected outcomes: should validate cross-package reuse of `technical/electronics/actuation` and the `technical/electronics/power` additions (`BatteryPack`, `BatteryManagementSystem`, upgraded `VoltageRegulator`).
 
 ## Software Examples
 
@@ -37,6 +32,9 @@ Examples are organized under canonical library roots and describe modeling inten
 - `technical/software/examples/webshop/webshop.sysml`
   - Purpose: end-to-end webshop architecture, requirements, behavior, and sequence-view example composed from shared software libraries.
   - Expected outcomes: should validate cross-package reuse of distributed service, SQL, Kubernetes, and interaction semantics.
+- `technical/software/examples/realtime-task-scheduling/realtime-task-scheduling.sysml`
+  - Purpose: minimal realtime task/queue/scheduler composition combined with a `PartProcurement`-annotated compute part, proving the vocabulary extracted from `sysml-robot-vacuum-cleaner` is genuinely product-agnostic.
+  - Expected outcomes: should validate cross-package reuse of `technical/software/realtime-runtime` and `generic/procurement`.
 
 ## Systems Engineering / Method Examples
 

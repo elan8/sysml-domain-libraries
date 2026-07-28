@@ -12,6 +12,7 @@ Use these packages for service architecture, platform/runtime modeling, delivery
 - Add `delivery-ops/` for release, control-plane, and observability concerns.
 - Add `security/` for identity and cyber-assurance overlays.
 - Add `data/` for relational and non-relational persistence vocabulary.
+- Add `realtime-runtime/` for real-time task, queue, and scheduler vocabulary (embedded or otherwise).
 - For method-style requirement roles and traceability metadata, use sibling `mbse-methodology` optionally; software vocabulary does not depend on it.
 - Add `../communication/` when software interfaces need protocol, endpoint, channel, or payload contracts.
 
@@ -30,6 +31,7 @@ Use these packages for service architecture, platform/runtime modeling, delivery
 - `security/EuCyberResilienceOverlay.sysml` - CRA-focused compliance overlay vocabulary
 - `data/SqlDomain.sysml` - relational persistence vocabulary
 - `data/NosqlDomain.sysml` - non-relational persistence vocabulary
+- `realtime-runtime/RealtimeRuntime.sysml` - real-time task, queue, and scheduler vocabulary
 
 ## Package Guidance
 
@@ -68,6 +70,12 @@ Use these packages for service architecture, platform/runtime modeling, delivery
 - **When to use:** persistence strategy, data ownership boundaries, and consistency trade-off communication.
 - **Anti-patterns:** data stores modeled without owning services, mixed consistency assumptions left implicit.
 - **Minimum checklist:** store ownership defined, data classification captured, consistency/retention intent stated.
+
+### realtime-runtime
+
+- **When to use:** periodic/deadline-driven tasks, bounded inter-task queues, and scheduler policy — embedded firmware or any other real-time software.
+- **Anti-patterns:** timing budgets (period, deadline, worst-case execution time) left implicit; queue overflow behavior unspecified.
+- **Minimum checklist:** each task's period/deadline/criticality stated, each queue's depth/discipline stated, a scheduler model declared.
 
 ## Quality
 
