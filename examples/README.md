@@ -12,6 +12,12 @@ None currently. `domain/` was emptied when `domain/robotics` was removed for qua
   - Purpose: minimal motor/encoder/motor-driver and battery/BMS/regulator composition demonstrating `sum()`-derived mass/power rollups instead of hand-typed totals.
   - Expected outcomes: should validate cross-package reuse of `technical/electronics/actuation` and the `technical/electronics/power` additions (`BatteryPack`, `BatteryManagementSystem`, upgraded `VoltageRegulator`).
 
+## Mechanical Examples
+
+- `technical/mechanical/examples/mechanical-composition/mechanical-composition.sysml`
+  - Purpose: minimal gearbox/wheel/caster-wheel composition demonstrating a `sum()`-derived mass rollup for a purely mechanical assembly with no `powerDraw`.
+  - Expected outcomes: should validate cross-package reuse of `technical/mechanical/mechanical-core` and `technical/mechanical/drivetrain`.
+
 ## Software Examples
 
 - `technical/software/examples/distributed-orders/distributed-orders.sysml`

@@ -11,6 +11,10 @@ package ElectronicActuationDomain {
         port phases : ~ThreePhaseMotorPort;
     }
 
+    part def PwmMotor :> Motor {
+        port command : ~PwmPort;
+    }
+
     part def Encoder :> ElectronicsComponent;
 
     part def QuadratureEncoder :> Encoder {

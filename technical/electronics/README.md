@@ -10,7 +10,7 @@ Use these packages when a model needs electronics vocabulary for power, compute,
 - Add `power/` for power sources, loads, conversion, and distribution.
 - Add `compute/`, `io/`, `buses/`, `interconnection/`, and `board/` as the model moves from logical electronics into implementation structure.
 - Add `actuation/` for motors, encoders, and motor drivers.
-- Add `sensing/` for inertial measurement and other electromechanical sensing components.
+- Add `sensing/` for inertial measurement, bumper/lift hazard switches, and other electromechanical sensing components.
 
 ## Structure
 
@@ -22,7 +22,7 @@ Use these packages when a model needs electronics vocabulary for power, compute,
 - `interconnection/` - SysML v2 physical port and interface definitions for buses, GPIO, PWM, and power rails (`ElectronicsInterconnection`).
 - `board/` - board assembly and integration overlays (`BoardIntegrationDomain`).
 - `actuation/` - motor, encoder, and motor-driver vocabulary (`ElectronicActuationDomain`).
-- `sensing/` - inertial and other electromechanical sensing vocabulary (`SensingDomain`).
+- `sensing/` - inertial measurement, bumper/lift hazard switches, and other electromechanical sensing vocabulary (`SensingDomain`).
 
 ## Related Layers
 

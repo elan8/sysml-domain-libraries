@@ -3,7 +3,7 @@
 This repository provides reusable SysML v2 **vocabulary** for things in the system:
 
 - `domain/` — business-domain vocabulary. Currently empty: the prior `robotics` library was removed (thin scaffolding, no downstream consumers — see Migration Map) while technical-library quality is prioritized before the next domain library is added.
-- `technical/` — business-agnostic technical capabilities (software, electronics, communication).
+- `technical/` — business-agnostic technical capabilities (software, electronics, communication, mechanical).
 - `generic/` — cross-domain foundation: units (`MonetaryUnits`, `EngineeringUnits`) and part procurement/traceability metadata (`PartProcurement`).
 
 **How** to author, trace, review, and assure models lives in the sibling repository [`mbse-methodology`](../mbse-methodology/README.md) (Elan8 Method). This repository must **not** depend on method packages.
