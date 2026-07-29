@@ -6,24 +6,23 @@ package BoardIntegrationDomain {
     import ElectronicIoDomain::*;
     import ElectronicBusDomain::*;
 
+
     attribute def ConnectorType;
     attribute def LayerCount;
 
-    part def BoardAssembly :> ElectronicsComponent {
-        attribute boardName : Name;
-        attribute layerCount : LayerCount;
-    }
-
-    part def BoardConnector {
-        attribute connectorName : Name;
+    part def Connector  {
         attribute connectorType : ConnectorType;
     }
 
-    part def WiringHarness {
-        attribute harnessName : Name;
+    part def PrintedCircuitBoard  {
+        attribute layerCount : LayerCount;
     }
 
-    part def BoardIntegration {
-        part board : BoardAssembly;
+    part def BoardAssembly :> ElectronicsComponent {
+        port pcb: PrintedCircuitBoard;
     }
+
+    part def BoardConnector :> Connector ;     
+    part def WiringHarness ;
+
 }

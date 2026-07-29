@@ -22,7 +22,7 @@ Use these packages when a model needs electronics vocabulary for power, compute,
 - `interconnection/` - SysML v2 physical port and interface definitions for buses, GPIO, PWM, and power rails (`ElectronicsInterconnection`).
 - `board/` - board assembly and integration overlays (`BoardIntegrationDomain`).
 - `actuation/` - electric motor, solenoid, stepper, servo, and actuator-driver vocabulary (`ElectronicActuationDomain`).
-- `sensing/` - inertial measurement, bumper/lift hazard switches, and other electromechanical sensing vocabulary (`SensingDomain`).
+- `sensing/` - typed measurement items, generic protocol-specializable sensor data ports, explicit passive/powered sensor classes, switches, and encoders (`SensingDomain`).
 
 ## Related Layers
 
@@ -38,7 +38,7 @@ Use these packages when a model needs electronics vocabulary for power, compute,
 - Use `compute/` to connect embedded compute units to firmware, memory, peripherals, and power rails.
 - Use `buses/` and `io/` when sensor, actuator, or board interfaces need implementation-level traceability.
 - Use `interconnection/` for typed electrical `port def` boundaries and `interface def` links between electronics components. I2C uses controller/target roles, SPI uses controller/peripheral roles, and UART uses conjugated peer ports.
-- Use `actuation/` and `sensing/` for motors, solenoids, steppers, servos, actuator drivers, and IMU vocabulary.
+- Use `actuation/` and `sensing/` for actuators and sensors. Measurement items describe what a sensor measures; data, signal, and power ports describe its external interfaces.
 - Prefer `sum()`-derived `mass`/`powerDraw` at assembly level over hand-typed totals — every `ElectronicsComponent` already carries both attributes, so assemblies can roll them up from their actual children instead of asserting an independent number (see `examples/motor-and-power-module/`).
 
 ## Notes
