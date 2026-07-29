@@ -1,5 +1,20 @@
 package ElectronicsInterconnection {
+    import Core::*;
     import ElectronicsCore::*;
+
+    attribute def ConnectorType;
+
+    part def ElectronicConnector :> PhysicalComponent {
+        attribute connectorType : ConnectorType;
+    }
+
+    part def BoardConnector :> ElectronicConnector;
+
+    part def WiringHarness :> PhysicalComponent {
+        part connectors : ElectronicConnector[2..*];
+    }
+
+    port def ElectricalTerminalPort;
 
     port def ElectronicCommunicationPort;
     port def SerialCommunicationPort :> ElectronicCommunicationPort;
@@ -64,6 +79,11 @@ package ElectronicsInterconnection {
     interface def PowerRailSupplyInterface {
         end sourcePort : PowerRailPort;
         end loadPort : ~PowerRailPort;
+    }
+
+    interface def ElectricalTerminalLink {
+        end terminalA : ElectricalTerminalPort;
+        end terminalB : ElectricalTerminalPort;
     }
 
     interface def DcPowerSupplyLink {

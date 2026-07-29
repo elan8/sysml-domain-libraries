@@ -8,7 +8,8 @@ Use these packages when a model needs electronics vocabulary for power, compute,
 
 - Start with `electronics-core/` for common electronics concepts.
 - Add `power/` for power sources, loads, conversion, and distribution.
-- Add `compute/`, `io/`, `buses/`, `interconnection/`, and `board/` as the model moves from logical electronics into implementation structure.
+- Add `compute/`, `io/`, `buses/`, `interconnection/`, `board/`, and `assembly/` as the model moves from logical electronics into implementation structure.
+- Add `components/` for standard board-level passives, semiconductors, and integrated circuits.
 - Add `actuation/` for electric motors, solenoids, steppers, servos, and actuator drivers.
 - Add `sensing/` for inertial measurement, bumper/lift hazard switches, and other electromechanical sensing components.
 
@@ -20,7 +21,9 @@ Use these packages when a model needs electronics vocabulary for power, compute,
 - `io/` - digital/analog I/O and interface overlays (`ElectronicIoDomain`).
 - `buses/` - board-level bus and link overlays (`ElectronicBusDomain`).
 - `interconnection/` - SysML v2 physical port and interface definitions for buses, GPIO, PWM, and power rails (`ElectronicsInterconnection`).
-- `board/` - board assembly and integration overlays (`BoardIntegrationDomain`).
+- `components/` - standard board-level electronic components such as resistors, capacitors, inductors, diodes, transistors, fuses, crystals, and integrated circuits (`ElectronicComponentDomain`).
+- `board/` - bare printed-board technology and physical properties (`PrintedBoardDomain`).
+- `assembly/` - PCBA, electronics-module, and box-build composition (`ElectronicsAssemblyDomain`).
 - `actuation/` - electric motor, solenoid, stepper, servo, and actuator-driver vocabulary (`ElectronicActuationDomain`).
 - `sensing/` - typed measurement items, generic protocol-specializable sensor data ports, explicit passive/powered sensor classes, switches, and encoders (`SensingDomain`).
 
@@ -38,6 +41,8 @@ Use these packages when a model needs electronics vocabulary for power, compute,
 - Use `compute/` to connect embedded compute units to firmware, memory, peripherals, and power rails.
 - Use `buses/` and `io/` when sensor, actuator, or board interfaces need implementation-level traceability.
 - Use `interconnection/` for typed electrical `port def` boundaries and `interface def` links between electronics components. I2C uses controller/target roles, SPI uses controller/peripheral roles, and UART uses conjugated peer ports.
+- Use `components/` for BOM-level component types. Electrical characteristics such as resistance, capacitance, and forward voltage are attributes; physical pins and terminals are ports.
+- Use `board/` for an unpopulated PCB and `assembly/` for a PCBA containing that board plus mounted physical components.
 - Use `actuation/` and `sensing/` for actuators and sensors. Measurement items describe what a sensor measures; data, signal, and power ports describe its external interfaces.
 - Prefer `sum()`-derived `mass`/`powerDraw` at assembly level over hand-typed totals — every `ElectronicsComponent` already carries both attributes, so assemblies can roll them up from their actual children instead of asserting an independent number (see `examples/motor-and-power-module/`).
 

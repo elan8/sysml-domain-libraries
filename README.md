@@ -64,6 +64,11 @@ No sibling `mbse-methodology` checkout is required to validate this repository.
 - `software/sql-domain/SqlDomain.sysml` → `technical/software/data/SqlDomain.sysml`
 - `software/nosql-domain/NosqlDomain.sysml` → `technical/software/data/NosqlDomain.sysml`
 
+### Electronics
+
+- `technical/electronics/board/BoardIntegrationDomain.sysml` → `technical/electronics/board/PrintedBoardDomain.sysml` + `technical/electronics/assembly/ElectronicsAssemblyDomain.sysml`
+- `BoardAssembly` → `PrintedCircuitBoardAssembly`
+
 ## Repository Standards
 
 - Naming and severity conventions: `docs/conventions.md`.
