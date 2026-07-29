@@ -6,23 +6,23 @@ Cross-domain unit and quantity helpers that complement the OMG ISQ/SI standard l
 
 | Package | File | Purpose |
 | --- | --- | --- |
-| `MonetaryUnits` | `MonetaryUnits.sysml` | Currency-typed monetary amounts (EUR, USD, …) |
-| `EngineeringUnits` | `EngineeringUnits.sysml` | `Ah` / `mAh` charge and `ms` duration literals |
+| `Elan8::Units::Money` | `MonetaryUnits.sysml` | Currency-typed monetary amounts (EUR, USD, …) |
+| `Elan8::Units::Engineering` | `EngineeringUnits.sysml` | `Ah` / `mAh` charge and `ms` duration literals |
 
-## MonetaryUnits
+## Elan8::Units::Money
 
 ```sysml
-private import MonetaryUnits::*;
+private import Elan8::Units::Money::*;
 
 attribute bomCost : MonetaryAmount = 120 [EUR];
 ```
 
 BOM roll-ups assume **one currency per sum** (no exchange rates).
 
-## EngineeringUnits
+## Elan8::Units::Engineering
 
 ```sysml
-private import EngineeringUnits::*;
+private import Elan8::Units::Engineering::*;
 private import ISQ::*;
 
 attribute capacity : ElectricChargeValue = 12500 [mAh];

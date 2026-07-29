@@ -39,7 +39,7 @@ None currently. `domain/` was emptied when `domain/robotics` was removed for qua
   - Purpose: end-to-end webshop architecture, requirements, behavior, and sequence-view example composed from shared software libraries.
   - Expected outcomes: should validate cross-package reuse of distributed service, SQL, Kubernetes, and interaction semantics.
 - `technical/software/examples/realtime-task-scheduling/realtime-task-scheduling.sysml`
-  - Purpose: minimal realtime task/queue/scheduler composition combined with a `PartProcurement`-annotated compute part, proving the vocabulary extracted from `sysml-robot-vacuum-cleaner` is genuinely product-agnostic.
+  - Purpose: minimal realtime task/queue/scheduler composition combined with a `Elan8::Procurement`-annotated compute part, proving the vocabulary extracted from `sysml-robot-vacuum-cleaner` is genuinely product-agnostic.
   - Expected outcomes: should validate cross-package reuse of `technical/software/realtime-runtime` and `generic/procurement`.
 
 ## Systems Engineering / Method Examples

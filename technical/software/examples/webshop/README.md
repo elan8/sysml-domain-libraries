@@ -16,7 +16,7 @@ In VS Code, open `webshop.sysml` and `Views.sysml` to explore the structure, int
 
 The entry model is `webshop.sysml`, which assembles:
 
-- software structure built on shared libraries (`SoftwareCore`, `DistributedSystems`, `SqlDomain`, and `KubernetesDomain`)
+- software structure built on shared libraries (`Elan8::Software::Core`, `Elan8::Software::Distributed`, `Elan8::Software::Data::Sql`, and `Elan8::Software::Platform::Kubernetes`)
 - behavioral modeling (`OrderLifecycleStateMachine` and `CheckoutPipeline`)
 - requirements with traceability (`requirement`, `satisfy`, and one illustrative `allocate`)
 - interaction scenarios for synchronous checkout orchestration and asynchronous event fan-out

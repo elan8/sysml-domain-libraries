@@ -12,9 +12,9 @@ Use these packages when a model needs vocabulary for purely mechanical component
 
 ## Structure
 
-- `core/` - base mechanical concept (`MechanicalCore`), providing `mass` on `MechanicalComponent` for budget rollups.
-- `interconnection/` - non-causal rotational and translational mechanical boundaries (`MechanicalInterconnection`).
-- `drivetrain/` - gearbox, wheel, and caster-wheel vocabulary (`DrivetrainDomain`).
+- `core/` - base mechanical concept (`Elan8::Mechanical::Core`), providing `mass` on `MechanicalComponent` for budget rollups.
+- `interconnection/` - non-causal rotational and translational mechanical boundaries (`Elan8::Mechanical::Interconnection`).
+- `drivetrain/` - gearbox, wheel, and caster-wheel vocabulary (`Elan8::Mechanical::Drivetrain`).
 
 ## Related Layers
 

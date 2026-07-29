@@ -1,8 +1,12 @@
-package MechanicalCore {
-    import Core::*;
-    private import ISQ::*;
+package Elan8 {
+    package Mechanical {
+        package Core {
+            import Elan8::Core::*;
+            private import ISQ::*;
 
-    part def MechanicalComponent :> PhysicalComponent {
+            part def MechanicalComponent :> PhysicalComponent {
         
+            }
+        }
     }
 }

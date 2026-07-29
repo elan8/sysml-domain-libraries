@@ -1,38 +1,46 @@
-package Views {
-    import WebShopArchitecture::*;
-    import WebShopBehavior::*;
-    import WebShopRequirements::*;
-    import WebShopExample::*;
+package Elan8 {
+    package Examples {
+        package Software {
+            package WebShop {
+                package Views {
+                    import Elan8::Examples::Software::WebShop::Architecture::*;
+                    import Elan8::Examples::Software::WebShop::Behavior::*;
+                    import Elan8::Examples::Software::WebShop::Requirements::*;
+                    import Elan8::Examples::Software::WebShop::*;
 
-    view structure : GeneralView {
-        expose WebShopExample::webshopSystem;
-    }
+                    view structure : GeneralView {
+                        expose Elan8::Examples::Software::WebShop::webshopSystem;
+                    }
 
-    view connections : InterconnectionView {
-        expose WebShopExample::webshopSystem;
-    }
+                    view connections : InterconnectionView {
+                        expose Elan8::Examples::Software::WebShop::webshopSystem;
+                    }
 
-    view checkoutFlow : SequenceView {
-        expose WebShopArchitecture::CheckoutFlow;
-    }
+                    view checkoutFlow : SequenceView {
+                        expose Elan8::Examples::Software::WebShop::Architecture::CheckoutFlow;
+                    }
 
-    view orderEventFanout : SequenceView {
-        expose WebShopArchitecture::OrderEventFanout;
-    }
+                    view orderEventFanout : SequenceView {
+                        expose Elan8::Examples::Software::WebShop::Architecture::OrderEventFanout;
+                    }
 
-    view orderLifecycle : StateTransitionView {
-        expose WebShopBehavior::OrderLifecycleStateMachine;
-    }
+                    view orderLifecycle : StateTransitionView {
+                        expose Elan8::Examples::Software::WebShop::Behavior::OrderLifecycleStateMachine;
+                    }
 
-    view checkoutPipeline : ActionFlowView {
-        expose WebShopBehavior::CheckoutPipeline;
-    }
+                    view checkoutPipeline : ActionFlowView {
+                        expose Elan8::Examples::Software::WebShop::Behavior::CheckoutPipeline;
+                    }
 
-    view requirements : GeneralView {
-        expose WebShopRequirements::CheckoutLatencyReq;
-        expose WebShopRequirements::CheckoutAvailabilityReq;
-        expose WebShopRequirements::PaymentReliabilityReq;
-        expose WebShopRequirements::EventDurabilityReq;
-        expose WebShopRequirements::SecurityBoundaryReq;
+                    view requirements : GeneralView {
+                        expose Elan8::Examples::Software::WebShop::Requirements::CheckoutLatencyReq;
+                        expose Elan8::Examples::Software::WebShop::Requirements::CheckoutAvailabilityReq;
+                        expose Elan8::Examples::Software::WebShop::Requirements::PaymentReliabilityReq;
+                        expose Elan8::Examples::Software::WebShop::Requirements::EventDurabilityReq;
+                        expose Elan8::Examples::Software::WebShop::Requirements::SecurityBoundaryReq;
+                    }
+                }
+            }
+        }
     }
 }

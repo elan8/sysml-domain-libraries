@@ -1,42 +1,48 @@
-package CommunicationCore {
-    import Core::*;
+package Elan8 {
+    package Communication {
+        package Core {
+            import Elan8::Core::*;
 
-    attribute def Hostname;
-    attribute def PortNumber;
-    attribute def ProtocolName;
-    attribute def UriString;
+            attribute def Hostname;
+            attribute def PortNumber;
+            attribute def ProtocolName;
+            attribute def UriString;
 
 
-    part def CommunicationEndpoint {
-        attribute protocol : ProtocolName;
-        attribute port : PortNumber;
+            part def CommunicationEndpoint {
+                attribute protocol : ProtocolName;
+                attribute port : PortNumber;
+            }
+
+            part def CommunicationChannel {
+                attribute name : Name;
+            }
+
+            part def CommunicationService;
+
+            part def CommunicationBinding {
+                attribute name : Name;
+                ref endpoint : CommunicationEndpoint;
+                ref channel : CommunicationChannel;
+                ref session : CommunicationSession;
+                ref operation : CommunicationOperation;
+            }
+
+            part def CommunicationSession {
+                attribute name : Name;
+            }
+
+            part def CommunicationOperation {
+                attribute name : Name;
+            }
+
+            part def OperationContract {
+                attribute name : Name;
+            }
+
+            part def InputContract :> OperationContract;
+            part def OutputContract :> OperationContract;
+            part def ErrorContract :> OperationContract;
+        }
     }
-
-    part def CommunicationChannel {
-        attribute name : Name;
-    }
-
-    part def CommunicationBinding {
-        attribute name : Name;
-        ref endpoint : CommunicationEndpoint;
-        ref channel : CommunicationChannel;
-        ref session : CommunicationSession;
-        ref operation : CommunicationOperation;
-    }
-
-    part def CommunicationSession {
-        attribute name : Name;
-    }
-
-    part def CommunicationOperation {
-        attribute name : Name;
-    }
-
-    part def OperationContract {
-        attribute name : Name;
-    }
-
-    part def InputContract :> OperationContract;
-    part def OutputContract :> OperationContract;
-    part def ErrorContract :> OperationContract;
 }

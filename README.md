@@ -4,7 +4,7 @@ This repository provides reusable SysML v2 **vocabulary** for things in the syst
 
 - `domain/` — business-domain vocabulary. Currently empty: the prior `robotics` library was removed (thin scaffolding, no downstream consumers — see Migration Map) while technical-library quality is prioritized before the next domain library is added.
 - `technical/` — business-agnostic technical capabilities (software, electronics, communication, mechanical).
-- `generic/` — cross-domain foundation: units (`MonetaryUnits`, `EngineeringUnits`) and part procurement/traceability metadata (`PartProcurement`).
+- `generic/` — cross-domain foundation under `Elan8`, including `Elan8::Units` and `Elan8::Procurement`.
 
 **How** to author, trace, review, and assure models lives in the sibling repository [`mbse-methodology`](../mbse-methodology/README.md) (Elan8 Method). This repository must **not** depend on method packages.
 
@@ -15,10 +15,29 @@ This repository provides reusable SysML v2 **vocabulary** for things in the syst
 - Requirements metadata, method concerns, viewpoints, recipes: sibling [`mbse-methodology`](../mbse-methodology/README.md) (optional; separate product).
 - Software and platform capability modeling: start with `technical/software/README.md`.
 
-## Canonical Path Policy
+## Public Packages
 
-- Import vocabulary from `domain/**`, `technical/**`, and `generic/units/**`.
-- Do not import `Elan8*` method packages from this repository.
+| Area | Namespace |
+| --- | --- |
+| Shared foundation | `Elan8::Core`, `Elan8::Units`, `Elan8::Procurement` |
+| Communication | `Elan8::Communication` |
+| Electronics | `Elan8::Electronics` |
+| Mechanical | `Elan8::Mechanical` |
+| Software | `Elan8::Software` |
+| Library examples | `Elan8::Examples` |
+
+Prefer a selective import such as:
+
+```sysml
+private import Elan8::Electronics::Actuation::ElectricalActuator;
+```
+
+## Canonical Namespace Policy
+
+- All reusable packages live below the `Elan8` root namespace.
+- Namespace segments are short domain nouns, for example `Elan8::Electronics::Actuation`.
+- Consumers should use selective or domain-level imports instead of `import Elan8::*`.
+- Do not import `Elan8::Method` packages from this repository.
 - Keep new domain/technical libraries and examples under these roots only.
 - Do not add systems-engineering / process packages here.
 
@@ -33,7 +52,7 @@ No sibling `mbse-methodology` checkout is required to validate this repository.
 
 ### Generic foundation
 
-- `technical/systems-engineering/` / `generic/systems-engineering/` → **removed**; use `mbse-methodology/library/` (`Elan8RequirementManagement`, `Elan8RequirementMetadata`, …)
+- `technical/systems-engineering/` / `generic/systems-engineering/` → **removed**; use `mbse-methodology/library/` (`Elan8::Method::Requirements`, `Elan8::Method::Metadata`, …)
 - `technical/units/` → `generic/units/`
 
 ### Robotics (removed, 2026-07-28)

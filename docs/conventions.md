@@ -13,7 +13,10 @@ This document standardizes naming and authoring conventions for all SysML librar
 
 ### Package And File Names
 
-- Use `PascalCase` for SysML package names and `.sysml` file basenames (for example `RobotControl`, `DistributedSystems`).
+- Place reusable packages below the `Elan8` root namespace.
+- Use short `PascalCase` domain nouns for namespace segments, for example `Elan8::Software::Distributed` and `Elan8::Electronics::Actuation`.
+- Do not repeat `Elan8`, `Domain`, or the parent domain name in a child package.
+- Use `PascalCase` for `.sysml` file basenames.
 - Keep folder names lowercase and hyphenated (for example `safety-assurance`, `distributed-systems`).
 
 ### Definition Names

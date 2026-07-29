@@ -6,7 +6,7 @@ Use these packages for service architecture, platform/runtime modeling, delivery
 
 ## Best Starting Points
 
-- Start with `software-core/SoftwareCore.sysml` for shared software vocabulary.
+- Start with `core/SoftwareCore.sysml` (`Elan8::Software::Core`) for shared software vocabulary.
 - Add `distributed-systems/DistributedSystems.sysml` for service and dependency modeling.
 - Add `platform/` for cloud and Kubernetes deployment capabilities.
 - Add `delivery-ops/` for release, control-plane, and observability concerns.
@@ -18,24 +18,24 @@ Use these packages for service architecture, platform/runtime modeling, delivery
 
 ## Structure
 
-- `software-core/SoftwareCore.sysml` - shared software entities, interfaces, and deployment primitives
-- `distributed-systems/DistributedSystems.sysml` - services, boundaries, dependencies, events, and brokers
-- `platform/CloudRuntimeDomain.sysml` - cloud runtime and execution context vocabulary
-- `platform/KubernetesDomain.sysml` - Kubernetes workload and cluster vocabulary
+- `core/SoftwareCore.sysml` (`Elan8::Software::Core`) - shared software entities, interfaces, and deployment primitives
+- `distributed-systems/DistributedSystems.sysml` (`Elan8::Software::Distributed`) - services, boundaries, dependencies, events, and brokers
+- `platform/CloudRuntimeDomain.sysml` (`Elan8::Software::Platform::Cloud`) - cloud runtime and execution context vocabulary
+- `platform/KubernetesDomain.sysml` (`Elan8::Software::Platform::Kubernetes`) - Kubernetes workload and cluster vocabulary
 - `delivery-ops/SoftwareControlPlane.sysml` - control-plane orchestration vocabulary
 - `delivery-ops/SoftwareDelivery.sysml` - delivery pipeline and release vocabulary
 - `delivery-ops/ObservabilityDomain.sysml` - telemetry, traces, and SLO/SLA vocabulary
-- `interactions/SoftwareInteractions.sysml` - sequence and interaction modeling vocabulary
+- `interactions/SoftwareInteractions.sysml` (`Elan8::Software::Interactions`) - sequence and interaction modeling vocabulary
 - `security/IdentitySecurityDomain.sysml` - identity, authn/authz, and trust boundary vocabulary
 - `security/CyberAssuranceDomain.sysml` - security control and assurance vocabulary
 - `security/EuCyberResilienceOverlay.sysml` - CRA-focused compliance overlay vocabulary
-- `data/SqlDomain.sysml` - relational persistence vocabulary
-- `data/NosqlDomain.sysml` - non-relational persistence vocabulary
-- `realtime-runtime/RealtimeRuntime.sysml` - real-time task, queue, and scheduler vocabulary
+- `data/SqlDomain.sysml` (`Elan8::Software::Data::Sql`) - relational persistence vocabulary
+- `data/NosqlDomain.sysml` (`Elan8::Software::Data::NoSql`) - non-relational persistence vocabulary
+- `realtime-runtime/RealtimeRuntime.sysml` (`Elan8::Software::Realtime`) - real-time task, queue, and scheduler vocabulary
 
 ## Package Guidance
 
-### software-core
+### core
 
 - **When to use:** shared components, modules, source artifacts, interfaces, operation-effect classification, and capability-to-implementation traceability.
 - **Anti-patterns:** operation interfaces whose read-only, command, analysis, or mutating intent is implicit; capability models disconnected from implementation structure.

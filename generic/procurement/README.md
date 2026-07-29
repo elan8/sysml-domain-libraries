@@ -10,12 +10,12 @@ unchanged").
 
 | Package | File | Purpose |
 | --- | --- | --- |
-| `PartProcurement` | `PartProcurement.sysml` | `BuyPart` metadata and `PartLifecycleStatus` for any purchasable part definition |
+| `Elan8::Procurement` | `PartProcurement.sysml` | `BuyPart` metadata and `PartLifecycleStatus` for any purchasable part definition |
 
-## PartProcurement
+## Elan8::Procurement
 
 ```sysml
-private import PartProcurement::*;
+private import Elan8::Procurement::*;
 
 part def MyMcu :> SomeBaseDefinition {
     @BuyPart {

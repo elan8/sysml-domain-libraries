@@ -13,20 +13,20 @@ Use these packages when a model needs protocol, endpoint, channel, binding, or m
 ## Structure
 
 - `core/` - shared abstractions for communication endpoints, channels, operations, sessions, and bindings.
-- `http/` - HTTP/REST communication overlays (`HttpDomain`, `OpenApiDomain`).
-- `grpc/` - gRPC communication overlays (`GrpcDomain`).
-- `messaging/` - asynchronous messaging overlays (`MessagingDomain`).
-- `streaming/` - streaming broker specializations (`KafkaDomain`).
+- `http/` - HTTP/REST communication overlays (`Elan8::Communication::Http`, `Elan8::Communication::OpenApi`).
+- `grpc/` - gRPC communication overlays (`Elan8::Communication::Grpc`).
+- `messaging/` - asynchronous messaging overlays (`Elan8::Communication::Messaging`).
+- `streaming/` - streaming broker specializations (`Elan8::Communication::Kafka`).
 - `transport/` - transport protocol scaffolds (TCP/UDP).
 - `device-bus/` - device and field bus scaffolds (USB).
-- `wireless/` - BLE and Wi-Fi communication overlays (`WirelessDomain`).
+- `wireless/` - BLE and Wi-Fi communication overlays (`Elan8::Communication::Wireless`).
 - `industrial/` - industrial protocol scaffolds (Modbus/Profinet/EtherCAT).
 
 ## Notes
 
 - Communication libraries are technical and business-agnostic.
 - Software and business-domain libraries should import these communication libraries rather than redefining protocol concepts.
-- Package names for migrated v1 libraries remain stable to minimize import churn.
+- Public packages use short names below `Elan8::Communication`.
 - Use operation contracts and serialization payloads when operations exchange structured input, output, or error data.
 - For robotics or runtime models, use `CommunicationEndpoint`, `CommunicationChannel`, and `CommunicationBinding` to connect runtime communication intent to concrete protocol or transport detail.
 
