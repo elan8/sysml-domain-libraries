@@ -9,7 +9,7 @@ Use these packages when a model needs electronics vocabulary for power, compute,
 - Start with `electronics-core/` for common electronics concepts.
 - Add `power/` for power sources, loads, conversion, and distribution.
 - Add `compute/`, `io/`, `buses/`, `interconnection/`, and `board/` as the model moves from logical electronics into implementation structure.
-- Add `actuation/` for motors, encoders, and motor drivers.
+- Add `actuation/` for electric motors, solenoids, steppers, servos, and actuator drivers.
 - Add `sensing/` for inertial measurement, bumper/lift hazard switches, and other electromechanical sensing components.
 
 ## Structure
@@ -21,12 +21,13 @@ Use these packages when a model needs electronics vocabulary for power, compute,
 - `buses/` - board-level bus and link overlays (`ElectronicBusDomain`).
 - `interconnection/` - SysML v2 physical port and interface definitions for buses, GPIO, PWM, and power rails (`ElectronicsInterconnection`).
 - `board/` - board assembly and integration overlays (`BoardIntegrationDomain`).
-- `actuation/` - motor, encoder, and motor-driver vocabulary (`ElectronicActuationDomain`).
+- `actuation/` - electric motor, solenoid, stepper, servo, and actuator-driver vocabulary (`ElectronicActuationDomain`).
 - `sensing/` - inertial measurement, bumper/lift hazard switches, and other electromechanical sensing vocabulary (`SensingDomain`).
 
 ## Related Layers
 
 - Communication protocol libraries reside in `../communication/`.
+- Electrical actuators import `../mechanical/interconnection/` for rotational and translational output boundaries.
 - Requirements method libraries (roles, evidence patterns) are optional and live in sibling `mbse-methodology` — not a dependency of electronics vocabulary.
 - Business-domain libraries, such as robotics, should compose electronics concepts for compute, power, I/O, and board-level implementation detail.
 
@@ -37,7 +38,7 @@ Use these packages when a model needs electronics vocabulary for power, compute,
 - Use `compute/` to connect embedded compute units to firmware, memory, peripherals, and power rails.
 - Use `buses/` and `io/` when sensor, actuator, or board interfaces need implementation-level traceability.
 - Use `interconnection/` for typed electrical `port def` boundaries and `interface def` links between electronics components. I2C uses controller/target roles, SPI uses controller/peripheral roles, and UART uses conjugated peer ports.
-- Use `actuation/` and `sensing/` for motor, encoder, motor-driver, and IMU vocabulary.
+- Use `actuation/` and `sensing/` for motors, solenoids, steppers, servos, actuator drivers, and IMU vocabulary.
 - Prefer `sum()`-derived `mass`/`powerDraw` at assembly level over hand-typed totals — every `ElectronicsComponent` already carries both attributes, so assemblies can roll them up from their actual children instead of asserting an independent number (see `examples/motor-and-power-module/`).
 
 ## Notes

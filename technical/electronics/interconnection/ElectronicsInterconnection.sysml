@@ -30,11 +30,21 @@ package ElectronicsInterconnection {
         in item receive : ElectricalSignal;
     }
 
-    port def PowerRailPort;
+    port def ElectricalPowerPort;
+    port def DcPowerPort :> ElectricalPowerPort;
+    port def AcPowerPort :> ElectricalPowerPort;
+    port def PowerRailPort :> DcPowerPort;
+
+    port def ElectricalDrivePort :> ElectricalPowerPort;
+    port def DcDrivePort :> ElectricalDrivePort, DcPowerPort;
+    port def SinglePhaseAcDrivePort :> ElectricalDrivePort, AcPowerPort;
+    port def PolyphaseDrivePort :> ElectricalDrivePort;
+    port def TwoPhaseDrivePort :> PolyphaseDrivePort;
+    port def ThreePhaseDrivePort :> PolyphaseDrivePort;
+
     port def GpioPort;
     port def PwmPort :> GpioPort;
     port def QuadratureEncoderPort;
-    port def ThreePhaseMotorPort;
 
     interface def I2cLink {
         end controllerPort : I2cControllerPort;
@@ -56,6 +66,16 @@ package ElectronicsInterconnection {
         end loadPort : ~PowerRailPort;
     }
 
+    interface def DcPowerSupplyLink {
+        end sourcePort : DcPowerPort;
+        end loadPort : ~DcPowerPort;
+    }
+
+    interface def AcPowerSupplyLink {
+        end sourcePort : AcPowerPort;
+        end loadPort : ~AcPowerPort;
+    }
+
     interface def GpioSignalInterface {
         end sourcePort : GpioPort;
         end sinkPort : ~GpioPort;
@@ -66,9 +86,24 @@ package ElectronicsInterconnection {
         end actuatorPort : ~PwmPort;
     }
 
-    interface def ThreePhaseMotorDriveInterface {
-        end driverPort : ThreePhaseMotorPort;
-        end motorPort : ~ThreePhaseMotorPort;
+    interface def DcDriveLink {
+        end driverPort : DcDrivePort;
+        end actuatorPort : ~DcDrivePort;
+    }
+
+    interface def SinglePhaseAcDriveLink {
+        end driverPort : SinglePhaseAcDrivePort;
+        end actuatorPort : ~SinglePhaseAcDrivePort;
+    }
+
+    interface def TwoPhaseDriveLink {
+        end driverPort : TwoPhaseDrivePort;
+        end actuatorPort : ~TwoPhaseDrivePort;
+    }
+
+    interface def ThreePhaseDriveLink {
+        end driverPort : ThreePhaseDrivePort;
+        end actuatorPort : ~ThreePhaseDrivePort;
     }
 
     interface def QuadratureEncoderInterface {

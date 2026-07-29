@@ -6,11 +6,17 @@ package SensingDomain {
         port bus : I2cTargetPort;
     }
 
-    part def BumperSwitch :> ElectronicsComponent {
-        port hazard : GpioPort;
+    abstract part def SwitchSensor :> ElectronicsComponent {
+        port trigger : GpioPort;
     }
 
-    part def LiftSwitch :> ElectronicsComponent {
-        port hazard : GpioPort;
+    part def BumperSwitch :> SwitchSensor ;
+    part def LiftSwitch :> SwitchSensor;
+
+    abstract part def Encoder :> ElectronicsComponent;
+
+    part def QuadratureEncoder :> Encoder {
+        port odometry : QuadratureEncoderPort;
     }
 }
+

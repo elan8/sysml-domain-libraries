@@ -6,22 +6,25 @@ Use these packages when a model needs vocabulary for purely mechanical component
 
 ## Best Starting Points
 
-- Start with `mechanical-core/` for the shared `MechanicalComponent` base.
+- Start with `core/` for the shared `MechanicalComponent` base.
+- Add `interconnection/` for rotational and translational mechanical ports and links.
 - Add `drivetrain/` for gearbox, wheel, and caster-wheel vocabulary.
 
 ## Structure
 
-- `mechanical-core/` - base mechanical concept (`MechanicalCore`), providing `mass` on `MechanicalComponent` for budget rollups.
+- `core/` - base mechanical concept (`MechanicalCore`), providing `mass` on `MechanicalComponent` for budget rollups.
+- `interconnection/` - non-causal rotational and translational mechanical boundaries (`MechanicalInterconnection`).
 - `drivetrain/` - gearbox, wheel, and caster-wheel vocabulary (`DrivetrainDomain`).
 
 ## Related Layers
 
-- Electromechanical parts that produce an electrical signal (bumper/lift switches, encoders, motors) are `ElectronicsComponent`-based and live in `../electronics/`, not here — this family is for parts with **no** electrical characteristics at all.
+- Electromechanical actuators remain `ElectronicsComponent`-based in `../electronics/`, but import this family's mechanical interconnection vocabulary for their physical outputs.
 - Business-domain libraries should compose mechanical concepts for structural and drivetrain implementation detail, the same way they already compose `../electronics/`.
 
 ## Modeling Checklist
 
-- Use `mechanical-core/` for any purely mechanical part that needs to participate in a `sum()`-derived mass rollup.
+- Use `core/` for any purely mechanical part that needs to participate in a `sum()`-derived mass rollup.
+- Use `interconnection/` for torque/rotation and force/translation boundaries between actuators, transmissions, and loads.
 - Use `drivetrain/` when a model needs gear reduction, wheel geometry, or an unpowered caster wheel.
 - Prefer `sum()`-derived `mass` at assembly level over hand-typed totals, exactly as `../electronics/` already does for `ElectronicsComponent` (see `examples/mechanical-composition/`).
 

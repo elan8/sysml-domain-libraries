@@ -7,7 +7,7 @@ package ElectronicIoDomain {
     attribute def SamplingClass;
 
     part def IoChannel {
-        attribute channelName : Name;
+        attribute name : Name;
         attribute direction : IoDirection;
         attribute signalKind : SignalKind;
     }
@@ -29,10 +29,6 @@ package ElectronicIoDomain {
 
     part def QuadratureEncoderChannel :> DigitalIoChannel;
 
-    part def CliffSensorInterface :> SensorElectricalInterface;
 
-    part def BumperSwitchInterface :> SensorElectricalInterface;
-
-    part def MotorDriveInterface :> ActuatorElectricalInterface;
 }
 

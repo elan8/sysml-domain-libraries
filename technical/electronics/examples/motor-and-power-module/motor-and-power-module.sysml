@@ -18,14 +18,44 @@ package MotorAndPowerModuleExample {
             attribute :>> ratedPower = 14 [W];
             attribute :>> mass = 0.5 [kg];
         }
-        part encoder : QuadratureEncoder {
-            attribute :>> mass = 0.1 [kg];
-        }
-        part driver : MotorDriver {
+        part driver : ThreePhaseMotorDriver {
             attribute :>> mass = 0.05 [kg];
         }
-        attribute :>> mass = sum(motor.mass, encoder.mass, driver.mass);
+        attribute :>> mass = sum(motor.mass, driver.mass);
         attribute :>> powerDraw = sum(motor.ratedPower);
+    }
+
+    part def SampleAuxiliaryActuators :> ElectronicsComponent {
+        part stepper : StepperMotor {
+            attribute :>> ratedPower = 8 [W];
+            attribute :>> mass = 0.3 [kg];
+        }
+        part stepperDriver : StepperMotorDriver {
+            attribute :>> mass = 0.04 [kg];
+        }
+        part solenoid : DcSolenoid {
+            attribute :>> ratedPower = 6 [W];
+            attribute :>> mass = 0.2 [kg];
+        }
+        part solenoidDriver : SolenoidDriver {
+            attribute :>> mass = 0.03 [kg];
+        }
+        part servo : PwmRotationalServoActuator {
+            attribute :>> ratedPower = 5 [W];
+            attribute :>> mass = 0.15 [kg];
+        }
+        attribute :>> mass = sum(
+            stepper.mass,
+            stepperDriver.mass,
+            solenoid.mass,
+            solenoidDriver.mass,
+            servo.mass
+        );
+        attribute :>> powerDraw = sum(
+            stepper.ratedPower,
+            solenoid.ratedPower,
+            servo.ratedPower
+        );
     }
 
     part def SamplePowerModule :> ElectronicsComponent {

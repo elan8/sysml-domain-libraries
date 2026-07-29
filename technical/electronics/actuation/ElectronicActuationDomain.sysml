@@ -1,30 +1,106 @@
 package ElectronicActuationDomain {
     private import ElectronicsCore::*;
     private import ElectronicsInterconnection::*;
+    private import MechanicalInterconnection::*;
     private import ISQ::*;
 
-    part def Motor :> ElectronicsComponent {
+    abstract part def ElectricalActuator :> ElectronicsComponent {
         attribute ratedPower : PowerValue;
     }
 
-    part def BldcMotor :> Motor {
-        port phases : ~ThreePhaseMotorPort;
+    abstract part def Motor :> ElectricalActuator {
+        port mechanicalOutput : RotationalMechanicalPort;
     }
 
-    part def PwmMotor :> Motor {
+    abstract part def DcMotor :> Motor;
+
+    part def BrushedDcMotor :> DcMotor {
+        port electricalInput : ~DcDrivePort;
+    }
+
+    part def BldcMotor :> DcMotor {
+        port electricalInput : ~ThreePhaseDrivePort;
+    }
+
+    abstract part def AcMotor :> Motor;
+
+    part def SinglePhaseAcMotor :> AcMotor {
+        port electricalInput : ~SinglePhaseAcDrivePort;
+    }
+
+    part def ThreePhaseAcMotor :> AcMotor {
+        port electricalInput : ~ThreePhaseDrivePort;
+    }
+
+    part def StepperMotor :> Motor {
+        port electricalInput : ~TwoPhaseDrivePort;
+    }
+
+    abstract part def Solenoid :> ElectricalActuator {
+        port mechanicalOutput : TranslationalMechanicalPort;
+    }
+
+    part def DcSolenoid :> Solenoid {
+        port electricalInput : ~DcDrivePort;
+    }
+
+    part def AcSolenoid :> Solenoid {
+        port electricalInput : ~SinglePhaseAcDrivePort;
+    }
+
+    abstract part def ServoActuator :> ElectricalActuator;
+
+    abstract part def RotationalServoActuator :> ServoActuator {
+        port mechanicalOutput : RotationalMechanicalPort;
+    }
+
+    abstract part def TranslationalServoActuator :> ServoActuator {
+        port mechanicalOutput : TranslationalMechanicalPort;
+    }
+
+    part def PwmRotationalServoActuator :> RotationalServoActuator {
+        port power : ~PowerRailPort;
         port command : ~PwmPort;
     }
 
-    part def Encoder :> ElectronicsComponent;
-
-    part def QuadratureEncoder :> Encoder {
-        port odometry : QuadratureEncoderPort;
+    part def PwmTranslationalServoActuator :> TranslationalServoActuator {
+        port power : ~PowerRailPort;
+        port command : ~PwmPort;
     }
 
-    part def MotorDriver :> ElectronicsComponent {
-        port power : PowerRailPort;
-        port command : PwmPort;
-        port phases : ThreePhaseMotorPort;
+    abstract part def ElectricalActuatorDriver :> ElectronicsComponent;
+    abstract part def MotorDriver :> ElectricalActuatorDriver;
+
+    part def HBridgeMotorDriver :> MotorDriver {
+        port supply : ~DcPowerPort;
+        port command : ~PwmPort;
+        port driveOutput : DcDrivePort;
         port fault : GpioPort;
+    }
+
+    part def ThreePhaseMotorDriver :> MotorDriver {
+        port supply : ~DcPowerPort;
+        port command : ~PwmPort;
+        port driveOutput : ThreePhaseDrivePort;
+        port fault : GpioPort;
+    }
+
+    part def StepperMotorDriver :> MotorDriver {
+        port supply : ~DcPowerPort;
+        port step : ~GpioPort;
+        port direction : ~GpioPort;
+        port driveOutput : TwoPhaseDrivePort;
+        port fault : GpioPort;
+    }
+
+    part def SolenoidDriver :> ElectricalActuatorDriver {
+        port supply : ~DcPowerPort;
+        port command : ~PwmPort;
+        port driveOutput : DcDrivePort;
+        port fault : GpioPort;
+    }
+
+    part def ThreePhaseServoDrive :> ThreePhaseMotorDriver {
+        port feedback : ~QuadratureEncoderPort;
     }
 }
