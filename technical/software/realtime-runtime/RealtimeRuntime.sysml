@@ -21,21 +21,20 @@ package Elan8 {
                 fixedPriorityCooperative;
             }
 
-            part def RealtimeTask :> SoftwareComponent {
-                attribute period : DurationValue;
+            abstract part def RealtimeTask :> SoftwareComponent {
                 attribute deadline : DurationValue;
-                attribute worstCaseExecutionTime : DurationValue;
-                attribute stackBudgetBytes : Integer;
-                attribute heapBudgetBytes : Integer;
                 attribute priority : Integer;
                 attribute criticality : TaskCriticality;
             }
 
+            abstract part def PeriodicTask :> RealtimeTask {
+                attribute period : DurationValue;
+            }
+
+            abstract part def EventDrivenTask :> RealtimeTask;
+
             part def SoftwareQueue {
-                attribute depth : Integer;
                 attribute discipline : QueueDiscipline;
-                attribute maxAge : DurationValue;
-                assert constraint { depth > 0 }
             }
 
             part def SchedulerModel {
