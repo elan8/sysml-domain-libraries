@@ -3,6 +3,7 @@ package Elan8 {
         package Compute {
             import Elan8::Core::Name;
             import Elan8::Electronics::Core::*;
+            import Elan8::Electronics::Interconnection::*;
             import Elan8::Electronics::Power::*;
 
             attribute def FirmwareSlot;
@@ -15,6 +16,7 @@ package Elan8 {
                 ref memory : MemoryBlock;
                 ref peripheral : PeripheralBlock;
                 ref powerRail : PowerRail;
+                port power : ~PowerRailPort;
             }
 
             part def Microcontroller :> EmbeddedComputeUnit;

@@ -35,6 +35,16 @@ package Elan8 {
                 attribute value : AngularMeasureValue;
             }
 
+            item def HomingBeaconSignal;
+
+            item def HomingBeaconObservation :> SensorMeasurement {
+                attribute detected : Boolean;
+            }
+
+            port def HomingBeaconPort {
+                out item beacon : HomingBeaconSignal;
+            }
+
             abstract part def Sensor :> ElectronicsComponent;
 
             abstract part def DataSensor :> Sensor {
@@ -76,6 +86,17 @@ package Elan8 {
 
             part def UartInertialMeasurementUnit
                 :> InertialMeasurementUnit, UartDataSensor;
+
+            part def HomingBeaconTransmitter :> ElectronicsComponent {
+                port power : ~PowerRailPort;
+                port beacon : HomingBeaconPort;
+            }
+
+            part def HomingBeaconReceiver :> DcPoweredSensor {
+                port beacon : ~HomingBeaconPort;
+                port detection : GpioPort;
+                item observation : HomingBeaconObservation;
+            }
 
             abstract part def SwitchSensor :> PassiveSensor {
                 port signal : GpioPort;

@@ -1,6 +1,7 @@
 package Elan8 {
     package Mechanical {
         package Interconnection {
+            private import Elan8::Core::*;
             private import ISQ::*;
 
             port def MechanicalPort;
@@ -25,6 +26,26 @@ package Elan8 {
             interface def TranslationalMechanicalLink {
                 end sideA : TranslationalMechanicalPort;
                 end sideB : TranslationalMechanicalPort;
+            }
+
+            connection def MechanicalMount {
+                end support : PhysicalComponent;
+                end mountedPart : PhysicalComponent;
+            }
+
+            connection def FastenedMount {
+                end support : PhysicalComponent;
+                end mountedPart : PhysicalComponent;
+            }
+
+            connection def SnapFitMount {
+                end support : PhysicalComponent;
+                end mountedPart : PhysicalComponent;
+            }
+
+            connection def RemovableMount {
+                end support : PhysicalComponent;
+                end mountedPart : PhysicalComponent;
             }
         }
     }

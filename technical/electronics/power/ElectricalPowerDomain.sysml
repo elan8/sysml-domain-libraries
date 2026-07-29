@@ -32,13 +32,29 @@ package Elan8 {
             part def BatteryPack :> ElectronicsComponent {
                 attribute nominalCapacity : ElectricChargeValue;
                 attribute nominalVoltage : ElectricPotentialValue;
-                port output : PowerRailPort;
+                doc /* Rechargeable pack with one bidirectional DC terminal boundary. */
+                port terminal : DcPowerPort;
+            }
+
+            part def BatteryCharger :> ElectronicsComponent {
+                attribute maxChargeCurrent : ElectricCurrentValue;
+                attribute quiescentPower : PowerValue;
+                port supplyInput : ~PowerRailPort;
+                port chargeOutput : DcPowerPort;
             }
 
             part def BatteryManagementSystem :> ElectronicsComponent {
                 attribute maxChargeCurrent : ElectricCurrentValue;
                 attribute maxCellTemperature : ThermodynamicTemperatureValue;
                 attribute quiescentPower : PowerValue;
+                doc /*
+                 * Protects and monitors the pack for charging and discharging.
+                 * Charging energy enters at chargeInput; protectedOutput supplies
+                 * the system loads; batteryTerminal connects to the cell pack.
+                 */
+                port batteryTerminal : DcPowerPort;
+                port chargeInput : ~DcPowerPort;
+                port protectedOutput : PowerRailPort;
                 port bus : I2cTargetPort;
                 port alert : GpioPort;
             }

@@ -5,18 +5,25 @@ package Elan8 {
             import Elan8::Electronics::Core::*;
 
             attribute def ConnectorType;
+            port def ElectricalTerminalPort;
 
             part def ElectronicConnector :> PhysicalComponent {
                 attribute connectorType : ConnectorType;
+                port terminals : ElectricalTerminalPort[1..*];
             }
 
             part def BoardConnector :> ElectronicConnector;
 
-            part def WiringHarness :> PhysicalComponent {
-                part connectors : ElectronicConnector[2..*];
+            part def HarnessConductor :> PhysicalComponent {
+                port endA : ElectricalTerminalPort;
+                port endB : ElectricalTerminalPort;
+                connect endA to endB;
             }
 
-            port def ElectricalTerminalPort;
+            part def WiringHarness :> PhysicalComponent {
+                part connectors : ElectronicConnector[2..*];
+                part conductors : HarnessConductor[1..*];
+            }
 
             port def ElectronicCommunicationPort;
             port def SerialCommunicationPort :> ElectronicCommunicationPort;

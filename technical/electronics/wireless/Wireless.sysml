@@ -8,6 +8,7 @@ package Elan8 {
             import Elan8::Software::Core::*;
 
             part def WirelessModule :> ElectronicsComponent {
+                port power : ~PowerRailPort;
                 port hostLink : SerialCommunicationPort;
                 ref wirelessChannel : WirelessCommunicationChannel;
             }
