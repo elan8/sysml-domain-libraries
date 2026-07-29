@@ -3,7 +3,7 @@ package SensingDomain {
     private import ElectronicsInterconnection::*;
 
     part def InertialMeasurementUnit :> ElectronicsComponent {
-        port bus : I2cPort;
+        port bus : I2cTargetPort;
     }
 
     part def BumperSwitch :> ElectronicsComponent {

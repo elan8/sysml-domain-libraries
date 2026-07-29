@@ -1,25 +1,23 @@
 package CommunicationCore {
-    import SoftwareCore::*;
-    import DistributedSystems::*;
+    import Core::*;
 
-    attribute def SessionName;
-    attribute def OperationName;
-    attribute def ContractName;
+    attribute def Hostname;
+    attribute def PortNumber;
+    attribute def ProtocolName;
+    attribute def UriString;
 
-    part def CommunicationService :> Service;
 
     part def CommunicationEndpoint {
         attribute protocol : ProtocolName;
-        attribute path : PathString;
         attribute port : PortNumber;
     }
 
     part def CommunicationChannel {
-        attribute channelName : Name;
+        attribute name : Name;
     }
 
     part def CommunicationBinding {
-        attribute bindingName : Name;
+        attribute name : Name;
         ref endpoint : CommunicationEndpoint;
         ref channel : CommunicationChannel;
         ref session : CommunicationSession;
@@ -27,15 +25,15 @@ package CommunicationCore {
     }
 
     part def CommunicationSession {
-        attribute sessionName : SessionName;
+        attribute name : Name;
     }
 
     part def CommunicationOperation {
-        attribute operationName : OperationName;
+        attribute name : Name;
     }
 
     part def OperationContract {
-        attribute contractName : ContractName;
+        attribute name : Name;
     }
 
     part def InputContract :> OperationContract;

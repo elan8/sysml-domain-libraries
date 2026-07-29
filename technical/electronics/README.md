@@ -36,7 +36,7 @@ Use these packages when a model needs electronics vocabulary for power, compute,
 - Use `power/` to make power rails, load groups, conversion, voltage, and current budgets explicit.
 - Use `compute/` to connect embedded compute units to firmware, memory, peripherals, and power rails.
 - Use `buses/` and `io/` when sensor, actuator, or board interfaces need implementation-level traceability.
-- Use `interconnection/` for typed `port def` and `interface def` wiring between electronics components.
+- Use `interconnection/` for typed electrical `port def` boundaries and `interface def` links between electronics components. I2C uses controller/target roles, SPI uses controller/peripheral roles, and UART uses conjugated peer ports.
 - Use `actuation/` and `sensing/` for motor, encoder, motor-driver, and IMU vocabulary.
 - Prefer `sum()`-derived `mass`/`powerDraw` at assembly level over hand-typed totals — every `ElectronicsComponent` already carries both attributes, so assemblies can roll them up from their actual children instead of asserting an independent number (see `examples/motor-and-power-module/`).
 
@@ -44,5 +44,6 @@ Use these packages when a model needs electronics vocabulary for power, compute,
 
 - Electronics libraries are technical and business-agnostic.
 - Foundational types live in `ElectronicsCore`; other packages specialize those concepts.
+- Protocol-specific electrical ports belong to electronics; logical channels, sessions, operations, and bindings belong to communication. `ElectronicBusDomain` composes both viewpoints.
 - Business domains (for example robotics) can compose these electronics libraries without importing business semantics back into technical layers.
 - `ElectronicsComponent.mass`/`powerDraw` carry no default value and are not mandatory to set — a pure power *source* like `BatteryPack` legitimately leaves `powerDraw` unset.

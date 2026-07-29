@@ -1,6 +1,6 @@
 package MessagingDomain {
     import CommunicationCore::*;
-    import SoftwareCore::*;
+    import Core::*;
     import DistributedSystems::*;
     import SerializationDomain::*;
 

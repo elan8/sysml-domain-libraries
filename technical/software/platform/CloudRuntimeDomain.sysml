@@ -1,4 +1,5 @@
 package CloudRuntimeDomain {
+    import Core::*;
     import SoftwareCore::*;
     import SoftwareControlPlane::*;
 
@@ -7,22 +8,22 @@ package CloudRuntimeDomain {
     attribute def ResourceClass;
 
     part def CloudRegion {
-        attribute regionName : RegionName;
+        attribute name : RegionName;
     }
 
     part def CloudZone {
-        attribute zoneName : ZoneName;
+        attribute name : ZoneName;
     }
 
     part def RuntimeCluster {
-        attribute clusterName : Name;
+        attribute name : Name;
         attribute resourceClass : ResourceClass;
     }
 
     part def RuntimeWorkload :> ArtifactReference;
 
     part def ManagedService {
-        attribute serviceName : Name;
+        attribute name : Name;
         attribute serviceUri : UriString;
     }
 }

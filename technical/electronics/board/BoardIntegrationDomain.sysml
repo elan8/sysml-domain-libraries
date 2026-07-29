@@ -1,5 +1,5 @@
 package BoardIntegrationDomain {
-    import SoftwareCore::*;
+    import Core::*;
     import ElectronicsCore::*;
     import ElectricalPowerDomain::*;
     import EmbeddedComputeDomain::*;

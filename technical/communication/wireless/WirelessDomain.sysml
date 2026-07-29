@@ -4,22 +4,17 @@ package WirelessDomain {
     import ElectronicsInterconnection::*;
     import SoftwareCore::*;
 
+    enum def Protocol {
+        Bluetooth;
+        BluetoothLowEnergy;
+        WiFi;
+    }
+
     attribute def RadioBand;
     attribute def WirelessProtocolName;
 
-    part def BleCommunicationChannel :> CommunicationChannel {
-        attribute protocolName : WirelessProtocolName;
+    part def WirelessCommunicationChannel :> CommunicationChannel{
+        attribute protocol : Protocol;
     }
 
-    part def WiFiCommunicationChannel :> CommunicationChannel {
-        attribute protocolName : WirelessProtocolName;
-        attribute radioBand : RadioBand;
-    }
-
-    part def WirelessModule :> ElectronicsComponent {
-        attribute moduleName : Name;
-        port hostLink : ~UartPort;
-        ref bleChannel : BleCommunicationChannel;
-        ref wifiChannel : WiFiCommunicationChannel;
-    }
 }

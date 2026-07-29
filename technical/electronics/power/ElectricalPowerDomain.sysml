@@ -1,5 +1,5 @@
 package ElectricalPowerDomain {
-    import SoftwareCore::*;
+    import Core::*;
     import ElectronicsCore::*;
     import ElectronicsInterconnection::*;
     private import ISQ::*;
@@ -10,7 +10,6 @@ package ElectricalPowerDomain {
     attribute def EfficiencyClass;
 
     part def PowerRail :> ElectronicsComponent {
-        attribute railName : Name;
         attribute voltage : VoltageValue;
         attribute currentBudget : CurrentValue;
         attribute powerClass : PowerClass;
@@ -38,7 +37,7 @@ package ElectricalPowerDomain {
         attribute maxChargeCurrent : ElectricCurrentValue;
         attribute maxCellTemperature : ThermodynamicTemperatureValue;
         attribute quiescentPower : PowerValue;
-        port bus : I2cPort;
+        port bus : I2cTargetPort;
         port alert : GpioPort;
     }
 

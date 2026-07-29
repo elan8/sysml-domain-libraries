@@ -1,5 +1,5 @@
 package DistributedSystems {
-    import SoftwareCore::*;
+    import Core::*;
 
     part def Service :> DeployableComponent {
         attribute serviceName : Name;

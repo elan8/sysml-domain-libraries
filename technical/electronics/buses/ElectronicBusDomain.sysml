@@ -1,5 +1,5 @@
 package ElectronicBusDomain {
-    import SoftwareCore::*;
+    import Core::Name;
     import ElectronicsCore::*;
     import CommunicationCore::*;
     import ElectronicsInterconnection::*;
@@ -9,30 +9,27 @@ package ElectronicBusDomain {
     attribute def TopologyClass;
 
     part def ElectronicBus :> CommunicationChannel {
-        attribute busName : Name;
         attribute busType : BusType;
         attribute speedClass : BusSpeedClass;
         attribute topologyClass : TopologyClass;
     }
 
-    part def BusNode :> ElectronicsComponent {
-        attribute nodeName : Name;
+    part def BusNode :> ElectronicsComponent;
+
+    part def I2cControllerNode :> BusNode {
+        port busPort : I2cControllerPort;
     }
 
-    part def I2cBusMasterNode :> BusNode {
-        port busPort : I2cPort;
+    part def I2cTargetNode :> BusNode {
+        port busPort : I2cTargetPort;
     }
 
-    part def I2cBusSlaveNode :> BusNode {
-        port busPort : ~I2cPort;
+    part def SpiControllerNode :> BusNode {
+        port busPort : SpiControllerPort;
     }
 
-    part def SpiBusMasterNode :> BusNode {
-        port busPort : SpiPort;
-    }
-
-    part def SpiBusSlaveNode :> BusNode {
-        port busPort : ~SpiPort;
+    part def SpiPeripheralNode :> BusNode {
+        port busPort : SpiPeripheralPort;
     }
 
     part def UartHostNode :> BusNode {

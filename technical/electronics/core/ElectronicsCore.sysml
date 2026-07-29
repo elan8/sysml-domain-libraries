@@ -1,5 +1,5 @@
 package ElectronicsCore {
-    import SoftwareCore::*;
+    import Core::*;
     private import ISQ::*;
 
     attribute def SignalKind;
@@ -8,16 +8,8 @@ package ElectronicsCore {
     attribute def TimingClass;
     attribute def PinCount;
 
-    part def ElectronicsComponent :> SoftwareComponent {
-        attribute componentName : Name;
-        attribute mass : MassValue;
+    part def ElectronicsComponent :> PhysicalComponent {
         attribute powerDraw : PowerValue;
-    }
-
-    part def ElectronicDevice :> ElectronicsComponent;
-
-    part def ElectronicModule :> ElectronicsComponent {
-        attribute moduleName : Name;
     }
 
     part def ElectricalInterface {
@@ -32,7 +24,7 @@ package ElectronicsCore {
         attribute pinCount : PinCount;
     }
 
-    item def ElectricalSignal :> MessageType {
+    item def ElectricalSignal  {
         attribute signalName : Name;
         attribute signalKind : SignalKind;
     }

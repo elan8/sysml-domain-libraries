@@ -1,5 +1,5 @@
 package ElectronicIoDomain {
-    import SoftwareCore::*;
+    import Core::*;
     import ElectronicsCore::*;
 
     attribute def IoDirection;

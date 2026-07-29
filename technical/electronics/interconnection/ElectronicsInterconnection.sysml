@@ -1,29 +1,54 @@
 package ElectronicsInterconnection {
     import ElectronicsCore::*;
-    import CommunicationCore::*;
 
-    port def I2cPort;
-    port def SpiPort;
-    port def UartPort;
+    port def ElectronicCommunicationPort;
+    port def SerialCommunicationPort :> ElectronicCommunicationPort;
+
+    port def I2cPort :> SerialCommunicationPort {
+        inout item clock : ElectricalSignal;
+        inout item data : ElectricalSignal;
+    }
+    port def I2cControllerPort :> I2cPort;
+    port def I2cTargetPort :> I2cPort;
+
+    port def SpiPort :> SerialCommunicationPort;
+    port def SpiControllerPort :> SpiPort {
+        out item clock : ElectricalSignal;
+        out item controllerData : ElectricalSignal;
+        in item peripheralData : ElectricalSignal;
+        out item chipSelect : ElectricalSignal;
+    }
+    port def SpiPeripheralPort :> SpiPort {
+        in item clock : ElectricalSignal;
+        in item controllerData : ElectricalSignal;
+        out item peripheralData : ElectricalSignal;
+        in item chipSelect : ElectricalSignal;
+    }
+
+    port def UartPort :> SerialCommunicationPort {
+        out item transmit : ElectricalSignal;
+        in item receive : ElectricalSignal;
+    }
+
     port def PowerRailPort;
     port def GpioPort;
     port def PwmPort :> GpioPort;
     port def QuadratureEncoderPort;
     port def ThreePhaseMotorPort;
 
-    interface def I2cNodeInterface {
-        end masterPort : I2cPort;
-        end slavePort : ~I2cPort;
+    interface def I2cLink {
+        end controllerPort : I2cControllerPort;
+        end targetPort : I2cTargetPort;
     }
 
-    interface def SpiNodeInterface {
-        end masterPort : SpiPort;
-        end slavePort : ~SpiPort;
+    interface def SpiLink {
+        end controllerPort : SpiControllerPort;
+        end peripheralPort : SpiPeripheralPort;
     }
 
-    interface def UartLinkInterface {
-        end hostPort : UartPort;
-        end devicePort : ~UartPort;
+    interface def UartLink {
+        end peerAPort : UartPort;
+        end peerBPort : ~UartPort;
     }
 
     interface def PowerRailSupplyInterface {
