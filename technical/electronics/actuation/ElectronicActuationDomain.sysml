@@ -74,21 +74,21 @@ package Elan8 {
             abstract part def MotorDriver :> ElectricalActuatorDriver;
 
             part def HBridgeMotorDriver :> MotorDriver {
-                port supply : ~DcPowerPort;
+                port supply : ~PowerRailPort;
                 port command : ~PwmPort;
                 port driveOutput : DcDrivePort;
                 port fault : GpioPort;
             }
 
             part def ThreePhaseMotorDriver :> MotorDriver {
-                port supply : ~DcPowerPort;
+                port supply : ~PowerRailPort;
                 port command : ~PwmPort;
                 port driveOutput : ThreePhaseDrivePort;
                 port fault : GpioPort;
             }
 
             part def StepperMotorDriver :> MotorDriver {
-                port supply : ~DcPowerPort;
+                port supply : ~PowerRailPort;
                 port step : ~GpioPort;
                 port direction : ~GpioPort;
                 port driveOutput : TwoPhaseDrivePort;
@@ -96,7 +96,7 @@ package Elan8 {
             }
 
             part def SolenoidDriver :> ElectricalActuatorDriver {
-                port supply : ~DcPowerPort;
+                port supply : ~PowerRailPort;
                 port command : ~PwmPort;
                 port driveOutput : DcDrivePort;
                 port fault : GpioPort;

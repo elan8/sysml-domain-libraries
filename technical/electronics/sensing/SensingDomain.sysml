@@ -46,6 +46,14 @@ package Elan8 {
                 port data : ElectronicCommunicationPort;
             }
 
+            abstract part def I2cDataSensor :> DataSensor {
+                port data : I2cTargetPort :>> data;
+            }
+
+            abstract part def UartDataSensor :> DataSensor {
+                port data : UartPort :>> data;
+            }
+
             abstract part def PassiveSensor :> Sensor {
                 doc /* Sensor with no external electrical supply port. */
             }
@@ -55,7 +63,7 @@ package Elan8 {
             }
 
             abstract part def DcPoweredSensor :> PoweredSensor {
-                port power : ~DcPowerPort;
+                port power : ~PowerRailPort;
             }
 
             part def InertialMeasurementUnit :> DcPoweredSensor, DataSensor {
@@ -63,13 +71,11 @@ package Elan8 {
                 item angularVelocity : AngularVelocity3dMeasurement;
             }
 
-            part def I2cInertialMeasurementUnit :> InertialMeasurementUnit {
-                port data : I2cTargetPort :>> data;
-            }
+            part def I2cInertialMeasurementUnit
+                :> InertialMeasurementUnit, I2cDataSensor;
 
-            part def UartInertialMeasurementUnit :> InertialMeasurementUnit {
-                port data : UartPort :>> data;
-            }
+            part def UartInertialMeasurementUnit
+                :> InertialMeasurementUnit, UartDataSensor;
 
             abstract part def SwitchSensor :> PassiveSensor {
                 port signal : GpioPort;
