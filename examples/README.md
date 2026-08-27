@@ -11,6 +11,9 @@ None currently. `domain/` was emptied when `domain/robotics` was removed for qua
 - `technical/electronics/examples/motor-and-power-module/motor-and-power-module.sysml`
   - Purpose: minimal motor/encoder/motor-driver and battery/BMS/regulator composition demonstrating `sum()`-derived mass/power rollups instead of hand-typed totals.
   - Expected outcomes: should validate cross-package reuse of `technical/electronics/actuation` and the `technical/electronics/power` additions (`BatteryPack`, `BatteryManagementSystem`, upgraded `VoltageRegulator`).
+- `technical/electronics/examples/rc-circuit/rc-circuit.sysml`
+  - Purpose: minimal series RC low-pass circuit (`VoltageSource` -> `Resistor` -> `Capacitor` -> `Ground`) demonstrating the constitutive equations added to `Elan8::Electronics::Components` and the `der`/across-through primitives in `Elan8::PhysicalModeling`.
+  - Expected outcomes: should validate cross-package reuse of `technical/electronics/components` and `generic/physical-modeling`. The `constraint` bodies parse and validate cleanly against the parser revision pinned by elan8/spec42#77; deriving a simulation from them is sim42's job — see `generic/physical-modeling/README.md`.
 
 ## Mechanical Examples
 

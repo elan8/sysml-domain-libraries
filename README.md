@@ -4,7 +4,7 @@ This repository provides reusable SysML v2 **vocabulary** for things in the syst
 
 - `domain/` — business-domain vocabulary. Currently empty: the prior `robotics` library was removed (thin scaffolding, no downstream consumers — see Migration Map) while technical-library quality is prioritized before the next domain library is added.
 - `technical/` — business-agnostic technical capabilities (software, electronics, communication, mechanical).
-- `generic/` — cross-domain foundation under `Elan8`, including `Elan8::Units` and `Elan8::Procurement`.
+- `generic/` — cross-domain foundation under `Elan8`, including `Elan8::Units`, `Elan8::Procurement`, and `Elan8::PhysicalModeling`.
 
 **How** to author, trace, review, and assure models lives in the sibling repository [`mbse-methodology`](../mbse-methodology/README.md) (Elan8 Method). This repository must **not** depend on method packages.
 
@@ -19,7 +19,7 @@ This repository provides reusable SysML v2 **vocabulary** for things in the syst
 
 | Area | Namespace |
 | --- | --- |
-| Shared foundation | `Elan8::Core`, `Elan8::Units`, `Elan8::Procurement` |
+| Shared foundation | `Elan8::Core`, `Elan8::Units`, `Elan8::Procurement`, `Elan8::PhysicalModeling` |
 | Communication | `Elan8::Communication` |
 | Electronics | `Elan8::Electronics` |
 | Mechanical | `Elan8::Mechanical` |

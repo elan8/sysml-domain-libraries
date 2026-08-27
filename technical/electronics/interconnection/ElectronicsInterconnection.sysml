@@ -3,9 +3,25 @@ package Elan8 {
         package Interconnection {
             import Elan8::Core::*;
             import Elan8::Electronics::Core::*;
+            private import Elan8::PhysicalModeling::*;
+            private import ISQ::*;
 
             attribute def ConnectorType;
-            port def ElectricalTerminalPort;
+
+            port def ElectricalTerminalPort {
+                doc /*
+                 * potential (across) and current (through), per Elan8::PhysicalModeling.
+                 * Optional to set: topology-only usages (board connectors, harness
+                 * conductors) leave them unset. Component constitutive equations and
+                 * a future simulation compiler rely on them once set.
+                 */
+                attribute potential : ElectricPotentialValue {
+                    @AcrossVariable;
+                }
+                attribute current : ElectricCurrentValue {
+                    @ThroughVariable;
+                }
+            }
 
             part def ElectronicConnector :> PhysicalComponent {
                 attribute connectorType : ConnectorType;
