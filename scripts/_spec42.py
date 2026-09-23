@@ -78,7 +78,7 @@ def _download_pinned_release() -> str:
     install_dir.mkdir(parents=True, exist_ok=True)
     archive_path = install_dir / archive_name
 
-    print(f"spec42 not found on PATH or via SPEC42_EXE; downloading {url}")
+    print(f"spec42 not found on PATH or via SPEC42_EXE; downloading {url}", flush=True)
     _download(url, archive_path)
 
     if archive_ext == "zip":
