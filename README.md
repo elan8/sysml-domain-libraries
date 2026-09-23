@@ -43,8 +43,8 @@ private import Elan8::Electronics::Actuation::ElectricalActuator;
 
 ## Validation
 
-```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\validate-spec42.ps1
+```sh
+python3 scripts/validate_spec42.py
 ```
 
 No sibling `mbse-methodology` checkout is required to validate this repository.
@@ -92,5 +92,5 @@ No sibling `mbse-methodology` checkout is required to validate this repository.
 
 - Naming and severity conventions: `docs/conventions.md`.
 - Repository sanity and acceptance checks: `docs/quality-checks.md`.
-- SysML semantic validation: run `powershell -ExecutionPolicy Bypass -File .\scripts\validate-spec42.ps1`.
+- SysML semantic validation: run `python3 scripts/validate_spec42.py`.
 - Cross-family examples and expected rule outcomes: see `examples/README.md`.
