@@ -24,8 +24,8 @@ The validation script resolves Spec42 in this order:
 
 - `--spec42` argument
 - `SPEC42_EXE` environment variable
-- a sibling `elan8/spec42` checkout's built binary
 - `spec42` on `PATH`
+- download and cache the release pinned in [`.spec42-version`](../.spec42-version) (under a user cache directory, once per machine per version)
 
 Run JSON output for automation with:
 
