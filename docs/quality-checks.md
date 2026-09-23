@@ -6,7 +6,7 @@ Use these checks before publishing new or changed SysML libraries.
 
 - `rg "package |library package" domain technical generic`
 - `rg "Elan8" domain technical generic` (must be empty — no method dependency)
-- `powershell -ExecutionPolicy Bypass -File .\scripts\validate-spec42.ps1`
+- `python3 scripts/validate_spec42.py`
 
 ## Library Expectations
 
@@ -22,21 +22,21 @@ By default, the repository script filters Spec42 diagnostics with `source = doma
 
 The validation script resolves Spec42 in this order:
 
-- `$env:SPEC42_EXE`
-- `C:\Git\elan8\spec42\target\debug\spec42.exe`
-- `C:\Git\spec42\target\debug\spec42.exe`
+- `--spec42` argument
+- `SPEC42_EXE` environment variable
+- a sibling `elan8/spec42` checkout's built binary
 - `spec42` on `PATH`
 
 Run JSON output for automation with:
 
-```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\validate-spec42.ps1 -Format json
+```sh
+python3 scripts/validate_spec42.py --format json
 ```
 
 There is currently no cross-family golden-path acceptance fixture: `domain/` was emptied when `domain/robotics` (the previous fixture owner) was removed for quality reasons. Until a new domain library ships one, treat `technical/software/examples/webshop/webshop.sysml` as the richest available example, noting it only exercises `technical/**` (not a cross-family `domain/` + `technical/` composition).
 
 To inspect Spec42's bundled domain-completeness diagnostics as advisory output, run:
 
-```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\validate-spec42.ps1 -IncludeDomainDiagnostics
+```sh
+python3 scripts/validate_spec42.py --include-domain-diagnostics
 ```
