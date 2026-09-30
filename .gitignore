@@ -1,1 +1,3 @@
 internal
+__pycache__/
+*.pyc
