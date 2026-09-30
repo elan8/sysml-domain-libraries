@@ -1,5 +1,7 @@
 # SysML Domain Libraries
 
+[![License](https://img.shields.io/github/license/elan8/sysml-domain-libraries)](LICENSE)
+
 This repository provides reusable SysML v2 **vocabulary** for things in the system:
 
 - `domain/` — business-domain vocabulary. Currently empty: the prior `robotics` library was removed (thin scaffolding, no downstream consumers — see Migration Map) while technical-library quality is prioritized before the next domain library is added.
@@ -43,8 +45,8 @@ private import Elan8::Electronics::Actuation::ElectricalActuator;
 
 ## Validation
 
-```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\validate-spec42.ps1
+```sh
+python3 scripts/validate_spec42.py
 ```
 
 No sibling `mbse-methodology` checkout is required to validate this repository.
@@ -92,5 +94,9 @@ No sibling `mbse-methodology` checkout is required to validate this repository.
 
 - Naming and severity conventions: `docs/conventions.md`.
 - Repository sanity and acceptance checks: `docs/quality-checks.md`.
-- SysML semantic validation: run `powershell -ExecutionPolicy Bypass -File .\scripts\validate-spec42.ps1`.
+- SysML semantic validation: run `python3 scripts/validate_spec42.py`.
 - Cross-family examples and expected rule outcomes: see `examples/README.md`.
+
+## License
+
+MIT. See [LICENSE](LICENSE).

@@ -79,6 +79,6 @@ Use these packages for service architecture, platform/runtime modeling, delivery
 
 ## Quality
 
-- Validate SysML syntax and semantic consistency with `scripts/validate-spec42.ps1`.
+- Validate SysML syntax and semantic consistency with `scripts/validate_spec42.py`.
 - Use the package guidance checklists above for modeling completeness until executable software-domain checks are available.
 - Do not add non-executable YAML rule catalogs; encode enforceable checks in Spec42 or another real validator first.
