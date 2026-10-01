@@ -1,0 +1,59 @@
+package Mechanical {
+    package Core {
+        private import Elan8::Core::*;
+        private import ISQ::*;
+
+        part def MechanicalComponent :> PhysicalComponent {
+
+        }
+    }
+    public import Drivetrain;
+    package Interconnection {
+        private import Elan8::Core::*;
+        private import ISQ::*;
+
+        port def MechanicalPort;
+
+        port def RotationalMechanicalPort :> MechanicalPort {
+            attribute angle : AngularMeasureValue;
+            attribute angularVelocity : AngularVelocityValue;
+            attribute torque : TorqueValue;
+        }
+
+        port def TranslationalMechanicalPort :> MechanicalPort {
+            attribute position : LengthValue;
+            attribute velocity : SpeedValue;
+            attribute force : ForceValue;
+        }
+
+        interface def RotationalMechanicalLink {
+            end sideA : RotationalMechanicalPort;
+            end sideB : RotationalMechanicalPort;
+        }
+
+        interface def TranslationalMechanicalLink {
+            end sideA : TranslationalMechanicalPort;
+            end sideB : TranslationalMechanicalPort;
+        }
+
+        connection def MechanicalMount {
+            end support : PhysicalComponent;
+            end mountedPart : PhysicalComponent;
+        }
+
+        connection def FastenedMount {
+            end support : PhysicalComponent;
+            end mountedPart : PhysicalComponent;
+        }
+
+        connection def SnapFitMount {
+            end support : PhysicalComponent;
+            end mountedPart : PhysicalComponent;
+        }
+
+        connection def RemovableMount {
+            end support : PhysicalComponent;
+            end mountedPart : PhysicalComponent;
+        }
+    }
+}
