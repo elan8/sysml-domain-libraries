@@ -4,10 +4,9 @@ This document standardizes naming and authoring conventions for all SysML librar
 
 ## Canonical Roots
 
-- Business-domain libraries belong under `domain/`.
-- Technical capability libraries belong under `technical/`.
-- Cross-domain foundation libraries (requirements, units, traceability) belong under `generic/`.
-- New files should not be added under deprecated legacy roots.
+- Technical capability libraries belong under `model/technical/`.
+- Cross-domain foundation libraries (core structure, units, procurement, physical modeling) belong under `model/generic/`.
+- Examples live beside those libraries and are collected by `model/Examples.sysml`. They are not exported from `Elan8`.
 
 ## Naming Standards
 
@@ -30,4 +29,9 @@ This document standardizes naming and authoring conventions for all SysML librar
 - Provide at least one passing minimal example per family.
 - Provide realistic cross-package examples that show how libraries compose.
 - Keep examples Spec42-clean unless the example is explicitly documented as parser or semantic-error material.
-- Document intended learning outcomes in `examples/README.md`.
+- State what the example demonstrates in its package `doc` comment.
+
+## Metadata And Quantities
+
+- Metadata values are literals: names, URLs, and codes.
+- Quantities, including `unitCost`, live on the part. A quantity literal such as `120 [EUR]` is not a model-level evaluable metadata value.

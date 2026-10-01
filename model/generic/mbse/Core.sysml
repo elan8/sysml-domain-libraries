@@ -3,8 +3,8 @@ package Core {
     attribute def Identifier;
     attribute def Name;
 
-    part def PhysicalComponent  {
+    part def PhysicalComponent {
         attribute name : Name;
         attribute mass : MassValue;
     }
-}
+} // package Core

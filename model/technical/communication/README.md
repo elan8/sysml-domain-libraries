@@ -8,7 +8,7 @@ Use these packages when a model needs protocol, endpoint, channel, binding, or m
 
 - Start with `Communication.sysml` (`Elan8::Communication`). Nested `Core` holds neutral endpoint, channel, operation, session, and binding concepts. Nested `Wireless` holds the BLE and Wi-Fi overlays.
 - Add `http/`, `grpc/`, `messaging/`, or `streaming/` when a model needs a concrete communication style.
-- Use `transport/`, `device-bus/`, and `industrial/` as scaffolds for lower-level or field-system communication detail. Wireless overlays are the nested `Wireless` package in `Communication.sysml`.
+- Use `transport/`, `device-bus/`, and `industrial/` as name scaffolds. They name TCP, UDP, USB, and the industrial networks; specialize them to add protocol detail. Wireless overlays are the nested `Wireless` package in `Communication.sysml`.
 
 ## Structure
 
@@ -17,9 +17,9 @@ Use these packages when a model needs protocol, endpoint, channel, binding, or m
 - `grpc/` - gRPC communication overlays (`Elan8::Communication::Grpc`).
 - `messaging/` - asynchronous messaging overlays (`Elan8::Communication::Messaging`).
 - `streaming/` - streaming broker specializations (`Elan8::Communication::Kafka`).
-- `transport/` - transport protocol scaffolds (TCP/UDP).
-- `device-bus/` - device and field bus scaffolds (USB).
-- `industrial/` - industrial protocol scaffolds (Modbus/Profinet/EtherCAT).
+- `transport/` - name scaffolds for TCP and UDP (`TcpTransport`, `UdpTransport`). Specialize them to add protocol detail.
+- `device-bus/` - name scaffold for USB (`UsbBus`). Specialize it to add bus detail.
+- `industrial/` - name scaffolds for Modbus, PROFINET, and EtherCAT. Specialize them to add fieldbus detail.
 
 ## Notes
 

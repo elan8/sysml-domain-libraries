@@ -9,11 +9,11 @@ package Electronics {
         private import Elan8::Core::*;
         private import ISQ::*;
 
-        attribute def SignalKind;
-        attribute def VoltageClass;
-        attribute def CurrentClass;
-        attribute def TimingClass;
-        attribute def PinCount;
+        attribute def SignalKind { doc /* Name meant to be specialized. */ }
+        attribute def VoltageClass { doc /* Name meant to be specialized. */ }
+        attribute def CurrentClass { doc /* Name meant to be specialized. */ }
+        attribute def TimingClass { doc /* Name meant to be specialized. */ }
+        attribute def PinCount { doc /* Name meant to be specialized. */ }
 
         part def ElectronicsComponent :> PhysicalComponent {
             attribute powerDraw : PowerValue;
@@ -39,24 +39,19 @@ package Electronics {
     package Interconnection {
         private import Elan8::Core::*;
         private import Elan8::Electronics::Core::*;
-        private import Elan8::PhysicalModeling::*;
         private import ISQ::*;
 
-        attribute def ConnectorType;
+        attribute def ConnectorType { doc /* Name meant to be specialized. */ }
 
         port def ElectricalTerminalPort {
             doc /*
-             * potential (across) and current (through), per Elan8::PhysicalModeling.
-             * Optional to set: topology-only usages (board connectors, harness
-             * conductors) leave them unset. Component constitutive equations and
-             * a future simulation compiler rely on them once set.
+             * Terminal potential and current. Optional to set: topology-only
+             * usages (board connectors, harness conductors) leave them unset.
+             * A simulation scenario maps them onto a Modelica or FMU variable
+             * when behavior is linked through Elan8::PhysicalModeling.
              */
-            attribute potential : ElectricPotentialValue {
-                @AcrossVariable;
-            }
-            attribute current : ElectricCurrentValue {
-                @ThroughVariable;
-            }
+            attribute potential : ElectricPotentialValue;
+            attribute current : ElectricCurrentValue;
         }
 
         part def ElectronicConnector :> PhysicalComponent {

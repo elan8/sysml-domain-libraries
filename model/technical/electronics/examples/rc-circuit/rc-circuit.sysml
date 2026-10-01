@@ -2,12 +2,9 @@ package RcCircuit {
     doc /*
      * Minimal series RC low-pass circuit: source -> resistor ->
      * capacitor -> ground, source return tied to the same ground.
-     * Demonstrates the constitutive equations added to Resistor,
-     * Capacitor, and VoltageSource (see
-     * Elan8::Electronics::Components::ElectronicComponentDomain) wired
-     * into a simulatable topology. See the known Spec42 gap noted in
-     * Elan8::PhysicalModeling before expecting these constraints to show
-     * up in Spec42's semantic graph today.
+     * Structural topology only. Dynamic behavior for simulation is a
+     * Modelica model or FMU linked from Elan8::PhysicalModeling, with the
+     * run declared as a SimulationScenario.
      */
 
     private import Elan8::Electronics::Components::*;

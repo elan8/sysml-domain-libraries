@@ -4,7 +4,7 @@ package Architecture {
     private import Elan8::Software::Distributed::*;
     private import Elan8::Software::Data::Sql::*;
     private import Elan8::Software::Interactions::*;
-    private import Elan8::Examples::Software::WebShop::Sequence::*;
+    private import Examples::Software::WebShop::Sequence::*;
 
     part def HttpService :> Service;
 

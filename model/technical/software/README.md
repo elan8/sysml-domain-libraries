@@ -2,15 +2,13 @@
 
 This directory contains technical SysML v2 software capabilities that can be reused across business domains.
 
-Use these packages for service architecture, platform/runtime modeling, delivery operations, security, and data persistence.
+Use these packages for service architecture, platform/runtime modeling, and data persistence.
 
 ## Best Starting Points
 
 - Start with `Software.sysml` (`Elan8::Software`). Shared vocabulary is the nested `Core` package (`Elan8::Software::Core`).
 - Add `distributed-systems/DistributedSystems.sysml` for service and dependency modeling.
 - Add `platform/` for cloud and Kubernetes deployment capabilities.
-- Add `delivery-ops/` for release, control-plane, and observability concerns.
-- Add `security/` for identity and cyber-assurance overlays.
 - Add `data/` for relational and non-relational persistence vocabulary.
 - Add `realtime-runtime/` for real-time task, queue, and scheduler vocabulary (embedded or otherwise).
 - For method-style requirement roles and traceability metadata, use sibling `mbse-methodology` optionally; software vocabulary does not depend on it.
@@ -22,13 +20,7 @@ Use these packages for service architecture, platform/runtime modeling, delivery
 - `distributed-systems/DistributedSystems.sysml` (`Elan8::Software::Distributed`) - services, boundaries, dependencies, events, and brokers
 - `platform/CloudRuntimeDomain.sysml` (`Elan8::Software::Platform::Cloud`) - cloud runtime and execution context vocabulary
 - `platform/KubernetesDomain.sysml` (`Elan8::Software::Platform::Kubernetes`) - Kubernetes workload and cluster vocabulary
-- `delivery-ops/SoftwareControlPlane.sysml` - control-plane orchestration vocabulary
-- `delivery-ops/SoftwareDelivery.sysml` - delivery pipeline and release vocabulary
-- `delivery-ops/ObservabilityDomain.sysml` - telemetry, traces, and SLO/SLA vocabulary
 - `interactions/SoftwareInteractions.sysml` (`Elan8::Software::Interactions`) - sequence and interaction modeling vocabulary
-- `security/IdentitySecurityDomain.sysml` - identity, authn/authz, and trust boundary vocabulary
-- `security/CyberAssuranceDomain.sysml` - security control and assurance vocabulary
-- `security/EuCyberResilienceOverlay.sysml` - CRA-focused compliance overlay vocabulary
 - `data/SqlDomain.sysml` (`Elan8::Software::Data::Sql`) - relational persistence vocabulary
 - `data/NosqlDomain.sysml` (`Elan8::Software::Data::NoSql`) - non-relational persistence vocabulary
 - `realtime-runtime/RealtimeRuntime.sysml` (`Elan8::Software::Realtime`) - real-time task, queue, and scheduler vocabulary
@@ -52,18 +44,6 @@ Use these packages for service architecture, platform/runtime modeling, delivery
 - **When to use:** cloud runtime constraints, multi-environment deployment, and workload placement.
 - **Anti-patterns:** runtime abstraction without host/runtime metadata, environment assumptions left implicit.
 - **Minimum checklist:** runtime and node identity modeled, target environment named, deployable artifacts linked.
-
-### delivery-ops
-
-- **When to use:** release governance, operational policy, and observability requirements.
-- **Anti-patterns:** delivery flow without policy gates, telemetry obligations not represented.
-- **Minimum checklist:** release/control ownership modeled, policy checks declared, observability signals defined.
-
-### security
-
-- **When to use:** identity lifecycle, trust boundaries, control inheritance, and compliance overlays.
-- **Anti-patterns:** authentication modeled without authorization context, controls with no assurance evidence path.
-- **Minimum checklist:** identity actors and trust boundaries declared, controls mapped to assets, assurance responsibilities explicit.
 
 ### data
 

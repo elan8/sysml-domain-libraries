@@ -12,7 +12,7 @@ From the repository root:
 spec42 check technical/software/examples/webshop/webshop.sysml
 ```
 
-In VS Code, open `webshop.sysml`. Requirements and views are nested in that package (`Elan8::Examples::Software::WebShop::Requirements` and `::Views`) because those names are standard-library roots and cannot be declared again at the top level.
+In VS Code, open `webshop.sysml`. Requirements and views are nested in that package (`Examples::Software::WebShop::Requirements` and `::Views`) because those names are standard-library roots and cannot be declared again at the top level.
 
 The entry model is `webshop.sysml`, which assembles:
 

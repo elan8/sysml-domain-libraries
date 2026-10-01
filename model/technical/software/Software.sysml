@@ -3,13 +3,13 @@ package Software {
         private import Elan8::Core::*;
         private import ScalarValues::String;
 
-        attribute def PathString;
-        attribute def VersionString;
-        attribute def EnvironmentName;
-        attribute def ResourceName;
-        attribute def CriticalityLevel;
-        attribute def OperationEffectKind;
-        attribute def LanguageName;
+        attribute def PathString { doc /* Name meant to be specialized. */ }
+        attribute def VersionString { doc /* Name meant to be specialized. */ }
+        attribute def EnvironmentName { doc /* Name meant to be specialized. */ }
+        attribute def ResourceName { doc /* Name meant to be specialized. */ }
+        attribute def CriticalityLevel { doc /* Name meant to be specialized. */ }
+        attribute def OperationEffectKind { doc /* Name meant to be specialized. */ }
+        attribute def LanguageName { doc /* Name meant to be specialized. */ }
 
         part def SoftwareComponent{
             attribute name : Name;

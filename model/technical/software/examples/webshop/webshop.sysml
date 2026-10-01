@@ -2,7 +2,7 @@ package WebShop {
     public import Architecture;
     public import Behavior;
     package Requirements {
-        private import Elan8::Examples::Software::WebShop::Architecture::*;
+        private import Examples::Software::WebShop::Architecture::*;
 
         requirement def CheckoutLatencyReq {
             subject checkoutService : CheckoutService;
@@ -37,46 +37,46 @@ package WebShop {
     public import Sequence;
     package Views {
         private import StandardViewDefinitions::*;
-        private import Elan8::Examples::Software::WebShop::Architecture::*;
-        private import Elan8::Examples::Software::WebShop::Behavior::*;
-        private import Elan8::Examples::Software::WebShop::Requirements::*;
-        private import Elan8::Examples::Software::WebShop::*;
+        private import Examples::Software::WebShop::Architecture::*;
+        private import Examples::Software::WebShop::Behavior::*;
+        private import Examples::Software::WebShop::Requirements::*;
+        private import Examples::Software::WebShop::*;
 
         view structure : GeneralView {
-            expose Elan8::Examples::Software::WebShop::webshopSystem;
+            expose Examples::Software::WebShop::webshopSystem;
         }
 
         view connections : InterconnectionView {
-            expose Elan8::Examples::Software::WebShop::webshopSystem;
+            expose Examples::Software::WebShop::webshopSystem;
         }
 
         view checkoutFlow : SequenceView {
-            expose Elan8::Examples::Software::WebShop::Architecture::CheckoutFlow;
+            expose Examples::Software::WebShop::Architecture::CheckoutFlow;
         }
 
         view orderEventFanout : SequenceView {
-            expose Elan8::Examples::Software::WebShop::Architecture::OrderEventFanout;
+            expose Examples::Software::WebShop::Architecture::OrderEventFanout;
         }
 
         view orderLifecycle : StateTransitionView {
-            expose Elan8::Examples::Software::WebShop::Behavior::OrderLifecycleStateMachine;
+            expose Examples::Software::WebShop::Behavior::OrderLifecycleStateMachine;
         }
 
         view checkoutPipeline : ActionFlowView {
-            expose Elan8::Examples::Software::WebShop::Behavior::CheckoutPipeline;
+            expose Examples::Software::WebShop::Behavior::CheckoutPipeline;
         }
 
         view requirements : GeneralView {
-            expose Elan8::Examples::Software::WebShop::Requirements::CheckoutLatencyReq;
-            expose Elan8::Examples::Software::WebShop::Requirements::CheckoutAvailabilityReq;
-            expose Elan8::Examples::Software::WebShop::Requirements::PaymentReliabilityReq;
-            expose Elan8::Examples::Software::WebShop::Requirements::EventDurabilityReq;
-            expose Elan8::Examples::Software::WebShop::Requirements::SecurityBoundaryReq;
+            expose Examples::Software::WebShop::Requirements::CheckoutLatencyReq;
+            expose Examples::Software::WebShop::Requirements::CheckoutAvailabilityReq;
+            expose Examples::Software::WebShop::Requirements::PaymentReliabilityReq;
+            expose Examples::Software::WebShop::Requirements::EventDurabilityReq;
+            expose Examples::Software::WebShop::Requirements::SecurityBoundaryReq;
         }
     }
-    private import Elan8::Examples::Software::WebShop::Architecture::*;
-    private import Elan8::Examples::Software::WebShop::Requirements::*;
-    private import Elan8::Examples::Software::WebShop::Behavior::*;
+    private import Examples::Software::WebShop::Architecture::*;
+    private import Examples::Software::WebShop::Requirements::*;
+    private import Examples::Software::WebShop::Behavior::*;
     private import Elan8::Software::Platform::Kubernetes::*;
 
     part def CommerceCluster :> KubernetesCluster {

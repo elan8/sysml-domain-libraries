@@ -9,6 +9,15 @@ package Examples {
     package Mechanical {
         public import Composition;
     }
+    package PhysicalModeling {
+        public import MassSpringSimulation;
+    }
+    package Procurement {
+        public import PartSourcingExample;
+    }
+    package Composition {
+        public import BenchInstrumentExample;
+    }
     package Software {
         public import WebShop;
     }

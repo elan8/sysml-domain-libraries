@@ -10,31 +10,35 @@ unchanged").
 
 | Package | File | Purpose |
 | --- | --- | --- |
-| `Elan8::Procurement` | `PartProcurement.sysml` | `BuyPart` metadata and `PartLifecycleStatus` for any purchasable part definition |
+| `Elan8::Procurement` | `PartProcurement.sysml` | `CostedPart` unit-cost mixin, `BuyPart` and `MakePart` metadata, plus `PartLifecycleStatus` |
 
 ## Elan8::Procurement
 
 ```sysml
 private import Elan8::Procurement::*;
+private import Elan8::Units::Money::*;
 
-part def MyMcu :> SomeBaseDefinition {
+part def MyMcu :> SomeBaseDefinition, CostedPart {
     @BuyPart {
         manufacturer = "Example Semiconductor Co.";
         manufacturerPartNumber = "ES-MCU-100";
-        productPageUrl = "https://example.invalid/es-mcu-100";
-        datasheetUrl = "https://example.invalid/es-mcu-100/datasheet";
-        datasheetDocumentId = "DS-0001";
-        datasheetRevision = "Rev 1";
-        lifecycleStatus = PartLifecycleStatus::active;
-        sourceCheckedOn = "2026-07-28";
+        url = "https://example.invalid/es-mcu-100";
     }
+    attribute :>> unitCost = 120 [EUR];
+}
+
+part def MyBracket :> SomeBaseDefinition, CostedPart {
+    @MakePart;
+    attribute :>> unitCost = 45 [EUR];
 }
 ```
 
-`BuyPart` annotates any `SysML::PartDefinition` with manufacturer, external
-documentation links, and lifecycle status. Internal model identity stays
-semantic; only human-facing external identifiers (part numbers, datasheet
-revisions) are plain text. This deliberately carries no domain- or
-technology-specific semantics, so any project-local or vendor-specific
-catalogue (electronics, mechanical, or otherwise) can annotate its own part
-definitions with it instead of re-deriving the same pattern locally.
+`CostedPart.unitCost` is a `MonetaryAmount`. Set it on the part (`120 [EUR]`);
+the symbol and minor-unit exponent come from that `MonetaryUnit`. `@BuyPart`
+and `@MakePart` carry only literals: manufacturer, manufacturer part number,
+and a product URL for a catalog part. A make part's unit cost is a
+manufacturing estimate, not a catalog price. Internal model identity stays
+semantic. This deliberately carries no domain- or technology-specific
+semantics, so any project-local catalogue can specialize `CostedPart` and
+annotate its own part definitions instead of re-deriving the same pattern
+locally.

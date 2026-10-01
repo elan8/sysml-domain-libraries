@@ -11,7 +11,7 @@ Use these packages when a model needs vocabulary for purely mechanical component
 
 ## Structure
 
-- `Mechanical.sysml` - `Elan8::Mechanical`, including nested `Core` (`Elan8::Mechanical::Core`, `mass` on `MechanicalComponent`) and `Interconnection` (`Elan8::Mechanical::Interconnection`).
+- `Mechanical.sysml` - `Elan8::Mechanical`, including nested `Core` (`Elan8::Mechanical::Core`, `MechanicalComponent` specializes `PhysicalComponent` and inherits `mass`) and `Interconnection` (`Elan8::Mechanical::Interconnection`).
 - `drivetrain/` - gearbox, wheel, and caster-wheel vocabulary (`Elan8::Mechanical::Drivetrain`).
 
 ## Related Layers
@@ -29,5 +29,5 @@ Use these packages when a model needs vocabulary for purely mechanical component
 ## Notes
 
 - Mechanical libraries are technical and business-agnostic.
-- `MechanicalComponent` deliberately does **not** share a common ancestor with `ElectronicsComponent` (no multi-specialization) — `mass` is independently declared on both. A purely mechanical part specializes `MechanicalComponent`; an electromechanical part (has a port) specializes `ElectronicsComponent` instead, even though it also has mass.
-- `MechanicalComponent` carries no `powerDraw` — purely mechanical parts don't draw power. If a part needs both `mass` and `powerDraw`, it isn't purely mechanical and belongs in `../electronics/` instead.
+- `MechanicalComponent` and `ElectronicsComponent` both specialize `Elan8::Core::PhysicalComponent`, where `mass` is declared once. A purely mechanical part specializes `MechanicalComponent`. An electromechanical part specializes `ElectronicsComponent`.
+- `powerDraw` is declared on `ElectronicsComponent`, not on `MechanicalComponent`. A part that draws electrical power belongs in `../electronics/`.

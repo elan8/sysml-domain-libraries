@@ -1,46 +1,62 @@
 # Physical Modeling
 
-Domain-agnostic primitives for writing constitutive (behavior) equations on physical
-components, so a future simulation compiler can assemble a DAE/ODE from connected
-components instead of each domain library reinventing a differentiation primitive.
+Links a part definition to an external dynamic model — a Modelica class or an
+FMI Functional Mock-up Unit — and defines a simulation run as an analysis case.
+The SysML model keeps system identity, structure, and the scenario. It does not
+encode constitutive equations.
 
 ## Contents
 
 | Package | File | Purpose |
 | --- | --- | --- |
-| `Elan8::PhysicalModeling` | `PhysicalModeling.sysml` | `der` differentiation primitive; `AcrossVariable`/`ThroughVariable` metadata defs for tagging potential-like vs flow-like port attributes |
+| `Elan8::PhysicalModeling` | `PhysicalModeling.sysml` | `ModelicaModel` and `FmuModel` metadata; `SimulationScenario` analysis case |
 
 ## Usage
 
-Tag the across/through attributes on the port definition:
+Tag the part definition with the artifact a simulation tool should execute:
 
 ```sysml
 private import Elan8::PhysicalModeling::*;
 
-port def ElectricalTerminalPort {
-    attribute potential : ElectricPotentialValue {
-        @AcrossVariable;
+part def MassSpring {
+    @ModelicaModel {
+        resourceUri = "models/MassSpring.mo";
+        className = "Example.MassSpring";
     }
-    attribute current : ElectricCurrentValue {
-        @ThroughVariable;
+}
+
+part def Damper {
+    @FmuModel {
+        resourceUri = "models/Damper.fmu";
+        fmuKind = FmuKind::coSimulation;
+        modelIdentifier = "Damper";
+        fmiVersion = "3.0";
     }
 }
 ```
 
-Write component behavior as acausal `constraint` bodies, using `==` (the equality
-operator — `=` is a feature-value binding and is a constraint-body syntax error):
+Specialize `SimulationScenario` for one run. `in` parameters are inputs, `out`
+parameters are the signals to trace, and `@ExternalVariable` maps a feature to
+the Modelica or FMU variable name when the names differ. A co-simulation FMU
+sets `communicationStep` and can leave `solver` unset.
 
 ```sysml
-constraint capacitorLaw {
-    terminal1.current == capacitance * der(terminal1.potential - terminal2.potential);
+analysis def MassSpringStep :> SimulationScenario {
+    subject massSpring : MassSpring :>> simulatedSystem;
+    attribute :>> stopTime = 5 [s];
+    attribute :>> outputInterval = 0.01 [s];
+    attribute :>> solver {
+        :>> name = "dassl";
+        :>> relativeTolerance = 0.000001;
+    }
+    in mass : MassValue = 1 [kg] {
+        @ExternalVariable { variableName = "m"; }
+    }
+    out position : LengthValue {
+        @ExternalVariable { variableName = "s"; }
+    }
 }
 ```
 
-`der` has no evaluatable body — it is a signature a simulation compiler recognizes by
-its `@DerivativePrimitive` metadata and replaces with a state derivative during DAE
-assembly. `@AcrossVariable`/`@ThroughVariable` label which port attributes are
-potential-like versus flow-like. They do not by themselves make a plain
-`connect`/`interface` equalize across variables or sum through variables to zero at a
-shared node — deriving KVL/KCL-style conservation constraints from connection topology
-is the simulation compiler's job, not this library's — see the doc comment in
-`PhysicalModeling.sysml` for why plain `connect` binding cannot do this generically.
+`@TimeSeriesInput` on an `in` parameter points at a file when the input is a
+signal rather than a constant. See `examples/mass-spring/`.

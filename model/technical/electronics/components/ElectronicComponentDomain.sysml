@@ -1,7 +1,6 @@
 package Components {
     private import Elan8::Electronics::Core::*;
     private import Elan8::Electronics::Interconnection::*;
-    private import Elan8::PhysicalModeling::*;
     private import ISQ::*;
     private import ScalarValues::*;
 
@@ -21,16 +20,6 @@ package Components {
         :> BoardLevelElectronicComponent {
         port terminal1 : ElectricalTerminalPort;
         port terminal2 : ElectricalTerminalPort;
-
-        doc /*
-         * Branch-current continuity: current entering terminal1 equals
-         * current leaving terminal2, the standard lumped two-terminal
-         * assumption. Holds for capacitors and inductors too (see
-         * Elan8::PhysicalModeling); it is not affected by internal storage.
-         */
-        constraint branchCurrentContinuity {
-            terminal2.current == -terminal1.current
-        }
     }
 
     abstract part def ThreeTerminalElectronicComponent
@@ -51,20 +40,12 @@ package Components {
         attribute tolerance : ComponentTolerance;
         attribute ratedPower : PowerValue;
         attribute maximumWorkingVoltage : ElectricPotentialValue;
-
-        constraint ohmsLaw {
-            terminal1.potential - terminal2.potential == resistance * terminal1.current
-        }
     }
 
     part def Capacitor :> TwoTerminalPassiveComponent {
         attribute capacitance : CapacitanceValue;
         attribute tolerance : ComponentTolerance;
         attribute ratedVoltage : ElectricPotentialValue;
-
-        constraint capacitorLaw {
-            terminal1.current == capacitance * der(terminal1.potential - terminal2.potential)
-        }
     }
 
     part def CeramicCapacitor :> Capacitor;
@@ -81,10 +62,6 @@ package Components {
         attribute inductance : InductanceValue;
         attribute tolerance : ComponentTolerance;
         attribute ratedCurrent : ElectricCurrentValue;
-
-        constraint inductorLaw {
-            terminal1.potential - terminal2.potential == inductance * der(terminal1.current)
-        }
     }
 
     part def Fuse :> TwoTerminalPassiveComponent {
@@ -94,35 +71,22 @@ package Components {
 
     part def VoltageSource :> TwoTerminalElectronicComponent {
         doc /*
-         * Ideal zero-internal-impedance source, needed to close a
-         * simulatable circuit alongside CurrentSource and Ground below.
-         * Distinct from the system-level power architecture parts in
+         * Ideal zero-internal-impedance source. Distinct from the
+         * system-level power architecture parts in
          * Elan8::Electronics::Power (BatteryPack, VoltageRegulator, ...),
          * which model real supply hardware rather than an idealized
-         * schematic-analysis primitive.
+         * schematic primitive.
          */
         attribute sourceVoltage : ElectricPotentialValue;
-
-        constraint sourceLaw {
-            terminal1.potential - terminal2.potential == sourceVoltage
-        }
     }
 
     part def CurrentSource :> TwoTerminalElectronicComponent {
         attribute sourceCurrent : ElectricCurrentValue;
-
-        constraint sourceLaw {
-            terminal1.current == sourceCurrent
-        }
     }
 
     part def Ground :> BoardLevelElectronicComponent {
-        doc /* Reference node: fixes terminal.potential to zero. */
+        doc /* Reference node of a circuit. */
         port terminal : ElectricalTerminalPort;
-
-        constraint groundReference {
-            terminal.potential == 0
-        }
     }
 
     part def CrystalResonator :> TwoTerminalPassiveComponent {
