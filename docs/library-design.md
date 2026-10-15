@@ -220,7 +220,7 @@ tool should process it, and metadata says how.
 | `Elan8::Units` | engineering and monetary units | keep |
 | `Elan8::Procurement` | `BomItem` and sourcing metadata | keep |
 | `Elan8::PhysicalModeling` | `ModelicaModel`, `FmuModel`, `ExternalVariable`, `SimulationScenario` | keep: the reference for how bindings should look |
-| `Elan8::Electronics` | components with typed terminals and ratings, power, sensing, actuation, buses | keep; remove placeholder types (`SignalKind`, `VoltageClass`, …) and `name` attributes; make bus and interface kinds typed ports |
+| `Elan8::Electronics` | components with typed terminals and ratings, power, sensing, actuation, buses, including the component catalogue (`Resistor`, `Mosfet`, `BldcMotor`, `Microcontroller`, …) | keep, catalogue included: these are generic kinds of component, with no vendor or part-number content. Remove placeholder types (`SignalKind`, `VoltageClass`, …) and `name` attributes; make bus and interface kinds typed ports; move application roles out (5.4) |
 | `Elan8::Mechanical` | rotational and translational ports, drivetrain | keep; extend in the same style (across and through variables) |
 | `Elan8::Software` | 5.2 | rebuild around operations, interaction ports, tasks and platforms |
 | `Elan8::Software::Interactions` | sequence-diagram notation as part defs | delete: native SysML interactions |
@@ -304,6 +304,22 @@ declaration that follows it.
 Names must avoid SysML's reserved words, which include `message`, `language`, `loop`, `frame` and
 `derived`; hence `payload`, `targetLanguage` and `codeLanguage` above.
 
+### 5.4 Generic kinds, not application roles
+
+A library definition names a **kind** of thing defined by its technology or physics (a switch, an
+infrared receiver, a brushless motor), never a **role** it plays in one application (a bumper, a
+docking beacon). Roles belong in the model that has them, as specialisations of the library kind.
+Vendor- and part-number-specific content (a particular MCU, a manufacturer's capacitor series) does
+not belong in the library either; it is project data, or an optional catalogue built on the
+library.
+
+Four electronics definitions are application roles from the robot vacuum and move to that model:
+
+| Now in `Elan8::Electronics::Sensing` | Becomes |
+|---|---|
+| `BumperSwitch`, `LiftSwitch` | the robot's own `:> SwitchSensor` definitions; the library keeps `SwitchSensor` |
+| `HomingBeaconTransmitter`, `HomingBeaconReceiver` and `HomingBeaconPort` | generic `InfraredTransmitter`, `InfraredReceiver` and an infrared port in the library; the robot's beacon specialises them |
+
 ## 6. What a tool needs from the libraries
 
 - **Stable types to recognise.** Every concept a tool acts on is a library definition or keyword;
@@ -330,8 +346,6 @@ Names must avoid SysML's reserved words, which include `message`, `language`, `l
 
 ## 8. Open questions
 
-- **Electronics catalogue.** Should catalogue-level parts (`CeramicCapacitor`, `BldcMotor`,
-  `CatalogMcu`) stay in the core or move to an optional catalogue package?
 - **Keywords.** Which concepts deserve a keyword (`#operation`, `#query`, `#command`, `#task`, `#component`), and do the
   editors need anything to make keywords discoverable?
 - **Spec42 support.** Semantic metadata keywords, view-scoped generation and disjointness
