@@ -122,6 +122,54 @@ metadata def <operation> OperationMetadata :> Metaobjects::SemanticMetadata {
 What this gives a generator: one function or method signature per operation, typed from its
 parameters, and the right place for it (free function or member of the owning component).
 
+#### Queries and commands
+
+Operations come in two kinds, following command–query separation. The kind is a type, with a
+keyword, so tools recognise it the same way as everything else:
+
+```sysml
+abstract action def QueryOperation :> SoftwareOperation;    // keyword #query
+abstract action def CommandOperation :> SoftwareOperation;  // keyword #command
+metadata def Idempotent;                                    // a command that can be safely repeated
+
+part def Navigator :> SoftwareComponent {
+    attribute targetSpeed : SpeedValue;
+    #query action def CurrentPose { out pose : Pose; }
+    #command action def SetSpeed { in speed : SpeedValue; @Idempotent; }
+}
+```
+
+The two kinds have a precise meaning, which is what makes them checkable:
+
+- **A query** returns information and has no effect outside its own execution. It does not assign
+  a feature of its owner or of anything else, does not `send`, and does not perform a command,
+  directly or through another operation. Its `out` parameters are its result. Queries are
+  idempotent by definition.
+- **A command** may change state or emit messages and events. Under strict command–query separation
+  it returns no domain data, only completion or an error; because many designs return the
+  identifier of something they create, strict separation is an option a project switches on, not a
+  rule of the library.
+- **Idempotency** is separate from the kind. `setSpeed(5)` is an idempotent command; `increment()` is
+  not. It matters wherever a command can be delivered or retried more than once.
+- **An unclassified** `SoftwareOperation` is allowed while a design is immature. Tools treat it as a
+  command, the conservative assumption.
+
+SysML can declare the two kinds disjoint (`action def CommandOperation :> SoftwareOperation
+disjoint from QueryOperation`). Spec42 parses but does not yet model disjointness, so until it
+does, "an operation is not both" is a tool check.
+
+What this enables:
+
+| Use | Query | Command |
+|---|---|---|
+| Model checks | the body contains no `assign` to non-local features, no `send` and no command call (transitively); a transition guard, `if` condition, constraint or requirement calls only queries | strict separation (when switched on): no `out` parameters but status |
+| Interface checks | an HTTP `GET` or `HEAD` binding must bind a query; a query on a message port is suspect | a non-idempotent command on an at-least-once channel (`Topic`, retrying RPC) is flagged unless the receiver deduplicates |
+| Formal verification | a pure function: usable in properties and contracts; leaves state unchanged, so its frame condition is implied; concurrent queries commute, which shrinks the state space (partial-order reduction) | the only state transitions: the transition relation is built from commands; their pre- and postconditions are proof obligations; invariants need checking only after commands |
+| Code generation | `const` method, `&self`, pure function; results may be cached | mutating method (`&mut self`); retry and deduplication code only where the command is not idempotent |
+
+These checks need the operation's body to be modelled; for an operation without a body, the kind
+is a contract that generated code and code-level checks enforce (for example a `const` method).
+
 ### 4.2 Which state machines become code?
 
 A state machine in a model is either a **specification** (what some part must do) or an
@@ -153,8 +201,8 @@ simulator in Python), each with its own scope and options.
 
 | Tool | Role (type) | Intent and scope (relationship, view, case) | Options (metadata) |
 |---|---|---|---|
-| Code generation | `SoftwareComponent`, `SoftwareOperation`, interaction ports, payload `item def`s, `state def`s | ownership, `exhibit`, `allocate`; a `CodeGenerationView` | `CodeGeneration`, technology bindings (`Rpc`, `Topic`, `HttpRoute`, …), `SourceCode` |
-| Formal verification | `state def`s, interaction ports, constraints | a `verification def` whose subject is the component and whose objective names the requirements; `VerificationMethod` = analysis | `FormalVerification { technique; bound; }` |
+| Code generation | `SoftwareComponent`, `QueryOperation` / `CommandOperation`, interaction ports, payload `item def`s, `state def`s | ownership, `exhibit`, `allocate`; a `CodeGenerationView` | `CodeGeneration`, technology bindings (`Rpc`, `Topic`, `HttpRoute`, …), `SourceCode` |
+| Formal verification | `state def`s, queries and commands, interaction ports, constraints | a `verification def` whose subject is the component and whose objective names the requirements; `VerificationMethod` = analysis | `FormalVerification { technique; bound; }` |
 | Timing analysis | `Task`, `ExecutionPlatform` | `allocate` task to platform; an `analysis def` over a platform | scheduling policy on the platform |
 | Simulation | physical ports, parameters with units, `ModelicaModel` / `FmuModel` | an `analysis def` specialising `SimulationScenario` (subject, inputs, outputs, horizon) | solver settings on the case |
 | Budgets and BOM | quantities with units, `BomItem` | roll-up `calc`s and the decomposition | currency, sourcing |
@@ -189,6 +237,8 @@ package Software {
     }
 
     abstract action def SoftwareOperation;                 // 4.1, keyword #operation
+    abstract action def QueryOperation :> SoftwareOperation;    // keyword #query
+    abstract action def CommandOperation :> SoftwareOperation;  // keyword #command
 
     abstract port def InteractionPort;
     port def RequestReplyPort :> InteractionPort {         // synchronous call
@@ -282,7 +332,9 @@ Names must avoid SysML's reserved words, which include `message`, `language`, `l
 
 - **Electronics catalogue.** Should catalogue-level parts (`CeramicCapacitor`, `BldcMotor`,
   `CatalogMcu`) stay in the core or move to an optional catalogue package?
-- **Keywords.** Which concepts deserve a keyword (`#operation`, `#task`, `#component`), and do the
+- **Keywords.** Which concepts deserve a keyword (`#operation`, `#query`, `#command`, `#task`, `#component`), and do the
   editors need anything to make keywords discoverable?
-- **Spec42 support.** Semantic metadata keywords and view-scoped generation must be supported by the
-  generator API; this needs a Spec42 issue once the design is agreed.
+- **Spec42 support.** Semantic metadata keywords, view-scoped generation and disjointness
+  (`disjoint from`) must be supported; this needs a Spec42 issue once the design is agreed.
+- **Strict command–query separation.** Should it be the default for new projects, or opt-in as
+  proposed?
