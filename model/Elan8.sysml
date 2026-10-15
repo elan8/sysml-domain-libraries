@@ -1,7 +1,7 @@
 package Elan8 {
-    public import Communication;
     public import Core;
     public import Electronics;
+    public import Generation;
     public import Mechanical;
     public import PhysicalModeling;
     public import Procurement;
