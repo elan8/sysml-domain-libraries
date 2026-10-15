@@ -1,7 +1,8 @@
 # Library design
 
-Status: proposal. Nothing in `model/` changes until this document is agreed. The SysML snippets
-have been checked with Spec42 against the standard library.
+Status: proposal. Nothing in `model/` changes until this document is agreed. The design and its
+snippets follow the OMG SysML v2.0 specification (section numbers refer to it), not the behaviour of
+any one tool.
 
 This document sets out what the Elan8 libraries are for, what belongs in them, and how a tool
 knows what to do with a model built from them. It reviews the current packages against that, and
@@ -82,16 +83,63 @@ the parameters a generator or deployment tool needs, on a generic element. The t
 specification (a `.proto`, an OpenAPI or AsyncAPI document, a CAN DBC) is referenced, not
 re-modelled.
 
-### 3.5 Keywords through semantic metadata
+### 3.5 Keywords
 
-Frequently used concepts get a user-defined keyword (SysML v2 7.27.4): a `metadata def` specialising
-`SemanticMetadata` with a `baseType`. Declaring with the keyword implicitly specialises the base, so
-models read naturally and tools still see a typed fact:
+SysML v2 lets a library define keywords (7.27.4): `#name` before a declaration applies the metadata
+definition `name`. When that definition specialises `SemanticMetadata` with a `baseType`, the
+keyword also specialises the base implicitly, so `#query action def CurrentPose` makes
+`CurrentPose` a `QueryOperation` (7.27.3), with everything that implies: its inherited features
+can be redefined and tools see the specialisation like any other.
 
-```sysml
-#operation action def ReadWheelSpeed { in wheel : WheelId; out speed : AngularVelocityValue; }
-#task part def MotorControlLoop { … }
-```
+A keyword is shorthand for `:>` plus a recognisable role; it adds no meaning of its own. It earns its
+place only when all of these hold:
+
+1. it marks a **role tools act on** (generation, verification, analysis);
+2. engineers **declare new definitions of that role often**, so the shorthand pays off;
+3. it **reads as a natural modelling word** in front of the SysML keyword;
+4. its name is short, lower case, unambiguous across Elan8 libraries, and **not a SysML reserved
+   word** (`event`, `message`, `interface`, `flow` and `language` are reserved).
+
+That gives a deliberately small set.
+
+**Role keywords** (semantic metadata, implicit specialisation):
+
+| Keyword | Specialises | Example |
+|---|---|---|
+| `#software` | `SoftwareComponent` | `#software part def Navigator { … }` |
+| `#task` | `Task` | `#task part def MotorControlLoop { … }` |
+| `#platform` | `ExecutionPlatform` | `#platform part def MainMcu { … }` |
+| `#query` | `QueryOperation` | `#query action def CurrentPose { out pose : Pose; }` |
+| `#command` | `CommandOperation` | `#command action def SetSpeed { in speed : SpeedValue; }` |
+| `#operation` | `SoftwareOperation` | an operation not yet classified as query or command |
+| `#call` | `RequestReplyPort` | `#call port def PoseService { in item :>> request : PoseRequest; out item :>> reply : Pose; }` |
+| `#oneway` | `MessagePort` | `#oneway port def SpeedCommands { out item :>> payload : SpeedCommand; }` |
+| `#stream` | `StreamPort` | `#stream port def ImuSamples { out item :>> sample : ImuSample; }` |
+
+**Marker keywords** (plain metadata without attributes, which also works as `#name`):
+
+| Keyword | Meaning |
+|---|---|
+| `#idempotent` | a command that can be repeated safely (4.1) |
+| `#external` | a component realised outside the project (third-party, off-the-shelf, legacy): generators do not generate it, and verification treats its contract as an assumption |
+
+**No keywords** for:
+
+- electronics and mechanical kinds: engineers mostly type usages (`part r : Resistor`) rather than
+  declare new definitions, and `:>` reads well where they do;
+- technology bindings with parameters (`Rpc`, `Topic`, `HttpRoute`): they need a body,
+  `@Rpc { … }`, so a keyword adds nothing;
+- views and analysis cases: they are typed (`: CodeGenerationView`), which is already the native
+  form;
+- contracts: preconditions, postconditions and invariants are native constraints.
+
+Conventions:
+
+- **Always pair a keyword with the SysML keyword** (`#query action def`, not `#query def`). SysML
+  allows the bare form (7.27.4), but it hides the metaclass from the reader.
+- **A clash is resolved by qualification:** `#Elan8::Software::query` always works.
+- **Every keyword has a `:>` equivalent,** so models written either way mean the same and tools
+  check only the type.
 
 ## 4. Answers to the design questions
 
@@ -154,9 +202,10 @@ The two kinds have a precise meaning, which is what makes them checkable:
 - **An unclassified** `SoftwareOperation` is allowed while a design is immature. Tools treat it as a
   command, the conservative assumption.
 
-SysML can declare the two kinds disjoint (`action def CommandOperation :> SoftwareOperation
-disjoint from QueryOperation`). Spec42 parses but does not yet model disjointness, so until it
-does, "an operation is not both" is a tool check.
+The two kinds are mutually exclusive. SysML's textual notation cannot state that for definitions:
+`DefinitionDeclaration` is `Identification SubclassificationPart?` (8.2.2), and disjoining
+(`disjoint from`) exists only in KerML (KerML 7.3.2.5). So "an operation is not both a query and a
+command" is a rule of this library, stated in the definitions' documentation and checked by tools.
 
 What this enables:
 
@@ -346,9 +395,10 @@ Four electronics definitions are application roles from the robot vacuum and mov
 
 ## 8. Open questions
 
-- **Keywords.** Which concepts deserve a keyword (`#operation`, `#query`, `#command`, `#task`, `#component`), and do the
-  editors need anything to make keywords discoverable?
-- **Spec42 support.** Semantic metadata keywords, view-scoped generation and disjointness
-  (`disjoint from`) must be supported; this needs a Spec42 issue once the design is agreed.
+- **Keyword discovery.** Do the editors need anything to make library keywords discoverable
+  (completion after `#`, hover with the specialised definition)?
+- **Tool support.** Tools must implement semantic metadata as 7.27.3–7.27.4 specify (implicit
+  specialisation, including for the bare form), and generators need view-scoped runs. Gaps in Spec42
+  are tracked as Spec42 issues, not designed around here.
 - **Strict command–query separation.** Should it be the default for new projects, or opt-in as
   proposed?
