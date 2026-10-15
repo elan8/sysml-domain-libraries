@@ -29,9 +29,8 @@ Use these packages when a model needs electronics vocabulary for power, compute,
 
 ## Related Layers
 
-- Communication protocol libraries reside in `../communication/`.
+- Software that runs on compute units uses `Elan8::Software`; an `ExecutionPlatform` is allocated to the `EmbeddedComputeUnit` that hosts it.
 - Electrical actuators import `Elan8::Mechanical::Interconnection` for rotational and translational output boundaries.
-- Requirements method libraries (roles, evidence patterns) are optional and live in sibling `mbse-methodology` — not a dependency of electronics vocabulary.
 - Business-domain libraries, such as robotics, should compose electronics concepts for compute, power, I/O, and board-level implementation detail.
 
 ## Modeling Checklist
@@ -50,6 +49,8 @@ Use these packages when a model needs electronics vocabulary for power, compute,
 
 - Electronics libraries are technical and business-agnostic.
 - Foundational types live in `Elan8::Electronics::Core`; other packages specialize those concepts.
-- Protocol-specific electrical ports belong to electronics; logical channels, sessions, operations, and bindings belong to communication. `Elan8::Electronics::Buses` composes both viewpoints.
+- Protocol-specific electrical ports and buses belong to electronics; software interactions over them (operations, messages, streams) belong to `Elan8::Software`.
+- Definitions name kinds of component (a switch, an infrared receiver), never the role a component plays in one application (a bumper, a docking beacon). Roles specialise the library kinds in the model that has them.
+- Numeric attributes are ISQ quantities with units; there are no untyped placeholder types.
 - Business domains (for example robotics) can compose these electronics libraries without importing business semantics back into technical layers.
 - `ElectronicsComponent.mass`/`powerDraw` carry no default value and are not mandatory to set — a pure power *source* like `BatteryPack` legitimately leaves `powerDraw` unset.

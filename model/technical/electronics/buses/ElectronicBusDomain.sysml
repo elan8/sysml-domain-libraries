@@ -1,17 +1,22 @@
 package Buses {
-    private import Elan8::Core::Name;
+    doc /*
+     * Wired buses between electronic components. A bus is a physical medium
+     * with its own timing; its nodes connect through the bus ports in
+     * Elan8::Electronics::Interconnection.
+     */
     private import Elan8::Electronics::Core::*;
-    private import Elan8::Communication::Core::*;
     private import Elan8::Electronics::Interconnection::*;
+    private import ISQ::*;
 
-    attribute def BusType;
-    attribute def BusSpeedClass;
-    attribute def TopologyClass;
+    enum def BusTopology {
+        pointToPoint;
+        multiDrop;
+        daisyChain;
+    }
 
-    part def ElectronicBus :> CommunicationChannel {
-        attribute busType : BusType;
-        attribute speedClass : BusSpeedClass;
-        attribute topologyClass : TopologyClass;
+    part def ElectronicBus :> ElectronicsComponent {
+        attribute bitRate : BinaryDigitRateValue[0..1];
+        attribute topology : BusTopology[0..1];
     }
 
     part def BusNode :> ElectronicsComponent;

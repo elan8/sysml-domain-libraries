@@ -8,40 +8,38 @@ package Electronics {
     package Core {
         private import Elan8::Core::*;
         private import ISQ::*;
+        private import ScalarValues::Natural;
 
-        attribute def SignalKind { doc /* Name meant to be specialized. */ }
-        attribute def VoltageClass { doc /* Name meant to be specialized. */ }
-        attribute def CurrentClass { doc /* Name meant to be specialized. */ }
-        attribute def TimingClass { doc /* Name meant to be specialized. */ }
-        attribute def PinCount { doc /* Name meant to be specialized. */ }
+        enum def SignalKind {
+            doc /* Whether a signal carries discrete logic levels or a continuous value. */
+            digital;
+            analog;
+        }
 
         part def ElectronicsComponent :> PhysicalComponent {
             attribute powerDraw : PowerValue;
         }
 
         part def ElectricalInterface {
-            attribute interfaceName : Name;
-            attribute signalKind : SignalKind;
-            attribute voltageClass : VoltageClass;
-            attribute timingClass : TimingClass;
+            doc /* The electrical characteristics of a component boundary. */
+            attribute signalKind : SignalKind[0..1];
+            attribute nominalVoltage : ElectricPotentialValue[0..1];
+            attribute maximumCurrent : ElectricCurrentValue[0..1];
         }
 
         part def PinGroup {
-            attribute groupName : Name;
-            attribute pinCount : PinCount;
+            attribute pinCount : Natural;
         }
 
-        item def ElectricalSignal  {
-            attribute signalName : Name;
-            attribute signalKind : SignalKind;
+        item def ElectricalSignal {
+            attribute signalKind : SignalKind[0..1];
+            attribute nominalVoltage : ElectricPotentialValue[0..1];
         }
     }
     package Interconnection {
         private import Elan8::Core::*;
         private import Elan8::Electronics::Core::*;
         private import ISQ::*;
-
-        attribute def ConnectorType { doc /* Name meant to be specialized. */ }
 
         port def ElectricalTerminalPort {
             doc /*
@@ -55,7 +53,6 @@ package Electronics {
         }
 
         part def ElectronicConnector :> PhysicalComponent {
-            attribute connectorType : ConnectorType;
             port terminals : ElectricalTerminalPort[1..*];
         }
 
@@ -101,9 +98,20 @@ package Electronics {
             in item receive : ElectricalSignal;
         }
 
-        port def ElectricalPowerPort;
+        port def ElectricalPowerPort {
+            doc /*
+             * Power transfer at a component boundary: the supply voltage and the
+             * current drawn, at the nominal operating point. A load is the
+             * conjugated end. Both are optional, so a topology-only model can
+             * leave them unset; a power budget check reads them where set.
+             */
+            attribute voltage : ElectricPotentialValue[0..1];
+            attribute current : ElectricCurrentValue[0..1];
+        }
         port def DcPowerPort :> ElectricalPowerPort;
-        port def AcPowerPort :> ElectricalPowerPort;
+        port def AcPowerPort :> ElectricalPowerPort {
+            attribute frequency : FrequencyValue[0..1];
+        }
         port def PowerRailPort :> DcPowerPort;
 
         port def ElectricalDrivePort :> ElectricalPowerPort;
@@ -191,16 +199,19 @@ package Electronics {
     public import Power;
     public import Sensing;
     package Wireless {
-        private import Elan8::Communication::Core::*;
-        private import Elan8::Communication::Wireless::*;
         private import Elan8::Electronics::Core::*;
         private import Elan8::Electronics::Interconnection::*;
-        private import Elan8::Software::Core::*;
+
+        enum def WirelessProtocol {
+            bluetooth;
+            bluetoothLowEnergy;
+            wifi;
+        }
 
         part def WirelessModule :> ElectronicsComponent {
+            attribute protocols : WirelessProtocol[1..*];
             port power : ~PowerRailPort;
             port hostLink : SerialCommunicationPort;
-            ref wirelessChannel : WirelessCommunicationChannel;
         }
     }
 }
