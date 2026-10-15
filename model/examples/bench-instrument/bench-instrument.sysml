@@ -7,7 +7,7 @@ package BenchInstrumentExample {
 
     private import Elan8::Mechanical::Core::*;
     private import Elan8::Electronics::Compute::*;
-    private import Elan8::Software::Core::*;
+    private import Elan8::Software::*;
     private import Elan8::Procurement::*;
     private import Elan8::Units::Money::*;
 
