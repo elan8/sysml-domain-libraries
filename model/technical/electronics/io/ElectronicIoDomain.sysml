@@ -1,22 +1,23 @@
 package Io {
-    private import Elan8::Core::*;
+    doc /*
+     * Input and output channels of an electronic component. A channel's
+     * direction is the direction of the port that uses it, not an attribute.
+     */
     private import Elan8::Electronics::Core::*;
-
-    attribute def IoDirection;
-    attribute def ResolutionClass;
-    attribute def SamplingClass;
+    private import ISQ::*;
+    private import ScalarValues::Natural;
 
     part def IoChannel {
-        attribute name : Name;
-        attribute direction : IoDirection;
-        attribute signalKind : SignalKind;
+        attribute signalKind : SignalKind[0..1];
     }
 
     part def DigitalIoChannel :> IoChannel;
 
     part def AnalogIoChannel :> IoChannel {
-        attribute resolutionClass : ResolutionClass;
-        attribute samplingClass : SamplingClass;
+        attribute resolution : Natural[0..1] {
+            doc /* Converter resolution in bits. */
+        }
+        attribute samplingRate : FrequencyValue[0..1];
     }
 
     part def SensorElectricalInterface :> ElectricalInterface;
@@ -25,7 +26,9 @@ package Io {
 
     part def GpioChannel :> DigitalIoChannel;
 
-    part def PwmChannel :> DigitalIoChannel;
+    part def PwmChannel :> DigitalIoChannel {
+        attribute frequency : FrequencyValue[0..1];
+    }
 
     part def QuadratureEncoderChannel :> DigitalIoChannel;
 }

@@ -1,64 +1,36 @@
-# Software Technical Libraries
+# Software Library
 
-This directory contains technical SysML v2 software capabilities that can be reused across business domains.
+`Elan8::Software` holds the generic software concepts that code generators, verifiers and timing
+analyses act on. The design behind it is in [docs/library-design.md](../../../docs/library-design.md).
 
-Use these packages for service architecture, platform/runtime modeling, and data persistence.
+## Contents
 
-## Best Starting Points
+- `Software.sysml` (`Elan8::Software`)
+  - **Components:** `SoftwareComponent` (keyword `#software`), and the `#external` marker for
+    components realised outside the project.
+  - **Operations:** `SoftwareOperation`, `QueryOperation` (`#query`) and `CommandOperation`
+    (`#command`), plus the `#idempotent` marker. A query has no effect outside its own execution;
+    a command may change state.
+  - **Interaction ports:** `RequestReplyPort` (`#call`), `MessagePort` (`#oneway`) and `StreamPort`
+    (`#stream`). An interface specialises one and redefines its payload items.
+  - **Timing and deployment:** `Task`, `PeriodicTask` and `EventDrivenTask` (`#task`),
+    `ExecutionPlatform` (`#platform`) with its scheduling policy, and `SoftwareQueue` with its
+    capacity and discipline. Deployment is `allocate task to platform;`.
+- `bindings/Bindings.sysml` (`Elan8::Software::Bindings`): technology choices as metadata: `Rpc`,
+  `HttpRoute`, `Topic`, `CanFrame` and `Container`.
 
-- Start with `Software.sysml` (`Elan8::Software`). Shared vocabulary is the nested `Core` package (`Elan8::Software::Core`).
-- Add `distributed-systems/DistributedSystems.sysml` for service and dependency modeling.
-- Add `platform/` for cloud and Kubernetes deployment capabilities.
-- Add `data/` for relational and non-relational persistence vocabulary.
-- Add `realtime-runtime/` for real-time task, queue, and scheduler vocabulary (embedded or otherwise).
-- For method-style requirement roles and traceability metadata, use sibling `mbse-methodology` optionally; software vocabulary does not depend on it.
-- Add `../communication/` when software interfaces need protocol, endpoint, channel, or payload contracts.
+Code generation views, formal verification options and links to source code and interface
+specifications are in `Elan8::Generation` (`model/generic/generation/`).
 
-## Structure
+## Native SysML, not library definitions
 
-- `Software.sysml` (`Elan8::Software`) - the software namespace. Nested `Core` (`Elan8::Software::Core`) holds shared entities, interfaces, and deployment primitives. `Core` is nested here because that name is already the root package `Elan8::Core`.
-- `distributed-systems/DistributedSystems.sysml` (`Elan8::Software::Distributed`) - services, boundaries, dependencies, events, and brokers
-- `platform/CloudRuntimeDomain.sysml` (`Elan8::Software::Platform::Cloud`) - cloud runtime and execution context vocabulary
-- `platform/KubernetesDomain.sysml` (`Elan8::Software::Platform::Kubernetes`) - Kubernetes workload and cluster vocabulary
-- `interactions/SoftwareInteractions.sysml` (`Elan8::Software::Interactions`) - sequence and interaction modeling vocabulary
-- `data/SqlDomain.sysml` (`Elan8::Software::Data::Sql`) - relational persistence vocabulary
-- `data/NosqlDomain.sysml` (`Elan8::Software::Data::NoSql`) - non-relational persistence vocabulary
-- `realtime-runtime/RealtimeRuntime.sysml` (`Elan8::Software::Realtime`) - real-time task, queue, and scheduler vocabulary
+State machines, events, messages and interactions are native SysML: `state`, `item def` payloads with
+`send` and `accept`, and successions. The library does not re-model them.
 
-## Package Guidance
+## Examples
 
-### core
-
-- **When to use:** shared components, modules, source artifacts, interfaces, operation-effect classification, and capability-to-implementation traceability.
-- **Anti-patterns:** operation interfaces whose read-only, command, analysis, or mutating intent is implicit; capability models disconnected from implementation structure.
-- **Minimum checklist:** externally consumed operations identify their effect kind, and exposed capabilities identify implementing components or source artifacts when traceability matters.
-
-### distributed-systems
-
-- **When to use:** service boundaries, API ownership, and deployment dependency reasoning.
-- **Anti-patterns:** direct coupling without interface ownership, implicit external boundaries.
-- **Minimum checklist:** service interfaces modeled, deployment allocation visible, dependency graph acyclic.
-
-### platform
-
-- **When to use:** cloud runtime constraints, multi-environment deployment, and workload placement.
-- **Anti-patterns:** runtime abstraction without host/runtime metadata, environment assumptions left implicit.
-- **Minimum checklist:** runtime and node identity modeled, target environment named, deployable artifacts linked.
-
-### data
-
-- **When to use:** persistence strategy, data ownership boundaries, and consistency trade-off communication.
-- **Anti-patterns:** data stores modeled without owning services, mixed consistency assumptions left implicit.
-- **Minimum checklist:** store ownership defined, data classification captured, consistency/retention intent stated.
-
-### realtime-runtime
-
-- **When to use:** periodic/deadline-driven tasks, bounded inter-task queues, and scheduler policy — embedded firmware or any other real-time software.
-- **Anti-patterns:** timing budgets (period, deadline, worst-case execution time) left implicit; queue overflow behavior unspecified.
-- **Minimum checklist:** each task's period/deadline/criticality stated, each queue's depth/discipline stated, a scheduler model declared.
-
-## Quality
-
-- Validate SysML syntax and semantic consistency with `scripts/validate_spec42.py`.
-- Use the package guidance checklists above for modeling completeness until executable software-domain checks are available.
-- Do not add non-executable YAML rule catalogs; encode enforceable checks in Spec42 or another real validator first.
+- `examples/webshop/`: services with queries and commands, request-reply and one-way ports,
+  technology bindings, an implemented state machine, a code generation view and a formally verified
+  requirement.
+- `examples/motor-controller/`: periodic and event-driven tasks with their timing, a bounded queue,
+  an execution platform allocated to a microcontroller, and a firmware generation view.

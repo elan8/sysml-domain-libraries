@@ -4,8 +4,8 @@ package SensorSuite {
 
     part def SensorSuite :> ElectronicsComponent {
         part imu : I2cInertialMeasurementUnit;
-        part bumper : BumperSwitch;
-        part lift : LiftSwitch;
+        part bumper : SwitchSensor;
+        part lift : SwitchSensor;
         part wheelEncoder : PoweredQuadratureEncoder;
     }
 }
