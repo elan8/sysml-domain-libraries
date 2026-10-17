@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-"""Bundle the domain libraries in `model/` into a KPAR with `spec42 bundle`.
+"""Bundle this repository's domain libraries into a KPAR with `spec42 bundle`.
 
-The archive takes its name and version from `model/.project.json`, and leaves out the examples
-(`examples/` directories and `model/Examples.sysml`), as earlier releases did. Spec42 is the
+The archive takes its name and version from `.project.json` at the repository root, the same
+file Spec42's own library fetch script requires, and contains the libraries under `model/`. It
+leaves out the documentation, scripts and examples (`examples/` directories and
+`model/Examples.sysml`), as earlier releases did. Spec42 is the
 release pinned in `.spec42-version` unless --spec42 or SPEC42_EXE names another executable.
 
 Usage:
@@ -20,9 +22,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _spec42 import REPO_ROOT, find_spec42  # noqa: E402
 
-MODEL_ROOT = REPO_ROOT / "model"
-PROJECT_FILE = MODEL_ROOT / ".project.json"
-EXCLUDES = ["examples", "Examples.sysml"]
+PROJECT_FILE = REPO_ROOT / ".project.json"
+EXCLUDES = [".git", "docs", "scripts", "examples", "model/Examples.sysml"]
 
 
 def main() -> int:
@@ -31,7 +32,7 @@ def main() -> int:
     parser.add_argument(
         "--version",
         help="Expected library version (for example the release tag without `v`); "
-        "fails when model/.project.json disagrees.",
+        "fails when .project.json disagrees.",
     )
     parser.add_argument("--output", help="Archive to create (default: <name>-<version>.kpar)")
     args = parser.parse_args()
@@ -47,7 +48,7 @@ def main() -> int:
         return 1
     output = Path(args.output or f"{project['name']}-{version}.kpar").resolve()
 
-    command = [find_spec42(args.spec42), "bundle", str(MODEL_ROOT), "--output", str(output)]
+    command = [find_spec42(args.spec42), "bundle", str(REPO_ROOT), "--output", str(output)]
     for exclude in EXCLUDES:
         command += ["--exclude", exclude]
     return subprocess.run(command).returncode
