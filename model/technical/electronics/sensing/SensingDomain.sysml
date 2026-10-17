@@ -11,7 +11,6 @@ package Sensing {
     }
 
     item def ContactStateMeasurement :> BinaryStateMeasurement;
-    item def LiftStateMeasurement :> BinaryStateMeasurement;
 
     item def Acceleration3dMeasurement :> SensorMeasurement {
         attribute x : AccelerationValue;
@@ -33,14 +32,15 @@ package Sensing {
         attribute value : AngularMeasureValue;
     }
 
-    item def HomingBeaconSignal;
-
-    item def HomingBeaconObservation :> SensorMeasurement {
-        attribute detected : Boolean;
+    item def InfraredSignal {
+        doc /* Modulated infrared light used to signal or detect presence. */
+        attribute wavelength : LengthValue[0..1];
+        attribute carrierFrequency : FrequencyValue[0..1];
     }
 
-    port def HomingBeaconPort {
-        out item beacon : HomingBeaconSignal;
+    port def InfraredPort {
+        doc /* Emits infrared light; a receiving component uses the conjugated port. */
+        out item signal : InfraredSignal;
     }
 
     abstract part def Sensor :> ElectronicsComponent;
@@ -85,28 +85,23 @@ package Sensing {
     part def UartInertialMeasurementUnit
         :> InertialMeasurementUnit, UartDataSensor;
 
-    part def HomingBeaconTransmitter :> ElectronicsComponent {
+    part def InfraredTransmitter :> ElectronicsComponent {
         port power : ~PowerRailPort;
-        port beacon : HomingBeaconPort;
+        port emission : InfraredPort;
     }
 
-    part def HomingBeaconReceiver :> DcPoweredSensor {
-        port beacon : ~HomingBeaconPort;
+    part def InfraredReceiver :> DcPoweredSensor {
+        port reception : ~InfraredPort;
         port detection : GpioPort;
-        item observation : HomingBeaconObservation;
+        item observation : BinaryStateMeasurement;
     }
 
-    abstract part def SwitchSensor :> PassiveSensor {
+    part def SwitchSensor :> PassiveSensor {
+        doc /* A mechanical contact read as a digital input: a bumper, a lid or a lift switch. */
         port signal : GpioPort;
-    }
-
-    part def BumperSwitch :> SwitchSensor {
         item contactState : ContactStateMeasurement;
     }
 
-    part def LiftSwitch :> SwitchSensor {
-        item liftState : LiftStateMeasurement;
-    }
 
     abstract part def Encoder :> Sensor;
     abstract part def RotationalEncoder :> Encoder;

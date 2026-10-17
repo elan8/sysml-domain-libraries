@@ -32,7 +32,7 @@ Run JSON output for automation with:
 python3 scripts/validate_spec42.py --format json
 ```
 
-There is no business-domain library in this repository. `model/examples/bench-instrument/` composes mechanical, electronics, software, and procurement. `model/technical/software/examples/webshop/webshop.sysml` remains the richest software example.
+There is no business-domain library in this repository. `model/examples/bench-instrument/` composes mechanical, electronics, software, and procurement. The software examples are `model/technical/software/examples/webshop/` (services, operations, bindings, generation and verification) and `model/technical/software/examples/motor-controller/` (tasks, timing and deployment).
 
 To inspect Spec42's bundled domain-completeness diagnostics as advisory output, run:
 

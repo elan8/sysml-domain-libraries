@@ -1,6 +1,6 @@
 # Library design
 
-Status: proposal. Nothing in `model/` changes until this document is agreed. The design and its
+Status: proposal, with an implementation in the follow-up pull request. The design and its
 snippets follow the OMG SysML v2.0 specification (section numbers refer to it), not the behaviour of
 any one tool.
 

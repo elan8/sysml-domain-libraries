@@ -20,5 +20,6 @@ package Examples {
     }
     package Software {
         public import WebShop;
+        public import MotorController;
     }
 }

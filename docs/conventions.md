@@ -13,7 +13,7 @@ This document standardizes naming and authoring conventions for all SysML librar
 ### Package And File Names
 
 - Place reusable packages below the `Elan8` root namespace.
-- Use short `PascalCase` domain nouns for namespace segments, for example `Elan8::Software::Distributed` and `Elan8::Electronics::Actuation`.
+- Use short `PascalCase` domain nouns for namespace segments, for example `Elan8::Software::Bindings` and `Elan8::Electronics::Actuation`.
 - Do not repeat `Elan8`, `Domain`, or the parent domain name in a child package.
 - Use `PascalCase` for `.sysml` file basenames.
 - Keep folder names lowercase and hyphenated (for example `safety-assurance`, `distributed-systems`).
@@ -21,8 +21,12 @@ This document standardizes naming and authoring conventions for all SysML librar
 ### Definition Names
 
 - Use singular nouns for definitions (`part def Service`, `item def Event`).
-- Prefer a common base `name` attribute when specializing existing base definitions.
-- Use specialized attribute names (for example `serviceName`, `nodeName`) only when domain clarity is improved and there is no ambiguity.
+- Do not add a `name` attribute: an element's name is its SysML declared name. An attribute may hold the name of something outside the model (a Modelica class, a broker topic, a container image).
+- Do not use SysML reserved words as names (`message`, `event`, `language`, `loop`, `frame`, `derived`, and the rest of SysML v2 8.2.2.1.2).
+- Type every numeric attribute with an ISQ quantity (`DurationValue`, `ElectricPotentialValue`, `StorageCapacityValue`, …) or a scalar type; do not declare untyped placeholder `attribute def`s.
+- Name kinds of thing, never the role they play in one application (`SwitchSensor`, not `BumperSwitch`).
+- Use native SysML for behaviour and interaction (`state`, `action`, `send`, `accept`, `allocate`) instead of library definitions that re-model them.
+- Record technology choices as metadata on generic elements (`Elan8::Software::Bindings`), not as technology-specific definitions.
 
 ## Example Authoring Checklist
 

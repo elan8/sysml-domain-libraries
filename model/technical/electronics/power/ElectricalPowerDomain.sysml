@@ -1,24 +1,20 @@
 package Power {
-    private import Elan8::Core::*;
     private import Elan8::Electronics::Core::*;
     private import Elan8::Electronics::Interconnection::*;
     private import ISQ::*;
-
-    attribute def VoltageValue;
-    attribute def CurrentValue;
-    attribute def PowerClass;
-    attribute def EfficiencyClass;
+    private import MeasurementReferences::DimensionOneValue;
 
     part def PowerRail :> ElectronicsComponent {
-        attribute voltage : VoltageValue;
-        attribute currentBudget : CurrentValue;
-        attribute powerClass : PowerClass;
-        ref suppliedLoad : LoadGroup;
+        doc /* A supply rail with its nominal voltage and the current it can deliver. */
+        attribute voltage : ElectricPotentialValue;
+        attribute currentBudget : ElectricCurrentValue[0..1];
+        ref suppliedLoad : LoadGroup[0..*];
     }
 
     part def VoltageRegulator :> ElectronicsComponent {
-        attribute regulatorName : Name;
-        attribute efficiencyClass : EfficiencyClass;
+        attribute efficiency : DimensionOneValue[0..1] {
+            doc /* Output power over input power, between 0 and 1. */
+        }
         attribute outputVoltage : ElectricPotentialValue;
         attribute quiescentPower : PowerValue;
         ref inputRail : PowerRail;
@@ -58,18 +54,19 @@ package Power {
     }
 
     part def DcDcConverter :> ElectronicsComponent {
-        attribute converterName : Name;
-        attribute efficiencyClass : EfficiencyClass;
+        attribute efficiency : DimensionOneValue[0..1] {
+            doc /* Output power over input power, between 0 and 1. */
+        }
+        port input : DcPowerPort;
+        port output : DcPowerPort;
     }
 
     part def LoadGroup {
-        attribute loadName : Name;
-        attribute currentBudget : CurrentValue;
+        attribute currentBudget : ElectricCurrentValue[0..1];
         ref suppliedBy : PowerRail;
     }
 
     part def PowerDistributionNode :> ElectronicsComponent {
-        attribute nodeName : Name;
         port railOut0 : PowerRailPort;
         port railOut1 : PowerRailPort;
         port railOut2 : PowerRailPort;
