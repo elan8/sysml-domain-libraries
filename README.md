@@ -14,6 +14,18 @@ What belongs in these libraries, and how tools use them, is set out in [docs/lib
 python3 scripts/validate_spec42.py
 ```
 
+## Releasing
+
+The libraries ship as a KPAR built by `spec42 bundle` from `model/`, without the examples:
+
+```sh
+python3 scripts/bundle_kpar.py
+```
+
+Both scripts use the Spec42 release pinned in [`.spec42-version`](.spec42-version). To release,
+set the version in [`model/.project.json`](model/.project.json) and push a matching `v<version>` tag;
+the release workflow validates, bundles and publishes the archive.
+
 ## License
 
 MIT. See [LICENSE](LICENSE).

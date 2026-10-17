@@ -23,31 +23,19 @@ jobs:
           echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
           echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
 
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Checkout Spec42 for kpar-pack
-        uses: actions/checkout@v6
+      - name: Set up Python
+        uses: actions/setup-python@v6
         with:
-          repository: elan8/spec42
-          path: spec42
-          ref: main
+          python-version: "3.12"
 
-      - name: Cache cargo
-        uses: Swatinem/rust-cache@v2
-        with:
-          workspaces: spec42
+      - name: Validate with the pinned Spec42 release
+        run: python3 scripts/validate_spec42.py
 
-      - name: Pack KPAR
+      - name: Bundle KPAR
         run: |
           VERSION="${{ steps.version.outputs.version }}"
           ARTIFACT="elan8-domain-libraries-${VERSION}.kpar"
-          cd spec42
-          cargo run -p kpar --bin kpar-pack -- \
-            --root "${GITHUB_WORKSPACE}" \
-            --version "${VERSION}" \
-            --output "${GITHUB_WORKSPACE}/${ARTIFACT}"
-          cd "${GITHUB_WORKSPACE}"
+          python3 scripts/bundle_kpar.py --version "${VERSION}" --output "${ARTIFACT}"
           sha256sum "${ARTIFACT}" > SHA256SUMS.txt
           echo "ARTIFACT=${ARTIFACT}" >> "$GITHUB_ENV"
 
@@ -62,6 +50,6 @@ jobs:
           fi
           gh release create "${TAG}" \
             --title "Domain libraries ${TAG}" \
-            --notes "KerML Project Archive (KPAR) release of Elan8 domain libraries for Spec42 ${TAG}." \
+            --notes "KerML Project Archive (KPAR) release of Elan8 domain libraries ${TAG}, validated and bundled with Spec42 $(cat .spec42-version)." \
             "${ARTIFACT}" \
             SHA256SUMS.txt
