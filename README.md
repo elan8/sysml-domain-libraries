@@ -6,6 +6,11 @@ This repository provides reusable SysML v2 **vocabulary** for things in the syst
 - `generic/` — cross-domain foundation 
 - `technical/` — business-agnostic technical capabilities (software, electronics, mechanical).
 
+The cross-domain [systems engineering roles and views](docs/systems-engineering.md)
+support recursive specification, architecture and integration modeling through
+`Elan8::SystemsEngineering`, with four reusable filtered GeneralView specializations.
+This source addition is not yet a published release.
+
 What belongs in these libraries, and how tools use them, is set out in [docs/library-design.md](docs/library-design.md).
 
 ## Validation

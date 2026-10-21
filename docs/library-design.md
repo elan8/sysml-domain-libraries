@@ -24,6 +24,11 @@ concept) costs the engineer time to learn and gives tools nothing to act on.
 
 ## 2. The value test
 
+The [systems engineering roles](systems-engineering.md) apply the tool-semantics
+criterion below: they identify specification, architecture and integration intent
+through type conformance. Their rules also distinguish actual contract refinement
+from method-role inheritance. They do not duplicate native requirement or case types.
+
 A library element belongs in the library when it passes at least one of the first two tests and
 does not fail the last two.
 

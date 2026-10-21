@@ -1,4 +1,7 @@
 package Examples {
+    package SystemsEngineering {
+        public import RecursiveSystemExample;
+    }
     package Electronics {
         public import MotorAndPowerModule;
         public import Pcba;

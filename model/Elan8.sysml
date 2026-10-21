@@ -6,5 +6,6 @@ package Elan8 {
     public import PhysicalModeling;
     public import Procurement;
     public import Software;
+    public import SystemsEngineering;
     public import Units;
 }
