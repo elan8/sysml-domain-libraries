@@ -44,14 +44,14 @@ package SystemsEngineering {
              * decomposition belongs in an architecture. */
     }
 
-    abstract part def SystemArchitecture :> SystemSpecification {
+    abstract part def SystemArchitecture {
         doc /* Proposed realization of a system contract. A project architecture
              * also specializes its own SystemSpecification and introduces child
              * usages typed by subsystem specifications, responsibilities and
-             * interactions. The inherited role does not prohibit decomposition. */
+             * interactions. The generic role is independent of SystemSpecification. */
     }
 
-    abstract part def SystemIntegration :> SystemArchitecture {
+    abstract part def SystemIntegration {
         doc /* Selected configuration. A project integration also specializes its
              * selected architecture and redefines inherited child usages with
              * compatible designs. Reconcile parent-local obligations explicitly;

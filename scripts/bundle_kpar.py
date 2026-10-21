@@ -9,7 +9,7 @@ release pinned in `.spec42-version` unless --spec42 or SPEC42_EXE names another 
 
 Usage:
     python3 scripts/bundle_kpar.py
-    python3 scripts/bundle_kpar.py --version 0.4.0 --output elan8-domain-libraries-0.4.0.kpar
+    python3 scripts/bundle_kpar.py --version 0.5.0 --output elan8-domain-libraries-0.5.0.kpar
 """
 from __future__ import annotations
 
