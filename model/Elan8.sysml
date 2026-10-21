@@ -1,5 +1,6 @@
 package Elan8 {
     public import Core;
+    public import Documents;
     public import Electronics;
     public import Generation;
     public import Mechanical;

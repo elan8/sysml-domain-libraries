@@ -13,6 +13,10 @@ This source addition is not yet a published release.
 
 What belongs in these libraries, and how tools use them, is set out in [docs/library-design.md](docs/library-design.md).
 
+The [document composition vocabulary](docs/documents.md), exported as
+`Elan8::Documents`, supplies renderer-independent metadata for document views,
+sections, prose, figures and tables. This source addition is not yet released.
+
 ## Validation
 
 ```sh
