@@ -1,6 +1,6 @@
 package Software {
     doc /*
-     * Generic software concepts that tools act on: components, operations
+     * Generic software concepts that tools act on: applications, layers, components, operations
      * (queries and commands), interaction ports, tasks, execution platforms
      * and queues. Behaviour is native SysML (`state`, `action`, `send`,
      * `accept`); deployment is native `allocate`. Technology choices are
@@ -19,9 +19,40 @@ package Software {
          * A unit of software with its own behaviour and interfaces. Its
          * operations are action usages it owns, its interfaces are ports, and
          * its implemented behaviour is the state machines it owns or exhibits.
+         * Components may compose other components. The abstraction level is
+         * architectural: a component is not necessarily one class, assembly
+         * or process in an implementation language.
          */
     }
     abstract part softwareComponents : SoftwareComponent[0..*] nonunique :> Parts::parts;
+
+    abstract part def SoftwareApplication :> SoftwareComponent {
+        doc /*
+         * An application boundary with a cohesive purpose, composed of software
+         * components, optionally organized into layers. An application need not
+         * correspond to one executable, process or deployment unit. Deployment
+         * is modeled separately through allocation to execution platforms.
+         */
+    }
+
+    abstract part def SoftwareLayer :> SoftwareComponent {
+        doc /*
+         * A logical architectural boundary that composes software components
+         * with related responsibilities. Composition expresses membership;
+         * allocation can map independently owned components to a layer instead.
+         * Allowed dependencies between layers must be modeled separately.
+         */
+        attribute color : String[0..1] {
+            doc /*
+             * Optional rendering hint: an HTML hex RGB color in #RRGGBB form
+             * (six hexadecimal digits, case insensitive), for example #DCEBFA.
+             * No alpha channel or named colors. When unset, a renderer uses its
+             * theme. Set a default on the layer definition for reuse and allow
+             * occurrence overrides; a fixed value cannot be overridden. Color conveys no dependency, ordering or deployment
+             * semantics. Renderers must opt in to reading this attribute.
+             */
+        }
+    }
 
     metadata def <software> SoftwareMetadata :> SemanticMetadata {
         doc /* Keyword `#software`: the declared part is a SoftwareComponent. */

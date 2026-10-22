@@ -17,6 +17,10 @@ The [document composition vocabulary](docs/documents.md), exported as
 `Elan8::Documents`, supplies renderer-independent metadata for document views,
 sections, prose, figures and tables. This source addition is not yet released.
 
+The [software vocabulary](model/technical/software/README.md) includes compositional
+`SoftwareApplication` and `SoftwareLayer` types. Layers can carry an optional
+`#RRGGBB` color hint for renderers. These additions are not yet released.
+
 ## Validation
 
 ```sh

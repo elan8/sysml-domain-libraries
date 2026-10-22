@@ -22,6 +22,7 @@ package Examples {
         public import BenchInstrumentExample;
     }
     package Software {
+        public import LayeredApplication;
         public import WebShop;
         public import MotorController;
     }
