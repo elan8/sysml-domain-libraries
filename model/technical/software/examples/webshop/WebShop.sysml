@@ -4,6 +4,9 @@ package WebShop {
      * and commands, request-reply and one-way ports, technology bindings, an
      * implemented state machine, a code generation view and a formally
      * verified requirement.
+     * Request, reply and event types here describe message occurrences for the
+     * item-oriented ports. For pure structured payload schemas and attribute-
+     * valued RPC parameters, see the GrpcServices example.
      */
     private import ScalarValues::*;
     private import ISQ::*;

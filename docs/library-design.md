@@ -55,7 +55,7 @@ already has.
 |---|---|---|
 | State machine | `state def`, `exhibit state` | a `StateMachine` part def |
 | Operation, function, method | `action def` (see 4.1) | a part def or an interface def |
-| Event, message, signal | `item def` payloads with `send` / `accept`, `message`, `flow` | `Lifeline`, `Activation` or `Message` part defs |
+| Event, message, signal | `item def` for occurrences; `attribute def` for structured data values; native interaction behavior | `Lifeline`, `Activation` or `Message` part defs |
 | Interaction, sequence | occurrences, messages and successions | `CombinedFragment`, `AltFragment` part defs |
 | Deployment | `allocate` | `ref` features named `deployedOn` |
 | Requirement, verification | `requirement def`, `verification def`, `VerificationMethod` | custom requirement classes |
@@ -191,7 +191,9 @@ metadata def <operation> OperationMetadata :> Metaobjects::SemanticMetadata {
   See the [interaction guide](software-interactions.md) for the distinction and
   the gRPC, HTTP, Kafka and message-bus patterns.
 - **Contracts** are native: preconditions and postconditions as `constraint`s on the operation,
-  errors as `out` items. A verifier reads them; a generator can emit assertions.
+  errors as explicit output data. Value schemas can use attribute definitions;
+  item parameters express occurrences. A verifier reads the contracts; a generator
+  can emit assertions.
 
 What this gives a generator: one function or method signature per operation, typed from its
 parameters, and the right place for it (free function or member of the owning component).
@@ -276,7 +278,7 @@ simulator in Python), each with its own scope and options.
 
 | Tool | Role (type) | Intent and scope (relationship, view, case) | Options (metadata) |
 |---|---|---|---|
-| Code generation | `SoftwareComponent`, `QueryOperation` / `CommandOperation`, interaction ports, payload `item def`s, `state def`s | ownership, `exhibit`, `allocate`; a `CodeGenerationView` | `CodeGeneration`, technology bindings (`Rpc`, `Topic`, `HttpRoute`, …), `SourceCode` |
+| Code generation | `SoftwareComponent`, `QueryOperation` / `CommandOperation`, interaction ports, data `attribute def`s, occurrence `item def`s, `state def`s | ownership, `exhibit`, `allocate`; a `CodeGenerationView` | `CodeGeneration`, technology bindings (`Rpc`, `Topic`, `HttpRoute`, …), `SourceCode` |
 | Formal verification | `state def`s, queries and commands, interaction ports, constraints | a `verification def` whose subject is the component and whose objective names the requirements; `VerificationMethod` = analysis | `FormalVerification { technique; bound; }` |
 | Timing analysis | `Task`, `ExecutionPlatform` | `allocate` task to platform; an `analysis def` over a platform | scheduling policy on the platform |
 | Simulation | physical ports, parameters with units, `ModelicaModel` / `FmuModel` | an `analysis def` specialising `SimulationScenario` (subject, inputs, outputs, horizon) | solver settings on the case |
@@ -346,8 +348,12 @@ package Software {
 ```
 
 Ports are conjugated on the other side (`~RequestReplyPort`) as usual, so a tool can check that
-every request has a matching reply and that payload types agree. Messages and events are `item def`s
-the engineer defines; the ports say how they travel.
+payload types and directed features agree. These particular port types exchange
+item occurrences. Pure payload schemas, including Protobuf messages, can instead
+use structured `attribute def`s and attribute-valued action parameters. An item
+envelope is useful when individual occurrence identity, lifecycle or transfer
+matters; communicating values does not automatically require one. See the
+[interaction guide](software-interactions.md) for the supported patterns.
 
 ### 5.3 Technology bindings
 

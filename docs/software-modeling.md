@@ -45,7 +45,8 @@ without acquiring an architectural component role.
 | Owned child object | Composite `part` | Expresses ownership, not merely a member in source code |
 | Shared/injected object | `ref part`, linked or bound to the authoritative occurrence | Does not create a second owned object |
 | Scalar or structured value | `attribute` / `attribute def` | Choose value semantics, not a mapping based only on source syntax |
-| Message, record or transferred data | `item` / `item def` | Does not automatically imply serialization or immutability |
+| Structured payload or record value | `attribute` / `attribute def`, with nested attributes | Preferred for pure Protobuf request/response schemas; wire details need bindings |
+| Distinct message or other occurrence | `item` / `item def`, optionally carrying a data attribute | Use when identity, lifecycle or occurrence-level transfer matters |
 | Enumeration | `enum def` and typed attributes | Numeric encodings need an implementation binding |
 | Field/property | Attribute, item or part according to its semantics | A property getter can perform effects; it is not automatically a query |
 | Function | `action def`, usually specializing `SoftwareOperation` | A reusable behavior definition is not a particular call |
@@ -85,6 +86,14 @@ Decide whether identity, value semantics, ownership or transfer matters before
 choosing `part`, `attribute` or `item`. A source-language class can implement an
 identity-bearing object, a value object or an adapter. Its spelling does not
 choose the SysML metaclass.
+
+For Protobuf data contracts, use structured attribute definitions for message
+schemas and attribute fields for both scalars and embedded message values.
+Action parameters can be attribute usages typed by these definitions. An item
+envelope is optional when individual message occurrences matter; it is not
+required merely because data is communicated. The
+[interaction guide](software-interactions.md) demonstrates nested values, field
+presence and the distinction from the library's item-oriented messaging ports.
 
 Use composition for owned component structure. Use references for shared stores,
 injected collaborators and other independently owned objects. Model the actual

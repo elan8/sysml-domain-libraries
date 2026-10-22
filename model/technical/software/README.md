@@ -80,6 +80,25 @@ semantic specialization of `SoftwareApplication` and `SoftwareLayer`. A layered
 diagram follows composition, or allocations for the alternative mapping approach.
 Stacked bands, ordering and color interpretation remain renderer responsibilities.
 
+## Data values and message occurrences
+
+Use structured `attribute def`s for pure data schemas, including Protobuf message
+types. Their fields are attribute usages, including embedded messages typed by
+other attribute definitions. An RPC can use `in attribute` and `out attribute`
+parameters directly; an item envelope is not needed for its signature.
+
+Use `item def` when a message or other entity's individual occurrence, identity,
+lifecycle or transfer matters. Two distinct messages can carry equal data values.
+An item envelope may carry an attribute typed by a reusable data definition.
+The existing `RequestReplyPort`, `MessagePort` and `StreamPort` are item-oriented;
+their payload features remain item usages. Value-based ports can specialize
+`InteractionPort` and declare directed attributes as needed.
+
+The gRPC example uses seven structured data definitions, six attribute-valued RPC
+parameters and an optional nested `PositionData` field. Its separate HTTP transport
+example retains request/reply items as transport occurrences. Kafka, message-bus
+and webshop examples retain their occurrence-oriented messaging patterns.
+
 ## Service contracts and implementations
 
 `SoftwareServiceContract` is an abstract part definition separate from
@@ -100,7 +119,8 @@ require a separate port per RPC or a generated provided/required-service mechani
 ## Datastores and queues
 
 `SoftwareDataStore` is a logical data resource: a database, settings file or
-in-memory store. A project adds its record schema as typed items and defines
+in-memory store. A project adds its record schema as attributes for data values
+or items for occurrences, and defines
 access interfaces and operations as needed. Its optional `capacity` is a
 `StorageCapacityValue` in information units, not a number of records.
 `persistence` is either `DataStorePersistence::volatile` or `persistent`;
@@ -119,8 +139,10 @@ its `capacity` remains a message count and its existing queue disciplines are un
 
 ## Native SysML, not library definitions
 
-State machines, events, messages and interactions are native SysML: `state`, `item def` payloads with
-`send` and `accept`, and successions. The library does not re-model them.
+State machines, actions, data definitions and interaction behavior are native
+SysML. Choose attribute or item definitions by their value/occurrence semantics;
+use native states, `send`, `accept`, flows and successions for relevant behavior.
+The library does not re-model those language concepts.
 
 ## Examples
 

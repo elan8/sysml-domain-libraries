@@ -18,7 +18,8 @@ definitions in these examples are project definitions, not additional library ty
 | Implementing software | `SoftwareModule` with owned operation usages |
 | Implementation relationship | Explicit contextual binding between port action references and implementing actions |
 | Reusable implementation-independent behavior obligations | `SoftwareServiceContract`, when useful separately from the port interface |
-| Event/command payload | `item def` with typed fields |
+| Protobuf request/response or reusable payload data | Structured `attribute def` with attribute fields |
+| Distinct message/event occurrence | `item def`, optionally carrying a structured data attribute |
 | One-way publishing/subscription | `MessagePort` specialization and conjugated subscriber port |
 | Broker or dispatcher | Explicit software component when its responsibility matters |
 | Stored event log | `SoftwareDataStore` specialization, distinct from a queue |
@@ -27,6 +28,49 @@ definitions in these examples are project definitions, not additional library ty
 These are different modeling questions. A service implementation, a callable
 service port and an HTTP endpoint need not be the same element. Similarly, an
 event, topic, broker, subscription and consumer group are not interchangeable.
+
+### Protobuf schemas are structured values
+
+Prefer `attribute def` for a Protobuf message's data schema. Scalar fields and
+embedded-message fields are both attribute usages; an embedded message is typed
+by another structured attribute definition. Inline nested attributes are allowed,
+but a named definition makes reuse and schema correspondence clearer.
+
+```sysml
+attribute def PositionData {
+    attribute x : Real;
+    attribute y : Real;
+}
+attribute def RobotStatusData {
+    attribute cleaning : Boolean;
+    attribute position : PositionData[0..1];
+}
+```
+
+The example maps Protobuf `RobotStatus.position` to an optional structured value.
+The message field's presence is distinct from its nested values being zero or
+defaulted. Protobuf type-definition nesting is also separate from field nesting:
+declaring a nested type does not itself declare a field. See
+[Protobuf field presence](https://protobuf.dev/programming-guides/field_presence/)
+and the [language guide](https://protobuf.dev/programming-guides/proto3/).
+
+Action inputs and outputs can be attribute usages typed by these definitions.
+No item envelope is needed merely to define an RPC signature. `Integer`/`Real`
+and multiplicities are abstractions; exact wire types, field numbers, defaults,
+presence rules and `oneof` semantics still need a controlled schema binding.
+
+Use an `item def` when the model needs identifiable occurrences with lifecycle,
+transfer or delivery semantics. Two message occurrences can carry equal structured
+data values while remaining distinct occurrences. An optional item envelope can
+contain `attribute data : RobotStatusData;` and occurrence-specific information.
+Communicating a data value alone is not a reason to introduce that envelope.
+
+The existing `RequestReplyPort`, `MessagePort` and `StreamPort` definitions are
+item-oriented exchange patterns. Retain their item parameters when using those
+patterns. A project can define value-based ports under `InteractionPort` with
+directed attributes, or use the RPC-reference pattern below with attribute-valued
+operation parameters. Do not type an `item` usage by an `attribute def`, or an
+`attribute` usage by an `item def`.
 
 ## 2. Can a port contain `ref action`?
 
@@ -38,8 +82,8 @@ not a tool-specific operation-port extension.
 
 ```sysml
 action def GetStatus :> QueryOperation {
-    in request : GetStatusRequest;
-    out response : RobotStatus;
+    in attribute request : GetStatusRequestData;
+    out attribute response : RobotStatusData;
 }
 port def RobotControlService :> InteractionPort {
     ref action getStatus : GetStatus[0..*];
@@ -123,6 +167,11 @@ These annotations record bindings, not generated dispatch or schema-conformance
 checks. Names in the table are explicit project mappings. The `.proto` remains
 authoritative for serialization details such as field numbers and wire types.
 
+The example's Protobuf messages map to the attribute definitions with the same
+name plus `Data`: `GetStatusRequestData`, `RobotStatusData`,
+`StartCleaningRequestData`, `StartCleaningResultData`, `GetDiagnosticsRequestData`
+and `DiagnosticsData`. Embedded Protobuf `Position` maps to `PositionData`.
+
 ## 5. Map gRPC to HTTP transport
 
 gRPC carried over HTTP/2 has a wire protocol with method paths, request/response
@@ -179,7 +228,9 @@ instead of inferring them from the method name.
 
 ## 7. Kafka events
 
-Use an item definition for event data and a typed one-way port for its publication.
+Use a structured attribute definition for reusable event data, and an item
+definition when modeling distinct event occurrences. The current Kafka fixture
+deliberately models occurrences with a typed item-oriented publication port.
 The [Kafka example](../model/technical/software/examples/interactions/KafkaEvents.sysml)
 annotates the publisher's selected port with `Topic` metadata: broker kind, topic
 name and key-field name. Consumer ports use the conjugated payload interface.

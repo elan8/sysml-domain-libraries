@@ -101,8 +101,11 @@ package Software {
         doc /*
          * A callable unit of software behaviour: a function, a method or a
          * remote operation. Its `in` and `out` parameters are its signature;
-         * errors are `out` items; preconditions and postconditions are
-         * constraints. A function is an operation definition; a method is an
+         * structured value parameters can be attribute usages typed by attribute
+         * definitions, including nested data. Item parameters are appropriate
+         * when occurrence semantics matter. Error/result data use output
+         * parameters; preconditions and postconditions are constraints.
+         * A function is an operation definition; a method is an
          * operation usage owned by a SoftwareComponent.
          */
     }
@@ -157,16 +160,21 @@ package Software {
 
     abstract port def InteractionPort {
         doc /*
-         * How two software components interact. Each kind is defined from the
-         * providing side; the other side uses the conjugated port. A port
-         * definition for one interface specialises a kind and redefines its
-         * items with the payload types, for example
+         * How two software components interact. Directed data-exchange kinds
+         * are defined from one side; the other side uses the conjugated port.
+         * RPC contracts may instead group undirected action references, with
+         * endpoint roles stated separately. Value-based exchanges may declare
+         * directed attributes in a project specialization. The item-oriented
+         * kinds below redefine their items with occurrence payload types, e.g.
          * `port def PoseService :> RequestReplyPort { in item :>> request : PoseRequest; out item :>> reply : Pose; }`.
          */
     }
 
     port def RequestReplyPort :> InteractionPort {
-        doc /* A synchronous call: the provider receives a request and returns a reply. */
+        doc /* An item-oriented synchronous exchange: the provider receives a
+             * request occurrence and returns a reply occurrence. RPC actions
+             * can instead accept and return attribute values directly; they
+             * do not require an item envelope to define their signatures. */
         in item request;
         out item reply;
         attribute timeout : DurationValue[0..1];
@@ -174,7 +182,10 @@ package Software {
     abstract port requestReplyPorts : RequestReplyPort[0..*] nonunique :> Ports::ports;
 
     port def MessagePort :> InteractionPort {
-        doc /* A one-way message, command or event: sent without waiting for a reply. */
+        doc /* An item-oriented one-way message, command or event occurrence,
+             * sent without waiting for a reply. Pure structured data schemas
+             * can use attribute definitions; an item envelope is useful when
+             * individual message occurrence semantics matter. */
         out item payload;
         attribute rate : FrequencyValue[0..1];
         attribute maximumSize : StorageCapacityValue[0..1];
@@ -182,7 +193,7 @@ package Software {
     abstract port messagePorts : MessagePort[0..*] nonunique :> Ports::ports;
 
     port def StreamPort :> InteractionPort {
-        doc /* A continuous flow of samples at a rate. */
+        doc /* An item-oriented continuous flow of sample occurrences at a rate. */
         out item sample;
         attribute rate : FrequencyValue[0..1];
     }

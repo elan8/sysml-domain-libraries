@@ -5,7 +5,7 @@ modeling conventions, normative references and protocol sources.
 
 | Model | Purpose |
 | --- | --- |
-| [GrpcServices.sysml](GrpcServices.sysml) | Three RPC signatures, undirected typed action references, two services per endpoint, explicit client/server role metadata, server implementation bindings and separate unary HTTP/2 transport mappings |
+| [GrpcServices.sysml](GrpcServices.sysml) | Structured attribute data schemas, nested optional data, attribute-valued RPC parameters, undirected action references, explicit endpoint roles and implementation/HTTP mappings |
 | [KafkaEvents.sysml](KafkaEvents.sysml) | Typed event publication, topic binding, an external Kafka/log boundary and two classic consumer groups |
 | [MessageBus.sysml](MessageBus.sysml) | In-process event-dispatch topology with two subscribers, without assumed storage or buffering |
 
@@ -13,6 +13,17 @@ modeling conventions, normative references and protocol sources.
 counterpart. Its `InterfaceSpec` URI is repository-root-relative by convention.
 The schema lists two services and three unary methods; no streaming lifecycle
 or generated stubs are supplied. Check it with `protoc` separately when available.
+
+Protobuf messages map to structured `attribute def`s named with a `Data` suffix.
+`RobotStatusData.position : PositionData[0..1]` demonstrates an embedded message
+value with presence. All six RPC parameters are explicit attribute usages.
+They do not require item envelopes. The HTTP request/reply item definitions model
+transport occurrences separately; the Kafka and bus fixtures also retain their
+occurrence-oriented payload models.
+
+The new `position` field uses Protobuf field number 2; the existing `cleaning`
+field remains number 1. SysML `Real` abstracts Protobuf `double`; wire precision,
+presence/default handling and schema compatibility require separate binding checks.
 
 The RPC example uses undirected `ref action` features to refer to logical call
 performances, not the transmission of action objects. Its project-local

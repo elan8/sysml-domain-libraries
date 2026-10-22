@@ -12,27 +12,35 @@ package GrpcServices {
         attribute role : EndpointRole;
     }
 
-    item def GetStatusRequest;
-    item def RobotStatus { attribute cleaning : Boolean; }
-    item def StartCleaningRequest;
-    item def StartCleaningResult { attribute accepted : Boolean; }
-    item def GetDiagnosticsRequest;
-    item def Diagnostics { attribute healthy : Boolean; }
+    // Protobuf message schemas describe structured values, not occurrences.
+    attribute def GetStatusRequestData;
+    attribute def PositionData {
+        attribute x : Real;
+        attribute y : Real;
+    }
+    attribute def RobotStatusData {
+        attribute cleaning : Boolean;
+        attribute position : PositionData[0..1];
+    }
+    attribute def StartCleaningRequestData;
+    attribute def StartCleaningResultData { attribute accepted : Boolean; }
+    attribute def GetDiagnosticsRequestData;
+    attribute def DiagnosticsData { attribute healthy : Boolean; }
 
     action def GetStatus :> QueryOperation {
         @Rpc { protocol = RpcProtocol::grpc; streaming = StreamingKind::unary; }
-        in request : GetStatusRequest;
-        out response : RobotStatus;
+        in attribute request : GetStatusRequestData;
+        out attribute response : RobotStatusData;
     }
     action def StartCleaning :> CommandOperation {
         @Rpc { protocol = RpcProtocol::grpc; streaming = StreamingKind::unary; }
-        in request : StartCleaningRequest;
-        out response : StartCleaningResult;
+        in attribute request : StartCleaningRequestData;
+        out attribute response : StartCleaningResultData;
     }
     action def GetDiagnostics :> QueryOperation {
         @Rpc { protocol = RpcProtocol::grpc; streaming = StreamingKind::unary; }
-        in request : GetDiagnosticsRequest;
-        out response : Diagnostics;
+        in attribute request : GetDiagnosticsRequestData;
+        out attribute response : DiagnosticsData;
     }
 
     port def RobotControlService :> InteractionPort {
@@ -57,7 +65,9 @@ package GrpcServices {
         action getDiagnostics : GetDiagnostics[0..*];
     }
 
-    // A separate unary transport abstraction, not a complete HTTP/2 wire model.
+    // Item-oriented request/response occurrences at a separate transport boundary.
+    // Their identity/lifetime can matter independently of the RPC data values.
+    // This is not a complete HTTP/2 wire model.
     item def Http2Request {
         attribute path : String;
         attribute contentType : String;
