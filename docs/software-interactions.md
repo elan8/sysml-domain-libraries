@@ -11,9 +11,10 @@ definitions in these examples are project definitions, not additional library ty
 | Concern | Representation |
 | --- | --- |
 | RPC behavior/signature | `action def` specializing `SoftwareOperation`, `QueryOperation` or `CommandOperation` |
-| Operation role at a boundary | Typed referential action usage inside a port definition |
+| Operation role at a boundary | Typed undirected referential action usage inside a port definition |
 | Logical service interface | `port def` grouping related referential RPC actions |
 | Endpoint offering several services | Composite port definition with nested service ports |
+| Client/server role | Explicit endpoint-role metadata in the example, separate from action direction |
 | Implementing software | `SoftwareModule` with owned operation usages |
 | Implementation relationship | Explicit contextual binding between port action references and implementing actions |
 | Reusable implementation-independent behavior obligations | `SoftwareServiceContract`, when useful separately from the port interface |
@@ -41,7 +42,7 @@ action def GetStatus :> QueryOperation {
     out response : RobotStatus;
 }
 port def RobotControlService :> InteractionPort {
-    in ref action getStatus : GetStatus[0..*];
+    ref action getStatus : GetStatus[0..*];
 }
 ```
 
@@ -51,10 +52,17 @@ declare a new action reference named `GetStatus`; it would not reference the
 existing definition merely because the names match.
 
 The `[0..*]` multiplicity allows references to repeated logical call performances.
-The example chooses incoming references on the provider side and a conjugated
-service port on the client side. This is a documented provided/required convention;
-SysML does not assign gRPC dispatch semantics to the `in` keyword. The action's
-own request/response parameters retain their meaning.
+The reference itself has no direction. Its operation definition still has input
+request and output response parameters. Those directions describe the operation
+signature; they are separate from whether an endpoint acts as client or server.
+Adding `in` would direct the action reference, not declare a provided operation
+or describe the RPC's entire request/response exchange.
+
+The example records client/server roles explicitly with project-local
+`GrpcEndpointRole` metadata on the endpoint occurrences. Both use the same
+`GrpcEndpoint` definition. Conjugation reverses directed features, so it does not
+establish client/server roles for these undirected action references. Neither the
+role annotation nor the reference itself supplies RPC dispatch semantics.
 
 An action reference refers to a behavior performance, not a static source-code
 method pointer or serialized method name. This pattern expresses a logical call
@@ -94,11 +102,13 @@ instead of maintaining separate signature copies in each representation.
 ## 4. Several services on one endpoint
 
 The example groups `RobotControlService` and `DiagnosticsService` under a
-`GrpcEndpoint` port definition. The client aggregate explicitly uses conjugated
-service-port types. Connections are made between corresponding service ports;
-the HTTP transport is shown separately. This makes direction clear at each
-service boundary rather than relying on an assumed recursive interpretation of
-conjugation across an arbitrary aggregate.
+`GrpcEndpoint` port definition. Client and server use that same contract, with
+explicit role annotations on their endpoint occurrences. Connections are made
+between corresponding service ports; the HTTP transport is shown separately.
+The server binds its RPC references to the handler's implementing actions. The
+client annotation identifies the consuming endpoint without reversing the
+operation's request/response signature. For a mixed-role aggregate, record the
+roles on individual service endpoint occurrences instead.
 
 In the example's [Protobuf contract](../model/technical/software/examples/interactions/robot.proto):
 
@@ -141,6 +151,8 @@ and model encoding, dispatch and response handling explicitly.
 
 The example's `UnaryHttp2Endpoint` is a deliberately limited request/reply
 abstraction. It does not model HTTP/2 multiplexing, headers, framing or streaming.
+Its client port is conjugated because this transport contract has directed
+request/response data features; this is distinct from the undirected RPC references.
 Its logical service connections and HTTP connection are two views of one
 interaction, not additional independent calls.
 
@@ -224,7 +236,7 @@ the synchronous `RequestReplyPort` contract.
 ## 9. What the examples prove
 
 The full workspace check validates definitions, typing, referential port features,
-conjugated service ports, implementation bindings, transport allocations and
+endpoint-role metadata, implementation bindings, transport allocations and
 broker/bus topology. Semantic export checks inspect those authored relationships.
 
 The fixtures do not prove generated gRPC implementation behavior, Protobuf wire

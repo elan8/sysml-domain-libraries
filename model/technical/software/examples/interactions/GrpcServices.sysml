@@ -5,6 +5,13 @@ package GrpcServices {
     private import Elan8::Generation::*;
     private import StandardViewDefinitions::*;
 
+    // Project-local endpoint roles; these are not action/data directions.
+    enum def EndpointRole { client; server; }
+    metadata def GrpcEndpointRole {
+        :> annotatedElement : SysML::PortUsage;
+        attribute role : EndpointRole;
+    }
+
     item def GetStatusRequest;
     item def RobotStatus { attribute cleaning : Boolean; }
     item def StartCleaningRequest;
@@ -33,23 +40,17 @@ package GrpcServices {
             uri = "model/technical/software/examples/interactions/robot.proto";
             format = SpecificationFormat::protobuf;
         }
-        // Provider-side convention: incoming references to logical call performances.
-        in ref action getStatus : GetStatus[0..*];
-        in ref action startCleaning : StartCleaning[0..*];
+        // Undirected references group RPC contracts, independently of endpoint role.
+        ref action getStatus : GetStatus[0..*];
+        ref action startCleaning : StartCleaning[0..*];
     }
     port def DiagnosticsService :> InteractionPort {
-        in ref action getDiagnostics : GetDiagnostics[0..*];
+        ref action getDiagnostics : GetDiagnostics[0..*];
     }
     port def GrpcEndpoint :> InteractionPort {
         port robotControl : RobotControlService;
         port diagnostics : DiagnosticsService;
     }
-    port def GrpcClientEndpoint :> InteractionPort {
-        // Make the service-level conjugation explicit within this aggregate.
-        port robotControl : ~RobotControlService;
-        port diagnostics : ~DiagnosticsService;
-    }
-
     part def RobotHandler :> SoftwareModule {
         action getStatus : GetStatus[0..*];
         action startCleaning : StartCleaning[0..*];
@@ -71,7 +72,9 @@ package GrpcServices {
     }
 
     part def ServerApplication :> SoftwareApplication {
-        port grpc : GrpcEndpoint;
+        port grpc : GrpcEndpoint {
+            @GrpcEndpointRole { role = EndpointRole::server; }
+        }
         port http2 : UnaryHttp2Endpoint;
         part handler : RobotHandler;
         bind grpc.robotControl.getStatus = handler.getStatus;
@@ -82,7 +85,9 @@ package GrpcServices {
         allocate grpc to http2;
     }
     part def ClientApplication :> SoftwareApplication {
-        port grpc : GrpcClientEndpoint;
+        port grpc : GrpcEndpoint {
+            @GrpcEndpointRole { role = EndpointRole::client; }
+        }
         port http2 : ~UnaryHttp2Endpoint;
         allocate grpc to http2;
     }
