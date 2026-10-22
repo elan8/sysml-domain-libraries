@@ -8,6 +8,10 @@ concepts and language mappings for C#, Python, Rust, C/C++, Java and
 TypeScript/JavaScript, including the distinction between architecture, source,
 build and runtime structure.
 
+The [interaction guide](../../../docs/software-interactions.md) explains RPC
+references in service ports, implementation bindings, endpoints containing several
+services, HTTP transport mappings, Kafka events and in-process message buses.
+
 ## Contents
 
 - `Software.sysml` (`Elan8::Software`)
@@ -88,8 +92,10 @@ The layered example defines `SettingsServiceContract` with load/save operations;
 `SettingsRepository` specializes both that contract and `SoftwareModule`.
 Neither specialization nor an action's name automatically exposes it on a port.
 Service exposure, transport binding and request-dispatch behavior remain explicit
-modeling concerns. The library does not yet define a generic provided/required
-service relationship for an endpoint.
+modeling concerns. Native typed action references in port definitions and explicit
+contextual bindings can express a logical callable boundary; the interaction
+guide documents the provider/client convention and its limits. This does not
+require a separate port per RPC or a generated provided/required-service mechanism.
 
 ## Datastores and queues
 
@@ -117,6 +123,10 @@ State machines, events, messages and interactions are native SysML: `state`, `it
 `send` and `accept`, and successions. The library does not re-model them.
 
 ## Examples
+
+- `examples/interactions/`: reference-based gRPC service ports, explicit
+  implementation bindings and HTTP mappings, Kafka event/log topology, and an
+  in-process message bus. Protocol endpoint definitions are local to the examples.
 
 - `examples/language-mappings/`: paired SysML and source examples for a C# class
   and callable contract, a Python module/script and a Rust crate with modules,

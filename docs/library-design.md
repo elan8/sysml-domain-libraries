@@ -185,8 +185,11 @@ metadata def <operation> OperationMetadata :> Metaobjects::SemanticMetadata {
 
 - **A function** is an operation definition: `#operation action def ComputeOdometry { in left : …; in right : …; out pose : Pose; }`.
 - **A method** is an operation usage owned by a component: `part def Navigator :> SoftwareComponent { #operation action plan : PlanPath; }`.
-- **An operation offered to other components** is exposed through a request–reply port (5.2) whose
-  request and reply items match its parameters.
+- **An operation offered to other components** can use typed referential action features
+  grouped in a service port, with explicit bindings to implementing actions. A
+  request–reply port instead describes an exchange of request and response data.
+  See the [interaction guide](software-interactions.md) for the distinction and
+  the gRPC, HTTP, Kafka and message-bus patterns.
 - **Contracts** are native: preconditions and postconditions as `constraint`s on the operation,
   errors as `out` items. A verifier reads them; a generator can emit assertions.
 

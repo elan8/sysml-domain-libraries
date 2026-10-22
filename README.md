@@ -25,6 +25,8 @@ service contracts, datastores and queues. These additions are not yet released.
 The [software modeling guide](docs/software-modeling.md) covers common software
 concepts and mappings for C#, Python, Rust, C/C++, Java and TypeScript/JavaScript,
 with linked SysML/source examples for C#, Python and Rust.
+The [interaction guide](docs/software-interactions.md) covers gRPC service ports,
+HTTP transport mappings, Kafka and message-bus patterns.
 
 ## Validation
 

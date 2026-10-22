@@ -24,7 +24,9 @@ package Bindings {
     }
 
     metadata def Rpc {
-        doc /* The operation is offered as a remote procedure call. */
+        doc /* Intended remote-call binding for an operation. Explicit service
+             * ports and implementation mappings establish exposure; this marker
+             * alone does not invoke, dispatch or generate a remote call. */
         :> annotatedElement : SysML::ActionDefinition;
         :> annotatedElement : SysML::ActionUsage;
         attribute protocol : RpcProtocol;
@@ -62,8 +64,10 @@ package Bindings {
     metadata def Topic {
         doc /*
          * Messages of the annotated payload or port travel over a broker topic.
-         * Delivery is at least once unless stated otherwise, so a command sent
-         * this way should be idempotent or deduplicated by the receiver.
+         * Delivery guarantees depend on broker and processing configuration and
+         * must be stated explicitly. Under at-least-once delivery, a command
+         * should be idempotent or deduplicated by the receiver. This annotation
+         * alone does not establish delivery, ordering or transaction guarantees.
          */
         :> annotatedElement : SysML::ItemDefinition;
         :> annotatedElement : SysML::PortUsage;

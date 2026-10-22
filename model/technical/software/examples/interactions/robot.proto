@@ -1,0 +1,18 @@
+syntax = "proto3";
+package demo.robot.v1;
+
+service RobotControl {
+  rpc GetStatus(GetStatusRequest) returns (RobotStatus);
+  rpc StartCleaning(StartCleaningRequest) returns (StartCleaningResult);
+}
+
+service DiagnosticsService {
+  rpc GetDiagnostics(GetDiagnosticsRequest) returns (Diagnostics);
+}
+
+message GetStatusRequest {}
+message RobotStatus { bool cleaning = 1; }
+message StartCleaningRequest {}
+message StartCleaningResult { bool accepted = 1; }
+message GetDiagnosticsRequest {}
+message Diagnostics { bool healthy = 1; }

@@ -22,6 +22,9 @@ package Examples {
         public import BenchInstrumentExample;
     }
     package Software {
+        public import GrpcServices;
+        public import KafkaEvents;
+        public import MessageBusExample;
         public import CSharpMapping;
         public import PythonMapping;
         public import RustMapping;

@@ -106,11 +106,12 @@ constraints and link the source interface when the callable-service abstraction
 does not fit. A trait or interface implementation does not automatically expose
 an RPC service.
 
-Ports describe interaction boundaries. Grouping a service's operations does not
-create one port per operation. A network endpoint may expose several services,
-but the current library does not yet define the generic provided/required-service
-relationship for an endpoint. `Rpc` and `InterfaceSpec` supply technology bindings;
-they do not implement service exposure or dispatch.
+Ports describe interaction boundaries. A port definition can group typed referential
+action usages for its RPC interface; contextual bindings relate those references to
+implementation actions. One endpoint can aggregate several service ports. See the
+[interaction guide](software-interactions.md) for this native pattern and examples
+covering HTTP transport, Kafka and message buses. `Rpc` and `InterfaceSpec` supply
+technology bindings; they do not implement service exposure or dispatch.
 
 ### State, errors, concurrency and asynchronous work
 
