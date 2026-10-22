@@ -19,7 +19,8 @@ sections, prose, figures and tables. This source addition is not yet released.
 
 The [software vocabulary](model/technical/software/README.md) includes compositional
 `SoftwareApplication` and `SoftwareLayer` types. Layers can carry an optional
-`#RRGGBB` color hint for renderers. These additions are not yet released.
+`#RRGGBB` color hint for renderers. It also distinguishes implementation modules,
+service contracts, datastores and queues. These additions are not yet released.
 
 ## Validation
 

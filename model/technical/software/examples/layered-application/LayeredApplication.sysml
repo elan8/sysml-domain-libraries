@@ -9,6 +9,24 @@ package LayeredApplication {
     item def MotionResult;
     item def SettingsRequest;
     item def SettingsResult;
+    item def SettingsRecord;
+
+    action def LoadSettings :> QueryOperation {
+        in request : SettingsRequest;
+        out result : SettingsResult;
+    }
+    action def SaveSettings :> CommandOperation {
+        in request : SettingsRequest;
+        out result : SettingsResult;
+    }
+    part def SettingsServiceContract :> SoftwareServiceContract {
+        action load : LoadSettings;
+        action save : SaveSettings;
+    }
+    part def SettingsDataStore :> SoftwareDataStore {
+        attribute :>> persistence = DataStorePersistence::persistent;
+        item entries : SettingsRecord[0..*];
+    }
 
     port def MotionApi :> RequestReplyPort {
         in item :>> request : MotionRequest;
@@ -19,17 +37,18 @@ package LayeredApplication {
         out item :>> reply : SettingsResult;
     }
 
-    part def MissionService :> SoftwareComponent {
+    part def MissionService :> SoftwareModule {
         port motion : ~MotionApi;
         port settings : ~SettingsApi;
     }
-    part def SettingsRepository :> SoftwareComponent {
+    part def SettingsRepository :> SoftwareModule, SettingsServiceContract {
         port settings : SettingsApi;
+        ref part store : SettingsDataStore;
     }
-    part def MotorAdapter :> SoftwareComponent {
+    part def MotorAdapter :> SoftwareModule {
         port motion : MotionApi;
     }
-    part def DiagnosticService :> SoftwareComponent;
+    part def DiagnosticService :> SoftwareModule;
 
     part def ServicesLayer :> SoftwareLayer {
         attribute :>> color default = "#DCEBFA";
@@ -38,6 +57,8 @@ package LayeredApplication {
     part def InfrastructureLayer :> SoftwareLayer {
         attribute :>> color default = "#E2F0D9";
         part settings : SettingsRepository;
+        part settingsData : SettingsDataStore;
+        bind settings.store = settingsData;
     }
     part def HardwareAbstractionLayer :> SoftwareLayer {
         attribute :>> color default = "#FFF2CC";

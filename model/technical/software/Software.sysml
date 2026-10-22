@@ -1,9 +1,10 @@
 package Software {
     doc /*
-     * Generic software concepts that tools act on: applications, layers, components, operations
-     * (queries and commands), interaction ports, tasks, execution platforms
-     * and queues. Behaviour is native SysML (`state`, `action`, `send`,
-     * `accept`); deployment is native `allocate`. Technology choices are
+     * Generic software concepts that tools act on: applications, layers,
+     * components, operations (queries and commands), interaction ports, tasks,
+     * execution platforms, service contracts and data resources. Behaviour is
+     * native SysML (`state`, `action`, `send`, `accept`); deployment is native
+     * `allocate`. Technology choices are
      * metadata in Elan8::Software::Bindings. See docs/library-design.md.
      */
     private import ISQ::*;
@@ -22,9 +23,33 @@ package Software {
          * Components may compose other components. The abstraction level is
          * architectural: a component is not necessarily one class, assembly
          * or process in an implementation language.
+         * This abstract base is open for project specializations; the library's
+         * application, layer, module, task and data-resource kinds are not an
+         * exhaustive classification of software.
          */
     }
     abstract part softwareComponents : SoftwareComponent[0..*] nonunique :> Parts::parts;
+
+    abstract part def SoftwareModule :> SoftwareComponent {
+        doc /*
+         * An implementation unit with a cohesive responsibility, for example a
+         * repository, algorithm module or device adapter. It may compose other
+         * components and realize service contracts. It does not imply one
+         * source file, class, language module, assembly or deployment unit.
+         */
+    }
+
+    abstract part def SoftwareServiceContract {
+        doc /*
+         * A callable service contract grouping related operation usages typed
+         * by SoftwareOperation definitions, with their signatures and obligations.
+         * This is not an implementation component or an execution platform.
+         * An implementation can specialize both SoftwareModule and a project
+         * service contract to inherit its operations and constraints. Several
+         * implementations can share a contract; one can realize several contracts.
+         * Transport bindings and port exposure are separate modeling concerns.
+         */
+    }
 
     abstract part def SoftwareApplication :> SoftwareComponent {
         doc /*
@@ -48,8 +73,9 @@ package Software {
              * (six hexadecimal digits, case insensitive), for example #DCEBFA.
              * No alpha channel or named colors. When unset, a renderer uses its
              * theme. Set a default on the layer definition for reuse and allow
-             * occurrence overrides; a fixed value cannot be overridden. Color conveys no dependency, ordering or deployment
-             * semantics. Renderers must opt in to reading this attribute.
+             * occurrence overrides; a fixed value cannot be overridden. Color
+             * conveys no dependency, ordering or deployment semantics. Renderers
+             * must opt in to reading this attribute.
              */
         }
     }
@@ -176,7 +202,7 @@ package Software {
     }
 
     // ------------------------------------------------------------------
-    // Tasks, platforms and queues
+    // Tasks and platforms
     // ------------------------------------------------------------------
 
     enum def TaskCriticality {
@@ -245,13 +271,45 @@ package Software {
         :>> baseType = executionPlatforms meta SysML::Usage;
     }
 
+    // ------------------------------------------------------------------
+    // Data resources
+    // ------------------------------------------------------------------
+
+    enum def DataStorePersistence {
+        volatile;
+        persistent;
+    }
+
+    abstract part def SoftwareDataStore :> SoftwareComponent {
+        doc /*
+         * A logical resource holding data for retrieval and update, for example
+         * a settings file, database or in-memory store. Project specializations
+         * define their data schema, access ports and read/write operations as
+         * needed. A queue instead buffers messages for delivery or consumption.
+         *
+         * This resource is distinct from a repository module that accesses it,
+         * a database server process, or the physical memory/storage hosting it.
+         * Composition expresses ownership; references identify shared stores.
+         * Atomicity, consistency, retention and failure behavior need explicit
+         * contracts; persistence alone does not guarantee those properties.
+         */
+        attribute capacity : StorageCapacityValue[0..1] {
+            doc /* Storage capacity in information units, not a record count. */
+        }
+        attribute persistence : DataStorePersistence[0..1] {
+            doc /* Volatile across execution restarts or persistent beyond them.
+                 * Unset means unspecified; persistent does not by itself promise
+                 * durability against power loss or storage failures. */
+        }
+    }
+
     enum def QueueDiscipline {
         fifoDropNewest;
         fifoDropOldest;
         overwriteLatest;
     }
 
-    part def SoftwareQueue {
+    part def SoftwareQueue :> SoftwareComponent {
         doc /*
          * A bounded buffer between software components. The discipline says
          * what happens when it is full; verification checks for overflow

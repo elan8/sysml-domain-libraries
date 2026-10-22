@@ -148,6 +148,19 @@ Conventions:
 
 ## 4. Answers to the design questions
 
+Software structure uses an open abstract `SoftwareComponent` base. Applications,
+layers, modules, tasks, queues and datastores are useful kinds; project-defined
+specializations remain valid. A `SoftwareServiceContract` groups operation
+contracts separately from implementations. A module can specialize a project
+service contract to inherit its operations and obligations. This does not imply
+a transport endpoint or automatically dispatch calls.
+
+Data resources distinguish message buffering (`SoftwareQueue`) from retrievable
+stored data (`SoftwareDataStore`). A repository module references a store; it is
+not the store itself. Storage capacity and persistence are optional properties;
+record schemas, access interfaces, consistency and failure guarantees are authored
+for the project. See the [software library](../model/technical/software/README.md).
+
 ### 4.1 Software operations: functions and methods
 
 A software operation (a function, a method, a remote procedure) is an `action def`. Its parameters
