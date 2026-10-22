@@ -148,6 +148,11 @@ Conventions:
 
 ## 4. Answers to the design questions
 
+For practical cross-language mappings and examples, see the
+[software modeling guide](software-modeling.md). It distinguishes architecture,
+implementation, build artifacts and runtime execution; source-language syntax
+alone does not determine a SysML metaclass or architectural role.
+
 Software structure uses an open abstract `SoftwareComponent` base. Applications,
 layers, modules, tasks, queues and datastores are useful kinds; project-defined
 specializations remain valid. A `SoftwareServiceContract` groups operation

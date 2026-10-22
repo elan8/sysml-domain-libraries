@@ -22,6 +22,9 @@ package Examples {
         public import BenchInstrumentExample;
     }
     package Software {
+        public import CSharpMapping;
+        public import PythonMapping;
+        public import RustMapping;
         public import LayeredApplication;
         public import WebShop;
         public import MotorController;

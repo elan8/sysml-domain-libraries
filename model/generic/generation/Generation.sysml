@@ -16,6 +16,7 @@ package Generation {
         python;
         java;
         typeScript;
+        cSharp;
     }
 
     enum def StateMachineStyle {

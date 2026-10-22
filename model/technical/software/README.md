@@ -3,6 +3,11 @@
 `Elan8::Software` holds the generic software concepts that code generators, verifiers and timing
 analyses act on. The design behind it is in [docs/library-design.md](../../../docs/library-design.md).
 
+The [software modeling guide](../../../docs/software-modeling.md) explains common
+concepts and language mappings for C#, Python, Rust, C/C++, Java and
+TypeScript/JavaScript, including the distinction between architecture, source,
+build and runtime structure.
+
 ## Contents
 
 - `Software.sysml` (`Elan8::Software`)
@@ -112,6 +117,10 @@ State machines, events, messages and interactions are native SysML: `state`, `it
 `send` and `accept`, and successions. The library does not re-model them.
 
 ## Examples
+
+- `examples/language-mappings/`: paired SysML and source examples for a C# class
+  and callable contract, a Python module/script and a Rust crate with modules,
+  free functions and receiver methods. See its README for validation limits.
 
 - `examples/layered-application/`: two applications, Services/Infrastructure/HAL
   composition, reusable layer colors, a service contract and repository implementation,

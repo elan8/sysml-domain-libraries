@@ -16,6 +16,11 @@ Use these checks before publishing new or changed SysML libraries.
 
 ## Parser And Semantic Validation
 
+The [software language examples](../model/technical/software/examples/language-mappings/README.md)
+are included in the complete workspace check. They also include source counterparts;
+run native compiler/interpreter checks separately where available. A source link
+or successful SysML validation alone does not verify model/code equivalence.
+
 Use Spec42 as the semantic validation gate for all `.sysml` files under `model/`.
 By default, the repository script filters Spec42 diagnostics with `source = domain`; those are modeling-completeness checks from Spec42's bundled domain libraries, not SysML syntax or semantic validity checks for this repository.
 
