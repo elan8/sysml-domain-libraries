@@ -14,14 +14,20 @@ package ProjectDocuments {
             @Section { title = "Introduction"; }
             doc /* Purpose and scope of the system. */
         }
+        view structure : InterconnectionView {
+            @Section { title = "Structure"; }
+            @Diagram { depth = 2; }
+            expose Vehicle::vehicle;
+        }
     }
 }
 ```
 
 A document is a view annotated with `Document`; nested views define sections in
 authored order. `Section` supplies a title, `Prose` references Markdown, `Figure`
-references SVG, `Table` selects columns over exposed elements, and
-`RequirementTable` supplies a requirement-table preset. These metadata definitions
+references SVG, `Diagram` limits how many levels a diagram view draws open,
+`Table` selects columns over exposed elements, and `RequirementTable` supplies a
+requirement-table preset. These metadata definitions
 do not duplicate the engineering model or prescribe a rendering engine.
 
 Configure `sysml-domain-libraries/model` as a library path for both editors and

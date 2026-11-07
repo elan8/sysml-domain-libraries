@@ -3,6 +3,7 @@ package Documents {
          * Document views compose sections in authored order; consumers interpret the metadata. */
 
     private import ScalarValues::String;
+    private import ScalarValues::Natural;
 
     metadata def Document {
         doc /* Marks a view usage as a document. Its nested views are the document's
@@ -35,6 +36,14 @@ package Documents {
              * inside the workspace. An authored figure is not checked against the model. */
         attribute file : String;
         attribute caption : String [0..1];
+    }
+
+    metadata def Diagram {
+        doc /* Presentation data for the diagram drawn from the annotated section, a view typed by
+             * a view definition such as `InterconnectionView`. `depth` is how many levels of
+             * members are drawn below the exposed elements; deeper content is drawn closed. Without
+             * it, every level the view exposes is drawn. */
+        attribute depth : Natural [0..1];
     }
 
     metadata def Table {
