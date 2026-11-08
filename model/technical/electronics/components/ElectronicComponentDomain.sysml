@@ -36,6 +36,9 @@ package Components {
         :> PassiveElectronicComponent, TwoTerminalElectronicComponent;
 
     part def Resistor :> TwoTerminalPassiveComponent {
+        @Elan8::PhysicalModeling::ModelicaModel {
+            className = "Elan8.Electronics.Components.Resistor";
+        }
         attribute resistance : ResistanceValue;
         attribute tolerance : ComponentTolerance;
         attribute ratedPower : PowerValue;
@@ -43,6 +46,9 @@ package Components {
     }
 
     part def Capacitor :> TwoTerminalPassiveComponent {
+        @Elan8::PhysicalModeling::ModelicaModel {
+            className = "Elan8.Electronics.Components.Capacitor";
+        }
         attribute capacitance : CapacitanceValue;
         attribute tolerance : ComponentTolerance;
         attribute ratedVoltage : ElectricPotentialValue;
@@ -70,6 +76,9 @@ package Components {
     }
 
     part def VoltageSource :> TwoTerminalElectronicComponent {
+        @Elan8::PhysicalModeling::ModelicaModel {
+            className = "Elan8.Electronics.Components.VoltageSource";
+        }
         doc /*
          * Ideal zero-internal-impedance source. Distinct from the
          * system-level power architecture parts in
@@ -81,10 +90,16 @@ package Components {
     }
 
     part def CurrentSource :> TwoTerminalElectronicComponent {
+        @Elan8::PhysicalModeling::ModelicaModel {
+            className = "Elan8.Electronics.Components.CurrentSource";
+        }
         attribute sourceCurrent : ElectricCurrentValue;
     }
 
     part def Ground :> BoardLevelElectronicComponent {
+        @Elan8::PhysicalModeling::ModelicaModel {
+            className = "Elan8.Electronics.Components.Ground";
+        }
         doc /* Reference node of a circuit. */
         port terminal : ElectricalTerminalPort;
     }
@@ -125,6 +140,9 @@ package Components {
     }
 
     part def BipolarJunctionTransistor :> Transistor {
+        @Elan8::PhysicalModeling::ModelicaModel {
+            className = "Elan8.Electronics.Components.BipolarJunctionTransistor";
+        }
         port base : ElectricalTerminalPort :> terminal1;
         port collector : ElectricalTerminalPort :> terminal2;
         port emitter : ElectricalTerminalPort :> terminal3;

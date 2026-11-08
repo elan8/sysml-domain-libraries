@@ -81,5 +81,11 @@ settled = [r for r in load("PnpDriver") if r["time"] >= 1e-4]
 check("PnpDriver", max(abs(r["transistor.collector.i"] + ic) for r in settled), 1e-9, "collector current [A]")
 check("PnpDriver", max(abs(r["transistor.collector.v"] - (3.0 - vc)) for r in settled), 1e-6, "collector voltage [V]")
 
+# The mass-spring example (model/generic/physical-modeling/examples/mass-spring): released
+# 0.1 m from rest, s(t) = 0.1 cos(sqrt(k/m) t) with k = 10 N/m and m = 1 kg.
+rows = load("MassSpring")
+omega = math.sqrt(10 / 1)
+check("MassSpring", max(abs(r["s"] - 0.1 * math.cos(omega * r["time"])) for r in rows), 1e-6, "position [m]")
+
 print(f"{sum(results)}/{len(results)} checks pass")
 sys.exit(0 if all(results) else 1)

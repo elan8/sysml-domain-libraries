@@ -23,6 +23,25 @@ package Power {
         port output : PowerRailPort;
     }
 
+    part def PrimaryCell :> ElectronicsComponent {
+        doc /*
+         * A non-rechargeable cell, such as a CR2032 coin cell: a constant
+         * open-circuit voltage behind an internal resistance, with the usable
+         * charge drawn down by the current delivered. Usable capacity is the
+         * nominal capacity times `usableCapacityFactor`, which accounts for the
+         * cut-off voltage of the load.
+         */
+        @Elan8::PhysicalModeling::ModelicaModel {
+            className = "Elan8.Electronics.Power.PrimaryCell";
+        }
+        attribute nominalVoltage : ElectricPotentialValue;
+        attribute internalResistance : ResistanceValue;
+        attribute nominalCapacity : ElectricChargeValue;
+        attribute usableCapacityFactor : DimensionOneValue;
+        port positive : ElectricalTerminalPort;
+        port negative : ElectricalTerminalPort;
+    }
+
     part def BatteryPack :> ElectronicsComponent {
         attribute nominalCapacity : ElectricChargeValue;
         attribute nominalVoltage : ElectricPotentialValue;

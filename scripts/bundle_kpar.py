@@ -4,7 +4,8 @@
 The archive takes its name and version from `.project.json` at the repository root, the same
 file Spec42's own library fetch script requires, and contains the libraries under `model/`. It
 leaves out the documentation, scripts and examples (`examples/` directories and
-`model/Examples.sysml`), as earlier releases did. Spec42 is the
+`model/Examples.sysml`), as earlier releases did, and the Modelica package (`modelica/`),
+which simulation tools load separately. Spec42 is the
 release pinned in `.spec42-version` unless --spec42 or SPEC42_EXE names another executable.
 
 Usage:
@@ -23,7 +24,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _spec42 import REPO_ROOT, find_spec42  # noqa: E402
 
 PROJECT_FILE = REPO_ROOT / ".project.json"
-EXCLUDES = [".git", "docs", "scripts", "examples", "model/Examples.sysml"]
+EXCLUDES = [".git", "docs", "scripts", "examples", "modelica", "model/Examples.sysml"]
 
 
 def main() -> int:

@@ -43,11 +43,7 @@ package MassSpringSimulation {
             :>> relativeTolerance = 0.000001;
         }
 
-        in mass : MassValue = 1 [kg] {
-            @ExternalVariable {
-                variableName = "m";
-            }
-        }
+        in mass : MassValue = 1 [kg];
 
         out position : LengthValue {
             @ExternalVariable {
