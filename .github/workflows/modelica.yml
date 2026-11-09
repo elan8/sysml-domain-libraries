@@ -1,0 +1,24 @@
+name: Modelica bindings
+
+# Checks every @ModelicaModel binding against its Modelica class and simulates the bound
+# classes with rumoca against independent references (modelica/tests/run.sh).
+on:
+  pull_request:
+    paths: ["model/**", "modelica/**", "scripts/check_modelica_bindings.py", ".github/workflows/modelica.yml"]
+  push:
+    branches: [main]
+    paths: ["model/**", "modelica/**", "scripts/check_modelica_bindings.py", ".github/workflows/modelica.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  modelica:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Bindings and reference simulations
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash modelica/tests/run.sh

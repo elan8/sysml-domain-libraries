@@ -6,6 +6,8 @@ Use these checks before publishing new or changed SysML libraries.
 
 - `rg "package |library package" model`
 - `python3 scripts/validate_spec42.py`
+- `modelica/tests/run.sh`: every `@ModelicaModel` binding against its Modelica class, and
+  reference simulations of the bound classes (see [`modelica/README.md`](../modelica/README.md))
 
 ## Library Expectations
 

@@ -36,6 +36,11 @@ package Components {
         :> PassiveElectronicComponent, TwoTerminalElectronicComponent;
 
     part def Resistor :> TwoTerminalPassiveComponent {
+        @Elan8::PhysicalModeling::ModelicaModel {
+            className = "Modelica.Electrical.Analog.Basic.Resistor";
+            parameters = ("resistance=R");
+            pins = ("terminal1=p", "terminal2=n");
+        }
         attribute resistance : ResistanceValue;
         attribute tolerance : ComponentTolerance;
         attribute ratedPower : PowerValue;
@@ -43,6 +48,11 @@ package Components {
     }
 
     part def Capacitor :> TwoTerminalPassiveComponent {
+        @Elan8::PhysicalModeling::ModelicaModel {
+            className = "Modelica.Electrical.Analog.Basic.Capacitor";
+            parameters = ("capacitance=C");
+            pins = ("terminal1=p", "terminal2=n");
+        }
         attribute capacitance : CapacitanceValue;
         attribute tolerance : ComponentTolerance;
         attribute ratedVoltage : ElectricPotentialValue;
@@ -59,6 +69,11 @@ package Components {
     part def TantalumCapacitor :> PolarizedCapacitor;
 
     part def Inductor :> TwoTerminalPassiveComponent {
+        @Elan8::PhysicalModeling::ModelicaModel {
+            className = "Modelica.Electrical.Analog.Basic.Inductor";
+            parameters = ("inductance=L");
+            pins = ("terminal1=p", "terminal2=n");
+        }
         attribute inductance : InductanceValue;
         attribute tolerance : ComponentTolerance;
         attribute ratedCurrent : ElectricCurrentValue;
@@ -70,6 +85,11 @@ package Components {
     }
 
     part def VoltageSource :> TwoTerminalElectronicComponent {
+        @Elan8::PhysicalModeling::ModelicaModel {
+            className = "Modelica.Electrical.Analog.Sources.ConstantVoltage";
+            parameters = ("sourceVoltage=V");
+            pins = ("terminal1=p", "terminal2=n");
+        }
         doc /*
          * Ideal zero-internal-impedance source. Distinct from the
          * system-level power architecture parts in
@@ -81,10 +101,19 @@ package Components {
     }
 
     part def CurrentSource :> TwoTerminalElectronicComponent {
+        @Elan8::PhysicalModeling::ModelicaModel {
+            className = "Modelica.Electrical.Analog.Sources.ConstantCurrent";
+            parameters = ("sourceCurrent=I");
+            pins = ("terminal1=p", "terminal2=n");
+        }
         attribute sourceCurrent : ElectricCurrentValue;
     }
 
     part def Ground :> BoardLevelElectronicComponent {
+        @Elan8::PhysicalModeling::ModelicaModel {
+            className = "Modelica.Electrical.Analog.Basic.Ground";
+            pins = ("terminal=p");
+        }
         doc /* Reference node of a circuit. */
         port terminal : ElectricalTerminalPort;
     }
@@ -119,19 +148,30 @@ package Components {
     abstract part def Transistor
         :> SemiconductorDevice, ThreeTerminalElectronicComponent;
 
-    enum def BipolarJunctionPolarity {
-        npn;
-        pnp;
-    }
-
-    part def BipolarJunctionTransistor :> Transistor {
+    abstract part def BipolarJunctionTransistor :> Transistor {
+        doc /* A bipolar junction transistor: an NpnTransistor or a PnpTransistor. */
         port base : ElectricalTerminalPort :> terminal1;
         port collector : ElectricalTerminalPort :> terminal2;
         port emitter : ElectricalTerminalPort :> terminal3;
-        attribute polarity : BipolarJunctionPolarity;
         attribute currentGain : Real;
         attribute maximumCollectorEmitterVoltage : ElectricPotentialValue;
         attribute maximumCollectorCurrent : ElectricCurrentValue;
+    }
+
+    part def NpnTransistor :> BipolarJunctionTransistor {
+        @Elan8::PhysicalModeling::ModelicaModel {
+            className = "Modelica.Electrical.Analog.Semiconductors.NPN";
+            parameters = ("currentGain=Bf");
+            pins = ("base=B", "collector=C", "emitter=E");
+        }
+    }
+
+    part def PnpTransistor :> BipolarJunctionTransistor {
+        @Elan8::PhysicalModeling::ModelicaModel {
+            className = "Modelica.Electrical.Analog.Semiconductors.PNP";
+            parameters = ("currentGain=Bf");
+            pins = ("base=B", "collector=C", "emitter=E");
+        }
     }
 
     enum def FieldEffectChannel {
