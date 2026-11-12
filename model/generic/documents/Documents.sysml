@@ -59,14 +59,23 @@ package Documents {
              *   @Metadata.feature              a value of a metadata annotation of the element
              *   relation / content             the content for each element a relation names,
              *                                  e.g. `verified-by / @VerificationMethod.kind`
+             *   verdict, verdict-time, verdict-state, verdict-charge, verdict-detail
+             *                                  a record in the file `verdicts` names, matched by
+             *                                  the element's qualified name. The file is a JSON
+             *                                  list written by a run. A missing file or a case
+             *                                  with no record is not a pass. A record from an
+             *                                  unlicensed development build says so.
              *
              * `kind` keeps only elements of that kind (`"requirement"`, `"part"`,
              * `"connection"`, `"part def"`, ...). `sort` names the content to order the rows by;
-             * without it, rows are in the order the elements are written in the model. */
+             * without it, rows are in the order the elements are written in the model.
+             * `verdicts` is a path, relative to this annotation and inside the workspace, of
+             * that JSON file. */
         attribute columns : String;
         attribute kind : String [0..1];
         attribute sort : String [0..1];
         attribute caption : String [0..1];
+        attribute verdicts : String [0..1];
     }
 
     metadata def RequirementTable {
