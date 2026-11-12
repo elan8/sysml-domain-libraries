@@ -6,11 +6,14 @@ package Examples {
         public import MotorAndPowerModule;
         public import Pcba;
         public import RcCircuit;
+        public import RlcCircuit;
         public import SensorSuite;
         public import StandardComponents;
     }
     package Mechanical {
         public import Composition;
+        public import MassSpringSimulation;
+        public import Pendulum;
     }
     package PhysicalModeling {
         public import MassSpringSimulation;

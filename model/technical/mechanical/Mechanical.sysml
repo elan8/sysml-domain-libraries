@@ -8,6 +8,7 @@ package Mechanical {
         }
     }
     public import Drivetrain;
+    public import Dynamics;
     package Interconnection {
         private import Elan8::Core::*;
         private import ISQ::*;

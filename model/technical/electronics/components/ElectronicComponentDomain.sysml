@@ -1,6 +1,7 @@
 package Components {
     private import Elan8::Electronics::Core::*;
     private import Elan8::Electronics::Interconnection::*;
+    private import Elan8::PhysicalModeling::*;
     private import ISQ::*;
     private import ScalarValues::*;
 
@@ -40,12 +41,20 @@ package Components {
         attribute tolerance : ComponentTolerance;
         attribute ratedPower : PowerValue;
         attribute maximumWorkingVoltage : ElectricPotentialValue;
+        @ModelicaModel {
+            resourceUri = "modelica/Elan8Electronics.mo";
+            className = "Elan8Electronics.Resistor";
+        }
     }
 
     part def Capacitor :> TwoTerminalPassiveComponent {
         attribute capacitance : CapacitanceValue;
         attribute tolerance : ComponentTolerance;
         attribute ratedVoltage : ElectricPotentialValue;
+        @ModelicaModel {
+            resourceUri = "modelica/Elan8Electronics.mo";
+            className = "Elan8Electronics.Capacitor";
+        }
     }
 
     part def CeramicCapacitor :> Capacitor;
@@ -62,6 +71,10 @@ package Components {
         attribute inductance : InductanceValue;
         attribute tolerance : ComponentTolerance;
         attribute ratedCurrent : ElectricCurrentValue;
+        @ModelicaModel {
+            resourceUri = "modelica/Elan8Electronics.mo";
+            className = "Elan8Electronics.Inductor";
+        }
     }
 
     part def Fuse :> TwoTerminalPassiveComponent {
@@ -78,15 +91,27 @@ package Components {
          * schematic primitive.
          */
         attribute sourceVoltage : ElectricPotentialValue;
+        @ModelicaModel {
+            resourceUri = "modelica/Elan8Electronics.mo";
+            className = "Elan8Electronics.VoltageSource";
+        }
     }
 
     part def CurrentSource :> TwoTerminalElectronicComponent {
         attribute sourceCurrent : ElectricCurrentValue;
+        @ModelicaModel {
+            resourceUri = "modelica/Elan8Electronics.mo";
+            className = "Elan8Electronics.CurrentSource";
+        }
     }
 
     part def Ground :> BoardLevelElectronicComponent {
         doc /* Reference node of a circuit. */
         port terminal : ElectricalTerminalPort;
+        @ModelicaModel {
+            resourceUri = "modelica/Elan8Electronics.mo";
+            className = "Elan8Electronics.Ground";
+        }
     }
 
     part def CrystalResonator :> TwoTerminalPassiveComponent {
