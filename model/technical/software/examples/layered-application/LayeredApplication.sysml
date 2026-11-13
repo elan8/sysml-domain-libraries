@@ -86,13 +86,13 @@ package LayeredApplication {
         doc /* Inventory of the application's occurrences within this system.
              * Tools can discover these by SoftwareApplication ancestry; this
              * example makes the two selections explicit. */
-        expose system.robotApplication;
-        expose system.diagnosticsApplication;
+        expose system::robotApplication;
+        expose system::diagnosticsApplication;
     }
     view layers : GeneralView {
         doc /* Follow application composition to show layers and their components.
              * A renderer can use SoftwareLayer.color for consistent layer colors.
              * This view does not prescribe a stacked layout or enforce layering. */
-        expose system.robotApplication;
+        expose system::robotApplication;
     }
 }
