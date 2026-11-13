@@ -8,7 +8,8 @@ package PhysicalModeling {
      * A simulation run is an analysis case specializing SimulationScenario:
      * inputs are `in` parameters, signals to trace are `out` parameters, and
      * the time horizon and solver are attributes of the case. This library
-     * does not encode constitutive equations or assemble a DAE.
+     * does not encode constitutive equations or assemble a DAE: component
+     * physics is written in Modelica.
      */
 
     private import ScalarValues::*;
@@ -26,11 +27,32 @@ package PhysicalModeling {
     metadata def ModelicaModel {
         doc /*
          * Binds a part definition to a Modelica class. `className` is the
-         * fully qualified class; `resourceUri` locates the .mo file or package.
+         * fully qualified class. Without `resourceUri`, the class is found on
+         * the Modelica libraries the simulation tool loads: the Modelica
+         * Standard Library, and for the few parts it has no class for, the
+         * `Elan8` Modelica package of this repository (`modelica/Elan8`). With
+         * `resourceUri`, the class
+         * is in that .mo file or package directory, a path relative to the
+         * file that declares the annotation.
+         *
+         * `parameters` pairs SysML attributes with Modelica parameters and
+         * `pins` pairs SysML ports with Modelica pins or connectors, each as
+         * "sysmlName=modelicaName", for example ("resistance=R") and
+         * ("terminal1=p", "terminal2=n") for the Modelica Standard Library's
+         * resistor. A SysML attribute or port with the name of a Modelica
+         * parameter or pin is paired without an entry. A parameter receives
+         * its attribute's value in SI units. Modelica parameters left unpaired
+         * keep their Modelica defaults; every parameter without a default and
+         * every pin must be paired. A port that subsets another
+         * (`port positive :> terminal1`) is the pin of the port it subsets.
+         * A part definition without its own binding uses the binding of its
+         * nearest bound supertype.
          */
         :> annotatedElement : SysML::PartDefinition;
-        attribute resourceUri : String;
+        attribute resourceUri : String[0..1];
         attribute className : String;
+        attribute parameters : String[0..*];
+        attribute pins : String[0..*];
     }
 
     metadata def FmuModel {
