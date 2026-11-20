@@ -83,4 +83,57 @@ package Elan8Tests "Circuits of the classes the Elan8 part definitions bind to, 
     connect(damper.flange_b, body.flange_a);
     annotation(experiment(StopTime = 3));
   end MassSpringDamper;
+  model DcMotorSpinUp "BrushedDcMotor from rest on 12 V, with a load inertia on its shaft"
+    Modelica.Electrical.Analog.Sources.ConstantVoltage supply(V = 12);
+    Elan8.Electronics.Actuation.BrushedDcMotor motor(armatureResistance = 2, armatureInductance = 5e-3,
+      torqueConstant = 0.05, rotorInertia = 1e-4);
+    Modelica.Mechanics.Rotational.Components.Inertia load(J = 2e-4);
+    Modelica.Electrical.Analog.Basic.Ground ground;
+  equation
+    connect(supply.p, motor.terminal1);
+    connect(motor.terminal2, supply.n);
+    connect(supply.n, ground.p);
+    connect(motor.mechanicalOutput, load.flange_a);
+    annotation(experiment(StopTime = 0.1));
+  end DcMotorSpinUp;
+
+  model DriveWheel "Motor, 10:1 gearbox and a 30 mm rolling wheel driving a 1 kg body"
+    Modelica.Electrical.Analog.Sources.ConstantVoltage supply(V = 12);
+    Elan8.Electronics.Actuation.BrushedDcMotor motor(armatureResistance = 2, armatureInductance = 5e-3,
+      torqueConstant = 0.05, rotorInertia = 1e-4);
+    Modelica.Mechanics.Rotational.Components.IdealGear gearbox(ratio = 10);
+    Modelica.Mechanics.Rotational.Components.IdealRollingWheel wheel(radius = 0.03);
+    Modelica.Mechanics.Translational.Components.Mass body(m = 1);
+    Modelica.Electrical.Analog.Basic.Ground ground;
+  equation
+    connect(supply.p, motor.terminal1);
+    connect(motor.terminal2, supply.n);
+    connect(supply.n, ground.p);
+    connect(motor.mechanicalOutput, gearbox.flange_a);
+    connect(gearbox.flange_b, wheel.flangeR);
+    connect(wheel.flangeT, body.flange_a);
+    annotation(experiment(StopTime = 0.1));
+  end DriveWheel;
+
+  model TorsionalOscillator "Inertia released 0.1 rad from a fixed support on a torsional spring and damper"
+    Modelica.Mechanics.Rotational.Components.Fixed support(phi0 = 0);
+    Modelica.Mechanics.Rotational.Components.Spring spring(c = 1, phi_rel0 = 0);
+    Modelica.Mechanics.Rotational.Components.Damper damper(d = 0.04);
+    Modelica.Mechanics.Rotational.Components.Inertia rotor(J = 0.01, phi(start = 0.1, fixed = true),
+      w(start = 0, fixed = true));
+  equation
+    connect(support.flange, spring.flange_a);
+    connect(spring.flange_b, rotor.flange_a);
+    connect(support.flange, damper.flange_a);
+    connect(damper.flange_b, rotor.flange_a);
+    annotation(experiment(StopTime = 3));
+  end TorsionalOscillator;
+
+  model TorqueSpinUp "A constant 0.5 N.m torque on a 0.25 kg.m2 inertia, from rest"
+    Modelica.Mechanics.Rotational.Sources.ConstantTorque source(tau_constant = 0.5);
+    Modelica.Mechanics.Rotational.Components.Inertia rotor(J = 0.25);
+  equation
+    connect(source.flange, rotor.flange_a);
+    annotation(experiment(StopTime = 2));
+  end TorqueSpinUp;
 end Elan8Tests;

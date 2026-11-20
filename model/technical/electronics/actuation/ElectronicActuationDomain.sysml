@@ -3,6 +3,14 @@ package Actuation {
     private import Elan8::Electronics::Interconnection::*;
     private import Elan8::Mechanical::Interconnection::*;
     private import ISQ::*;
+    private import Quantities::*;
+
+    attribute def TorqueConstantValue :> ScalarQuantityValue {
+        doc /*
+         * Torque per unit current of a motor, for example 0.05 [N * m / A]. In SI it equals the
+         * back-EMF constant in V·s/rad.
+         */
+    }
 
     abstract part def ElectricalActuator :> ElectronicsComponent {
         attribute ratedPower : PowerValue;
@@ -15,6 +23,25 @@ package Actuation {
     abstract part def DcMotor :> Motor;
 
     part def BrushedDcMotor :> DcMotor {
+        doc /*
+         * A brushed DC motor: the armature resistance and inductance in series with a back-EMF,
+         * and a rotor with its inertia. `terminal1` is the positive terminal: a positive current
+         * into it turns the shaft in the positive direction. `electricalInput` is the
+         * architecture-level view of the same supply and carries no Modelica.
+         *
+         * This is also the torque-level equivalent of a brushless or permanent-magnet
+         * synchronous motor under ideal commutation or field-oriented control, with the
+         * line-to-line resistance and inductance and the torque constant.
+         */
+        @Elan8::PhysicalModeling::ModelicaModel {
+            className = "Elan8.Electronics.Actuation.BrushedDcMotor";
+        }
+        attribute armatureResistance : ResistanceValue;
+        attribute armatureInductance : InductanceValue;
+        attribute torqueConstant : TorqueConstantValue;
+        attribute rotorInertia : MomentOfInertiaValue;
+        port terminal1 : ElectricalTerminalPort;
+        port terminal2 : ElectricalTerminalPort;
         port electricalInput : ~DcDrivePort;
     }
 

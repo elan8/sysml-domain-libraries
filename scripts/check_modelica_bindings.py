@@ -210,8 +210,9 @@ class Modelica:
 
 def has_default(rest: str) -> bool:
     """Whether a declaration's text after its name binds a value: `= value`, after any
-    modifier such as `(start = 1)`, which is not a binding."""
-    rest = rest.split('"')[0]
+    modifier such as `(start = 1)`, which is not a binding. String literals, which may sit inside
+    the modifier (`displayUnit = "rad"`), are dropped first."""
+    rest = re.sub(r'"[^"]*"', "", rest)
     depth, outside = 0, []
     for char in rest:
         if char == "(":

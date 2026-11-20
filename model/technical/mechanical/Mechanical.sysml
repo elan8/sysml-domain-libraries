@@ -9,6 +9,7 @@ package Mechanical {
     }
     public import Drivetrain;
     public import Translational;
+    public import Rotational;
     package Interconnection {
         private import Elan8::Core::*;
         private import ISQ::*;
