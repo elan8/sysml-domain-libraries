@@ -70,4 +70,17 @@ package Elan8Tests "Circuits of the classes the Elan8 part definitions bind to, 
     connect(cell.negative, ground.p);
     annotation(experiment(StopTime = 100));
   end CellCurrentSource;
+  model MassSpringDamper "Translational.Mass released 0.1 m from a wall, on a 100 N/m spring and a 4 N.s/m damper"
+    Modelica.Mechanics.Translational.Components.Fixed wall(s0 = 0);
+    Modelica.Mechanics.Translational.Components.Spring spring(c = 100, s_rel0 = 0);
+    Modelica.Mechanics.Translational.Components.Damper damper(d = 4);
+    Modelica.Mechanics.Translational.Components.Mass body(m = 1, s(start = 0.1, fixed = true),
+      v(start = 0, fixed = true));
+  equation
+    connect(wall.flange, spring.flange_a);
+    connect(spring.flange_b, body.flange_a);
+    connect(wall.flange, damper.flange_a);
+    connect(damper.flange_b, body.flange_a);
+    annotation(experiment(StopTime = 3));
+  end MassSpringDamper;
 end Elan8Tests;

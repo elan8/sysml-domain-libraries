@@ -8,11 +8,13 @@ Use these packages when a model needs vocabulary for purely mechanical component
 
 - Start with `Mechanical.sysml` (`Elan8::Mechanical`). Nested `Core` is the shared `MechanicalComponent` base, and nested `Interconnection` is the rotational and translational ports and links.
 - Add `drivetrain/` for gearbox, wheel, and caster-wheel vocabulary.
+- Add `translational/` for a mass, spring, damper and fixed support that simulate through the Modelica Standard Library.
 
 ## Structure
 
 - `Mechanical.sysml` - `Elan8::Mechanical`, including nested `Core` (`Elan8::Mechanical::Core`, `MechanicalComponent` specializes `PhysicalComponent` and inherits `mass`) and `Interconnection` (`Elan8::Mechanical::Interconnection`).
 - `drivetrain/` - gearbox, wheel, and caster-wheel vocabulary (`Elan8::Mechanical::Drivetrain`).
+- `translational/` - one-dimensional mass, spring, damper and fixed support (`Elan8::Mechanical::Translational`), bound to Modelica classes; see `examples/mass-spring-damper/`.
 
 ## Related Layers
 

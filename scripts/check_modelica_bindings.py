@@ -6,7 +6,8 @@ For each part definition with a binding (Elan8::PhysicalModeling::ModelicaModel)
 - the class resolves: in the Modelica Standard Library (`--msl`), in this repository's `Elan8`
   package (`modelica/Elan8`), or with `resourceUri` in a file next to the SysML file;
 - every `parameters` and `pins` entry ("sysmlName=modelicaName") names an attribute or port of the
-  part definition or a supertype, and a parameter or pin of the class;
+  part definition or a supertype, and a parameter (or a state variable, whose attribute then gives its
+  initial value) or a pin of the class;
 - every parameter of the class without a default value, and every pin, is paired: by an entry or
   by a SysML attribute or port of the same name.
 
@@ -39,7 +40,10 @@ ATTRIBUTE = re.compile(r"\battribute\s+(?::>>\s*)?(\w+)")
 PORT = re.compile(r"\bport\s+(\w+)")
 
 PARAMETER = re.compile(r"^\s*(?:final\s+)?parameter\s+([\w.]+)(\s*\([^;]*?\))?\s+(\w+)([^;]*);", re.M)
-PIN_TYPES = ("Pin", "PositivePin", "NegativePin")
+PIN_TYPES = ("Pin", "PositivePin", "NegativePin", "Flange_a", "Flange_b")
+VARIABLE = re.compile(
+    r"^\s*(?:input\s+|output\s+)?((?:Modelica\.Units\.)?SI\.\w+|Real)(?:\s*\([^;]*?\))?\s+(\w+)\b[^;]*;", re.M
+)
 COMPONENT = re.compile(r"^\s*([\w.]+)\s+(\w+)\b[^;]*;", re.M)
 EXTENDS = re.compile(r"^\s*extends\s+([\w.]+)", re.M)
 
@@ -176,25 +180,32 @@ class Modelica:
         return None
 
     def members(self, qualified: str, seen=None):
-        """(parameters {name: has_default}, pins) of a class, with inherited members."""
+        """(parameters {name: has_default}, pins, variables) of a class, with inherited members."""
         seen = seen if seen is not None else set()
-        parameters, pins = {}, set()
+        parameters, pins, variables = {}, set(), set()
         found = self.source(qualified)
         if found is None or qualified in seen:
-            return parameters, pins
+            return parameters, pins, variables
         seen.add(qualified)
         text, package = found
         for _type, _modifier, name, rest in PARAMETER.findall(text):
             parameters[name] = has_default(rest)
         pins |= declared_pins(text)
-        for base in EXTENDS.findall(text):
+        variables |= declared_variables(text)
+        bound = set()
+        for clause in EXTENDS.finditer(text):
+            base = clause.group(1)
+            bound |= extends_bindings(text, clause.end())
             resolved = self.resolve(base, package) or self.resolve(base, qualified)
             if resolved:
-                more_parameters, more_pins = self.members(resolved, seen)
+                more_parameters, more_pins, more_variables = self.members(resolved, seen)
                 for name, defaulted in more_parameters.items():
                     parameters.setdefault(name, defaulted)
                 pins |= more_pins
-        return parameters, pins
+                variables |= more_variables
+        for name in bound & set(parameters):
+            parameters[name] = True  # given a value by an `extends` modifier
+        return parameters, pins, variables
 
 
 def has_default(rest: str) -> bool:
@@ -221,6 +232,37 @@ def declared_pins(text: str) -> set[str]:
         if type_name.split(".")[-1] in PIN_TYPES and not re.search(r"\bif\b", match.group(0)):
             pins.add(name)
     return pins
+
+
+def extends_bindings(text: str, start: int) -> set[str]:
+    """Names an `extends` clause binds with `name = value` (`extends Base(L = 0, s(start = 0))`
+    binds `L` and merely modifies `s`). `start` is the offset just after the base class name."""
+    match = re.compile(r"\s*\(").match(text, start)
+    if not match:
+        return set()
+    depth, cursor, parts, current = 1, match.end(), [], []
+    while cursor < len(text) and depth:
+        char = text[cursor]
+        depth += {"(": 1, ")": -1}.get(char, 0)
+        if depth == 1 and char == ",":
+            parts.append("".join(current))
+            current = []
+        elif depth:
+            current.append(char)
+        cursor += 1
+    parts.append("".join(current))
+    bound = set()
+    for part in parts:
+        name = re.match(r"\s*(\w+)\s*=(?!=)", part)
+        if name:
+            bound.add(name.group(1))
+    return bound
+
+
+def declared_variables(text: str) -> set[str]:
+    """Variables a class declares with a physical or Real type (`SI.Position s(start = 0)`),
+    which a `parameters` entry may name to give the variable's initial value."""
+    return {name for _type, name in VARIABLE.findall(text)}
 
 
 def pairs(entries, kind, where, problems):
@@ -269,6 +311,7 @@ def main() -> int:
                 text = Modelica._declaration(path.read_text(encoding="utf-8"), class_name.split(".")[-1])
                 parameters = {n: has_default(r) for _t, _m, n, r in PARAMETER.findall(text)}
                 pins = declared_pins(text)
+                variables = declared_variables(text)
                 library = Modelica(roots)
             else:
                 if class_name.split(".")[0] not in roots:
@@ -277,7 +320,7 @@ def main() -> int:
                 if library.source(class_name) is None:
                     problems.append(f"{where}: class `{class_name}` not found")
                     continue
-                parameters, pins = library.members(class_name)
+                parameters, pins, variables = library.members(class_name)
 
             attributes, ports = features(defs, name)
             parameter_map = pairs(binding.get("parameters"), "parameters", where, problems)
@@ -285,8 +328,10 @@ def main() -> int:
             for sysml, modelica in parameter_map.items():
                 if sysml not in attributes:
                     problems.append(f"{where}: parameters entry `{sysml}` is no attribute of {name}")
-                if modelica not in parameters:
-                    problems.append(f"{where}: parameters entry `{modelica}` is no parameter of {class_name}")
+                if modelica not in parameters and modelica not in variables:
+                    problems.append(
+                        f"{where}: parameters entry `{modelica}` is no parameter or variable of {class_name}"
+                    )
             for sysml, modelica in pin_map.items():
                 if sysml not in ports:
                     problems.append(f"{where}: pins entry `{sysml}` is no port of {name}")

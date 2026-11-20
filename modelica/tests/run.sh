@@ -38,6 +38,7 @@ sim RcCharge 1e-5
 sim NpnDriver 1e-5
 sim PnpDriver 1e-5
 sim CellCurrentSource 0.5
+sim MassSpringDamper 0.01
 "$rumoca" sim "$repo/model/generic/physical-modeling/examples/mass-spring/models/MassSpring.mo" \
   -m Example.MassSpring "${tol[@]}" --dt 0.01 -o "$out/MassSpring.csv"
 

@@ -41,6 +41,12 @@ rows = load("CellCurrentSource")
 check("CellCurrentSource", max(abs(r["cell.positive.v"] - (V0 - RI * 3e-3)) for r in rows), 1e-12, "terminal voltage [V]")
 check("CellCurrentSource", max(abs(r["cell.remainingCharge"] - (Q0 - 3e-3 * r["time"])) for r in rows), 1e-9, "remaining charge [C]")
 
+# Mass released from 0.1 m at rest on a spring (c = 100 N/m) and damper (d = 4 N s/m), m = 1 kg:
+# w0 = 10 rad/s, zeta = 0.2, so s(t) = 0.1 exp(-2 t) (cos(wd t) + 2/wd sin(wd t)), wd = sqrt(96).
+rows = load("MassSpringDamper")
+wd = math.sqrt(96)
+check("MassSpringDamper", max(abs(r["body.s"] - 0.1 * math.exp(-2 * r["time"]) * (math.cos(wd * r["time"]) + 2 / wd * math.sin(wd * r["time"]))) for r in rows), 1e-6, "position [m]")
+
 # Transistor: MSL NPN static equations (no temperature dependency, substrate grounded).
 IS, BF, BR, VAK, VT, G = 1e-16, 200.0, 0.1, 0.02, 0.02585, 1e-15
 

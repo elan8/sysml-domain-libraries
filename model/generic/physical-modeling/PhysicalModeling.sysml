@@ -35,7 +35,8 @@ package PhysicalModeling {
          * is in that .mo file or package directory, a path relative to the
          * file that declares the annotation.
          *
-         * `parameters` pairs SysML attributes with Modelica parameters and
+         * `parameters` pairs SysML attributes with Modelica parameters, or with variables
+         * whose initial value the attribute gives (`attribute :>> position := 0.1 [m]`), and
          * `pins` pairs SysML ports with Modelica pins or connectors, each as
          * "sysmlName=modelicaName", for example ("resistance=R") and
          * ("terminal1=p", "terminal2=n") for the Modelica Standard Library's
