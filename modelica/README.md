@@ -33,6 +33,9 @@ for the few the MSL has no class for.
 | `Drivetrain::Gearbox` | `Modelica.Mechanics.Rotational.Components.IdealGear` |
 | `Drivetrain::RollingWheel` | `Modelica.Mechanics.Rotational.Components.IdealRollingWheel` |
 | `Actuation::BrushedDcMotor` | `Elan8.Electronics.Actuation.BrushedDcMotor` (this directory) |
+| `Actuation::PermanentMagnetSynchronousMotor` | `Elan8.Electronics.Actuation.PermanentMagnetSynchronousMotor` (this directory) |
+| `Actuation::BldcMotor` | `Elan8.Electronics.Actuation.ThreePhaseBldcMotor` (this directory) |
+| `Balancing::WheeledInvertedPendulum` | `Elan8.Mechanical.WheeledInvertedPendulum` (this directory) |
 | `Actuation::RotationalElectromechanicalConverter` | `Modelica.Electrical.Analog.Basic.RotationalEMF` |
 
 The [DC motor drive](../model/technical/mechanical/examples/dc-motor-drive/README.md) composes
@@ -46,8 +49,17 @@ Specializations use their supertype's binding: a `TantalumCapacitor` is a
 parameters are a datasheet's nominal point, not the plain resistance, inductance, torque constant
 and rotor inertia that sizing a drive starts from. The class composes MSL elements: a `Resistor`, an
 `Inductor`, a `RotationalEMF` and an `Inertia`. It is also the torque-level equivalent of a brushless
-or permanent-magnet synchronous motor under ideal commutation or field-oriented control; a model of
-the three phases themselves is not in the libraries yet.
+or permanent-magnet synchronous motor under ideal commutation or field-oriented control. The two
+three-phase classes model such motors themselves: `PermanentMagnetSynchronousMotor` in the rotor's dq
+frame, and `ThreePhaseBldcMotor` phase by phase on an averaged inverter.
+
+`WheeledInvertedPendulum` is a body balanced on one axle with two wheels that roll without slipping, in
+the vertical plane, with the motors acting between the wheels and the body (the `drive` flange: a torque
+on the wheels, the opposite torque on the body). It is written out from Lagrange's equations in the
+position and the pitch, with the two accelerations solved explicitly, because the compiler the
+numerical checks use does not accept the coupled 2x2 system as an implicit block. A MultiBody model of the
+same system is a possible cross-check, but with that compiler a `BodyShape` simulates without error and
+never moves, so MultiBody models there use `Body` and need a reference solution.
 
 ## Initial values
 

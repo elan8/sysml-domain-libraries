@@ -174,6 +174,42 @@ check("BldcFreeSpinSine", max(abs(park(r)[1] - ref[round(r["time"], 6)][1]) for 
 check("BldcFreeSpinSine", max(abs(r["motor.rotorSpeed"] - ref[round(r["time"], 6)][2]) for r in sampled), 1e-2, "shaft speed [rad/s]")
 
 
+# WheeledInvertedPendulum of a standing person: body 114 kg with its centre 0.95 m above the axle and 27 kg m2
+# about it, wheels 3 kg and 0.1 kg m2 with a radius of 0.15 m. Lagrange's equations with the generalised
+# coordinates position and pitch give a mass matrix [[M11, M12], [M12, M22]], M11 = mw + mb + Iw / r2,
+# M12 = mb l cos(pitch), M22 = mb l2 + Ib.
+P_MB, P_LB, P_IB, P_MW, P_IW, P_RW, P_G = 114.0, 0.95, 27.0, 3.0, 0.1, 0.15, 9.81
+P_M11 = P_MW + P_MB + P_IW / P_RW ** 2
+P_M22 = P_MB * P_LB ** 2 + P_IB
+
+# Released with no torque, the generalised momentum of the position (x does not appear in the energy)
+# and the total energy are constant, along the whole fall.
+rows = load("PendulumFall")
+p_momentum = lambda r: P_M11 * r["plant.velocity"] + P_MB * P_LB * math.cos(r["plant.pitch"]) * r["plant.pitchRate"]
+p_energy = lambda r: 0.5 * P_M11 * r["plant.velocity"] ** 2 + P_MB * P_LB * math.cos(r["plant.pitch"]) * r["plant.velocity"] * r["plant.pitchRate"] \
+    + 0.5 * P_M22 * r["plant.pitchRate"] ** 2 + P_MB * P_G * P_LB * math.cos(r["plant.pitch"])
+check("PendulumFall", max(abs(p_momentum(r) - p_momentum(rows[0])) for r in rows), 1e-6, "generalised p_momentum [kg m/s]")
+check("PendulumFall", max(abs(p_energy(r) - p_energy(rows[0])) for r in rows), 1e-4, "energy [J]")
+check("PendulumFall", max(abs(r["plant.energy"] - p_energy(r)) for r in rows), 1e-6, "model's p_energy variable [J]")
+assert rows[-1]["plant.pitch"] > 0.6, "released at 0.2 rad the person must have fallen well past it by 0.4 s"
+
+# For a tiny lean the system is linear: pitch'' = lambda2 pitch, with lambda2 = mb g l / (M22 - (mb l)2 / M11),
+# so pitch = pitch0 cosh(lambda t), and the momentum condition makes the velocity -(mb l / M11) pitchRate.
+rows = load("PendulumSmallLean")
+p_lam = math.sqrt(P_MB * P_G * P_LB / (P_M22 - (P_MB * P_LB) ** 2 / P_M11))
+check("PendulumSmallLean", max(abs(r["plant.pitch"] - 0.0005 * math.cosh(p_lam * r["time"])) for r in rows), 5e-7, "pitch [rad]")
+check("PendulumSmallLean", max(abs(r["plant.velocity"] + P_MB * P_LB / P_M11 * r["plant.pitchRate"]) for r in rows), 1e-6, "velocity [m/s]")
+
+# A weightless body: nothing couples ground and pitch, so a 3 N m wheel torque gives the wheels a constant
+# acceleration tau / (r (mw + Iw / r2)) and spins the body backwards by tau / Ib.
+rows = load("PendulumTorque")
+p_tau = 3.0
+P_M11_WHEELS = P_MW + P_IW / P_RW ** 2     # no body mass
+check("PendulumTorque", max(abs(r["plant.velocity"] - p_tau * r["time"] / (P_RW * P_M11_WHEELS)) for r in rows), 1e-9, "velocity [m/s]")
+check("PendulumTorque", max(abs(r["plant.pitch"] + 0.5 * p_tau / P_IB * r["time"] ** 2) for r in rows), 1e-9, "pitch [rad]")
+check("PendulumTorque", max(abs(r["plant.drive.phi"] - (r["plant.position"] / P_RW - r["plant.pitch"])) for r in rows), 1e-9, "relative wheel angle [rad]")
+
+
 def driver(vrail=3.0, vdrive=3.0, rb=47000.0, rc=1000.0):
     """KCL at base and collector of a low-side NPN, solved for (vb, vc) by Newton's method."""
 

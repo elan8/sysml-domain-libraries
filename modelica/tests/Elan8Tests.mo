@@ -161,6 +161,33 @@ package Elan8Tests "Circuits of the classes the Elan8 part definitions bind to, 
     annotation(experiment(StopTime = 0.1));
   end BldcFreeSpinSine;
 
+  model PendulumFall "WheeledInvertedPendulum of a standing person, released from a 0.2 rad lean with no torque"
+    Elan8.Mechanical.WheeledInvertedPendulum plant(bodyMass = 114, bodyCenterHeight = 0.95, bodyInertia = 27,
+      wheelMass = 3, wheelInertia = 0.1, wheelRadius = 0.15, pitch(start = 0.2));
+    Modelica.Mechanics.Rotational.Sources.ConstantTorque free(tau_constant = 0);
+  equation
+    connect(free.flange, plant.drive);
+    annotation(experiment(StopTime = 0.4));
+  end PendulumFall;
+
+  model PendulumSmallLean "As PendulumFall from a lean of 0.5 mrad, where the linearized system is exact"
+    Elan8.Mechanical.WheeledInvertedPendulum plant(bodyMass = 114, bodyCenterHeight = 0.95, bodyInertia = 27,
+      wheelMass = 3, wheelInertia = 0.1, wheelRadius = 0.15, pitch(start = 0.0005));
+    Modelica.Mechanics.Rotational.Sources.ConstantTorque free(tau_constant = 0);
+  equation
+    connect(free.flange, plant.drive);
+    annotation(experiment(StopTime = 0.5));
+  end PendulumSmallLean;
+
+  model PendulumTorque "A weightless body: a constant wheel torque accelerates the wheels forward and spins the body back"
+    Elan8.Mechanical.WheeledInvertedPendulum plant(bodyMass = 0, bodyCenterHeight = 0.95, bodyInertia = 27,
+      wheelMass = 3, wheelInertia = 0.1, wheelRadius = 0.15);
+    Modelica.Mechanics.Rotational.Sources.ConstantTorque motor(tau_constant = 3);
+  equation
+    connect(motor.flange, plant.drive);
+    annotation(experiment(StopTime = 0.5));
+  end PendulumTorque;
+
   model DriveWheel "Motor, 10:1 gearbox and a 30 mm rolling wheel driving a 1 kg body"
     Modelica.Electrical.Analog.Sources.ConstantVoltage supply(V = 12);
     Elan8.Electronics.Actuation.BrushedDcMotor motor(armatureResistance = 2, armatureInductance = 5e-3,

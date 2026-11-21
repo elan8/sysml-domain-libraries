@@ -48,6 +48,9 @@ sim CellCurrentSource 0.5
 sim MassSpringDamper 0.01
 sim DcMotorSpinUp 1e-3
 sim DriveWheel 1e-3
+sim PendulumFall 1e-3
+sim PendulumSmallLean 1e-3
+sim PendulumTorque 1e-3
 sim PmsmLockedRotor 1e-4
 sim PmsmFreeSpin 1e-4
 sim BldcLockedSine 1e-4
