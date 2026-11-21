@@ -34,6 +34,8 @@ tol=(--rtol 1e-9 --atol 1e-12)
 python3 -B "$here/test_msl_catalog.py"
 python3 "$repo/scripts/check_modelica_bindings.py" --msl "$msl/Modelica $MSL_NUMBER" \
   --coverage-report "$out/msl-coverage.md" --coverage-baseline "$here/msl-coverage-baseline.txt"
+python3 -B "$repo/scripts/generate_mechanics_bindings.py" --check --rumoca "$rumoca" \
+  --msl "$msl/Modelica $MSL_NUMBER"
 "$rumoca" --version
 sim() { # model output-step
   "$rumoca" sim "$here/Elan8Tests.mo" -m "Elan8Tests.$1" "${roots[@]}" "${tol[@]}" --dt "$2" -o "$out/$1.csv"
@@ -53,7 +55,21 @@ sim BldcLockedTrapezoid 1e-4
 sim BldcFreeSpinSine 1e-4
 sim TorsionalOscillator 0.01
 sim TorqueSpinUp 0.01
+sim ForceDrivenMass 0.01
+sim CommandedLinearMotion 0.01
 "$rumoca" sim "$repo/model/generic/physical-modeling/examples/mass-spring/models/MassSpring.mo" \
   -m Example.MassSpring "${tol[@]}" --dt 0.01 -o "$out/MassSpring.csv"
 
 python3 "$here/check.py" "$out"
+python3 "$repo/model/technical/mechanical/examples/force-driven-mass/check_position.py" "$out/ForceDrivenMass.csv"
+python3 "$repo/model/technical/mechanical/examples/force-driven-mass/check_position.py" "$out/CommandedLinearMotion.csv" --commanded
+cat >> "$out/msl-coverage.md" <<'EOF'
+
+## Mechanics reference simulations
+
+The Modelica reference simulations matched analytical results for shaft angle,
+speed, and acceleration under constant torque, measured position under
+constant and step forces, and measured motion under a signal-controlled force.
+The binding inventory above records validated SysML bindings. The CI reference
+simulations run from Modelica fixtures.
+EOF

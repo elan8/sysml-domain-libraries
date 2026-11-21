@@ -4,10 +4,10 @@ name: Modelica bindings
 # classes with rumoca against independent references (modelica/tests/run.sh).
 on:
   pull_request:
-    paths: ["model/**", "modelica/**", "scripts/check_modelica_bindings.py", ".github/workflows/modelica.yml"]
+    paths: ["model/**", "modelica/**", "scripts/check_modelica_bindings.py", "scripts/generate_mechanics_bindings.py", ".github/workflows/modelica.yml"]
   push:
     branches: [main]
-    paths: ["model/**", "modelica/**", "scripts/check_modelica_bindings.py", ".github/workflows/modelica.yml"]
+    paths: ["model/**", "modelica/**", "scripts/check_modelica_bindings.py", "scripts/generate_mechanics_bindings.py", ".github/workflows/modelica.yml"]
   workflow_dispatch:
 
 permissions:

@@ -12,6 +12,7 @@ package Examples {
     package Mechanical {
         public import Composition;
         public import DcMotorDrive;
+        public import ForceDrivenMass;
     }
     package PhysicalModeling {
         public import MassSpringSimulation;

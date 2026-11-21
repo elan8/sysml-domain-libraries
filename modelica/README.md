@@ -121,3 +121,39 @@ To generate the same report locally using the pinned MSL release:
 python3 scripts/check_modelica_bindings.py --msl "/path/to/Modelica 4.1.0" \
   --coverage-report msl-coverage.md --coverage-baseline modelica/tests/msl-coverage-baseline.txt
 ```
+
+## Mechanics binding generator
+
+[The reviewed mappings](mechanics-pilot.json) select MSL classes and name their
+SysML parts, ports, and parameters. Rumoca 0.10.4 resolves inherited connectors,
+parameter types, units, and defaults. The generator verifies the reviewed
+mappings against that interface and updates only the marked regions of the
+rotational and translational libraries. The force sources use the MSL default
+of a fixed support. Changes to that default or to the resolved connector or
+parameter inventory require review.
+
+```bash
+python3 -B scripts/generate_mechanics_bindings.py --rumoca /path/to/rumoca \
+  --msl "/path/to/Modelica 4.1.0"
+```
+
+CI runs the same command with `--check` to detect drift in the committed
+definitions. The command lists outstanding classes across the 1D components,
+sensors, and sources packages. Validated bindings appear in the MSL coverage
+table. The CI summary also records successful Modelica reference simulations.
+The [force-driven mass](../model/technical/mechanical/examples/force-driven-mass/README.md)
+exercises constant, step, and signal-controlled forces and measured motion
+through SysML and Run42.
+
+### MultiBody and advanced 1D interfaces
+
+Rumoca 0.10.4 can run the MSL elementary pendulum as a precomposed Modelica
+model. That assembly declares an `inner World` and supplies three-element
+vectors for the revolute axis and body centre of mass. To compose it from
+SysML parts, Run42 needs a way to declare the shared world at assembly scope,
+pass dimensioned vector parameters, and map a typed 3D frame connection.
+
+Completing the 1D catalog also requires array inputs for the `Move` sources,
+configurable friction and loss tables, and verified conditional connector
+configurations. The coverage report continues to list these classes until they
+have validated bindings.
