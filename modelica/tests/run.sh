@@ -6,9 +6,12 @@
 set -euo pipefail
 
 RUMOCA_VERSION=v0.10.4
-MSL_VERSION=v4.1.0
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 repo="$(cd "$here/../.." && pwd)"
+# The Standard Library version is declared once, by the package's `uses(Modelica(version=...))`.
+MSL_NUMBER="$(sed -n 's/.*uses(Modelica(version *= *"\([0-9.]*\)")).*/\1/p' "$repo/modelica/Elan8/package.mo")"
+[[ -n "$MSL_NUMBER" ]] || { echo "modelica/Elan8/package.mo declares no uses(Modelica(version=...))" >&2; exit 1; }
+MSL_VERSION="v$MSL_NUMBER"
 cache="$here/.cache"
 out="$here/out"
 mkdir -p "$cache" "$out"
@@ -24,11 +27,11 @@ if [[ ! -d "$msl" ]]; then
     -p "ModelicaStandardLibrary_${MSL_VERSION}.zip" -O "$cache/msl.zip" --clobber
   unzip -q "$cache/msl.zip" -d "$msl"
 fi
-roots=(--source-root "$repo/modelica/Elan8" --source-root "$msl/Modelica 4.1.0"
-       --source-root "$msl/Complex.mo" --source-root "$msl/ModelicaServices 4.1.0")
+roots=(--source-root "$repo/modelica/Elan8" --source-root "$msl/Modelica $MSL_NUMBER"
+       --source-root "$msl/Complex.mo" --source-root "$msl/ModelicaServices $MSL_NUMBER")
 tol=(--rtol 1e-9 --atol 1e-12)
 
-python3 "$repo/scripts/check_modelica_bindings.py" --msl "$msl/Modelica 4.1.0"
+python3 "$repo/scripts/check_modelica_bindings.py" --msl "$msl/Modelica $MSL_NUMBER"
 "$rumoca" --version
 sim() { # model output-step
   "$rumoca" sim "$here/Elan8Tests.mo" -m "Elan8Tests.$1" "${roots[@]}" "${tol[@]}" --dt "$2" -o "$out/$1.csv"

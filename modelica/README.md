@@ -3,7 +3,7 @@
 A part definition gets its physics from a Modelica class, named with
 `@Elan8::PhysicalModeling::ModelicaModel` (see
 [`PhysicalModeling`](../model/generic/physical-modeling/README.md)). Most parts bind to the
-Modelica Standard Library (MSL) 4.1.0; this directory holds the `Elan8` Modelica package
+Modelica Standard Library (MSL), at the version `package.mo` declares with `uses`; this directory holds the `Elan8` Modelica package
 for the few the MSL has no class for.
 
 | Part definition | Modelica class |
