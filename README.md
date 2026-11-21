@@ -42,7 +42,16 @@ The libraries ship as a KPAR built by `spec42 bundle`, without the docs, scripts
 python3 scripts/bundle_kpar.py
 ```
 
-Both scripts use the Spec42 release pinned in [`.spec42-version`](.spec42-version). To release,
+The Modelica package that the parts bind to (`modelica/Elan8`) is not model content, so a KPAR
+does not hold it. Each release publishes it as a second archive from the same tag,
+`elan8-domain-modelica-<version>.zip`, which unpacks to `Elan8/` and the licence. Both archives
+are listed in `SHA256SUMS.txt`, and the archive is reproducible:
+
+```sh
+python3 scripts/bundle_modelica.py
+```
+
+The scripts use the Spec42 release pinned in [`.spec42-version`](.spec42-version). To release,
 set the version in [`.project.json`](.project.json) and push a matching `v<version>` tag;
 the release workflow validates, bundles and publishes the archive.
 

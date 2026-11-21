@@ -31,13 +31,16 @@ jobs:
       - name: Validate with the pinned Spec42 release
         run: python3 scripts/validate_spec42.py
 
-      - name: Bundle KPAR
+      - name: Bundle KPAR and Modelica package
         run: |
           VERSION="${{ steps.version.outputs.version }}"
           ARTIFACT="elan8-domain-libraries-${VERSION}.kpar"
           python3 scripts/bundle_kpar.py --version "${VERSION}" --output "${ARTIFACT}"
-          sha256sum "${ARTIFACT}" > SHA256SUMS.txt
+          MODELICA="elan8-domain-modelica-${VERSION}.zip"
+          python3 scripts/bundle_modelica.py --version "${VERSION}" --output "${MODELICA}"
+          sha256sum "${ARTIFACT}" "${MODELICA}" > SHA256SUMS.txt
           echo "ARTIFACT=${ARTIFACT}" >> "$GITHUB_ENV"
+          echo "MODELICA=${MODELICA}" >> "$GITHUB_ENV"
 
       - name: Create GitHub Release
         env:
@@ -48,8 +51,13 @@ jobs:
             echo "Missing packed KPAR artifact: '${ARTIFACT:-}'" >&2
             exit 1
           fi
+          if [[ -z "${MODELICA:-}" || ! -f "${MODELICA}" ]]; then
+            echo "Missing packed Modelica archive: '${MODELICA:-}'" >&2
+            exit 1
+          fi
           gh release create "${TAG}" \
             --title "Domain libraries ${TAG}" \
-            --notes "KerML Project Archive (KPAR) release of Elan8 domain libraries ${TAG}, validated and bundled with Spec42 $(cat .spec42-version)." \
+            --notes "KerML Project Archive (KPAR) release of Elan8 domain libraries ${TAG}, validated and bundled with Spec42 $(cat .spec42-version). The Modelica package the parts bind to is in ${MODELICA}." \
             "${ARTIFACT}" \
+            "${MODELICA}" \
             SHA256SUMS.txt
