@@ -19,7 +19,7 @@ This is a lint on source text, not a SysML or Modelica parser: it reads part def
 Spec42 validates the SysML; rumoca compiles and simulates the Modelica (`modelica/tests/run.sh`).
 
 Usage:
-    python3 scripts/check_modelica_bindings.py --msl "<MSL directory>/Modelica 4.1.0"
+    python3 scripts/check_modelica_bindings.py --msl "<MSL directory>/Modelica <version>"
 """
 from __future__ import annotations
 
