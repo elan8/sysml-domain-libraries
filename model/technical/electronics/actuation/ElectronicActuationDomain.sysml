@@ -4,6 +4,7 @@ package Actuation {
     private import Elan8::Mechanical::Interconnection::*;
     private import ISQ::*;
     private import Quantities::*;
+    private import ScalarValues::*;
 
     attribute def TorqueConstantValue :> ScalarQuantityValue {
         doc /*
@@ -43,6 +44,27 @@ package Actuation {
         port terminal1 : ElectricalTerminalPort;
         port terminal2 : ElectricalTerminalPort;
         port electricalInput : ~DcDrivePort;
+    }
+
+    part def PermanentMagnetSynchronousMotor :> AcMotor {
+        doc /*
+         * A permanent-magnet synchronous motor, which is also a brushless DC motor when it is
+         * driven with field-oriented control. The Modelica class is the dq-frame model: its two
+         * inputs, `vd` and `vq`, are the stator voltages in the rotor frame, so a simulation takes
+         * them from a controller and needs no inverter or phase transformation. Positive `vq`
+         * turns the shaft in the positive direction. `electricalInput` is the
+         * architecture-level three-phase view and carries no Modelica.
+         */
+        @Elan8::PhysicalModeling::ModelicaModel {
+            className = "Elan8.Electronics.Actuation.PermanentMagnetSynchronousMotor";
+        }
+        attribute statorResistance : ResistanceValue;
+        attribute statorInductanceD : InductanceValue;
+        attribute statorInductanceQ : InductanceValue;
+        attribute permanentMagnetFlux : MagneticFluxValue;
+        attribute polePairs : Real;
+        attribute rotorInertia : MomentOfInertiaValue;
+        port electricalInput : ~ThreePhaseDrivePort;
     }
 
     part def BldcMotor :> DcMotor {

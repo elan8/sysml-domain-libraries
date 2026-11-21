@@ -97,6 +97,30 @@ package Elan8Tests "Circuits of the classes the Elan8 part definitions bind to, 
     annotation(experiment(StopTime = 0.1));
   end DcMotorSpinUp;
 
+  model PmsmLockedRotor "PermanentMagnetSynchronousMotor with its rotor held, on constant dq voltages"
+    Elan8.Electronics.Actuation.PermanentMagnetSynchronousMotor motor(statorResistance = 0.5,
+      statorInductanceD = 1e-3, statorInductanceQ = 2e-3, permanentMagnetFlux = 0.05, polePairs = 4,
+      rotorInertia = 1e-3);
+    Modelica.Mechanics.Rotational.Components.Fixed rotorHold;
+  equation
+    motor.vd = 3;
+    motor.vq = 5;
+    connect(motor.mechanicalOutput, rotorHold.flange);
+    annotation(experiment(StopTime = 0.02));
+  end PmsmLockedRotor;
+
+  model PmsmFreeSpin "PermanentMagnetSynchronousMotor from rest on constant dq voltages, salient, no load"
+    Elan8.Electronics.Actuation.PermanentMagnetSynchronousMotor motor(statorResistance = 0.5,
+      statorInductanceD = 1e-3, statorInductanceQ = 2e-3, permanentMagnetFlux = 0.05, polePairs = 4,
+      rotorInertia = 1e-3);
+    Modelica.Mechanics.Rotational.Components.Inertia load(J = 1e-3);
+  equation
+    motor.vd = -2;
+    motor.vq = 10;
+    connect(motor.mechanicalOutput, load.flange_a);
+    annotation(experiment(StopTime = 0.1));
+  end PmsmFreeSpin;
+
   model DriveWheel "Motor, 10:1 gearbox and a 30 mm rolling wheel driving a 1 kg body"
     Modelica.Electrical.Analog.Sources.ConstantVoltage supply(V = 12);
     Elan8.Electronics.Actuation.BrushedDcMotor motor(armatureResistance = 2, armatureInductance = 5e-3,

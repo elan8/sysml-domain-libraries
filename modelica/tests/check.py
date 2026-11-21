@@ -91,6 +91,47 @@ check("TorqueSpinUp", max(abs(r["rotor.w"] - 0.5 * r["time"] / 0.25) for r in ro
 IS, BF, BR, VAK, VT, G = 1e-16, 200.0, 0.1, 0.02, 0.02585, 1e-15
 
 
+# PermanentMagnetSynchronousMotor, R = 0.5 ohm, Ld = 1 mH, Lq = 2 mH, flux 0.05 Wb, 4 pole pairs.
+# With the rotor held the electrical speed is zero, so each axis is a first-order circuit.
+R_S, L_D, L_Q, PSI, P_P, J_TOTAL = 0.5, 1e-3, 2e-3, 0.05, 4, 2e-3
+rows = load("PmsmLockedRotor")
+id_ = lambda t: 3 / R_S * (1 - math.exp(-R_S * t / L_D))
+iq_ = lambda t: 5 / R_S * (1 - math.exp(-R_S * t / L_Q))
+check("PmsmLockedRotor", max(abs(r["motor.id"] - id_(r["time"])) for r in rows), 1e-6, "d-axis current [A]")
+check("PmsmLockedRotor", max(abs(r["motor.iq"] - iq_(r["time"])) for r in rows), 1e-6, "q-axis current [A]")
+check("PmsmLockedRotor", max(abs(r["motor.electricalTorque"] - 1.5 * P_P * (PSI * iq_(r["time"]) + (L_D - L_Q) * id_(r["time"]) * iq_(r["time"]))) for r in rows), 1e-6, "torque [N m]")
+
+
+def pmsm_free_spin(vd, vq, t_end, step=1e-6):
+    """Classical fourth-order Runge-Kutta, written here and not taken from a simulator."""
+    def f(x):
+        i_d, i_q, w = x
+        we = P_P * w
+        torque = 1.5 * P_P * (PSI * i_q + (L_D - L_Q) * i_d * i_q)
+        return [(vd - R_S * i_d + we * L_Q * i_q) / L_D, (vq - R_S * i_q - we * (L_D * i_d + PSI)) / L_Q, torque / J_TOTAL]
+    x, t, out = [0.0, 0.0, 0.0], 0.0, {}
+    while t < t_end - 1e-12:
+        k1 = f(x)
+        k2 = f([a + step / 2 * b for a, b in zip(x, k1)])
+        k3 = f([a + step / 2 * b for a, b in zip(x, k2)])
+        k4 = f([a + step * b for a, b in zip(x, k3)])
+        x = [a + step / 6 * (b + 2 * c + 2 * d + e) for a, b, c, d, e in zip(x, k1, k2, k3, k4)]
+        t += step
+        out[round(t, 6)] = tuple(x)
+    return out
+
+
+# Salient motor from rest on vd = -2 V, vq = 10 V, free on a 1e-3 kg m2 load. The d and q axes couple
+# through the speed, so the reference is an independent integration.
+rows = load("PmsmFreeSpin")
+ref = pmsm_free_spin(-2, 10, 0.1)
+sampled = [r for r in rows if round(r["time"], 6) in ref and r["time"] > 0]
+assert len(sampled) > 100, "the free-spin check must compare many samples"
+check("PmsmFreeSpin", max(abs(r["motor.id"] - ref[round(r["time"], 6)][0]) for r in sampled), 1e-4, "d-axis current [A]")
+check("PmsmFreeSpin", max(abs(r["motor.iq"] - ref[round(r["time"], 6)][1]) for r in sampled), 1e-4, "q-axis current [A]")
+check("PmsmFreeSpin", max(abs(r["load.w"] - ref[round(r["time"], 6)][2]) for r in sampled), 1e-3, "shaft speed [rad/s]")
+
+
 def driver(vrail=3.0, vdrive=3.0, rb=47000.0, rc=1000.0):
     """KCL at base and collector of a low-side NPN, solved for (vb, vc) by Newton's method."""
 
