@@ -174,6 +174,9 @@ class Modelica:
 
     def resolve(self, name: str, context: str) -> str | None:
         """Modelica name lookup: `name` in `context` and its enclosing packages, innermost first."""
+        if name.startswith("."):
+            absolute = name[1:]
+            return absolute if self.source(absolute) is not None else None
         scopes = context.split(".") if context else []
         for depth in range(len(scopes), -1, -1):
             candidate = ".".join(scopes[:depth] + [name])

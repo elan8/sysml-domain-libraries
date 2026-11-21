@@ -196,8 +196,43 @@ package Elan8Tests "Circuits of the classes the Elan8 part definitions bind to, 
   model TorqueSpinUp "A constant 0.5 N.m torque on a 0.25 kg.m2 inertia, from rest"
     Modelica.Mechanics.Rotational.Sources.ConstantTorque source(tau_constant = 0.5);
     Modelica.Mechanics.Rotational.Components.Inertia rotor(J = 0.25);
+    Modelica.Mechanics.Rotational.Sensors.AngleSensor angleSensor;
+    Modelica.Mechanics.Rotational.Sensors.SpeedSensor speedSensor;
+    Modelica.Mechanics.Rotational.Sensors.AccSensor accelerationSensor;
   equation
     connect(source.flange, rotor.flange_a);
+    connect(rotor.flange_b, angleSensor.flange);
+    connect(rotor.flange_b, speedSensor.flange);
+    connect(rotor.flange_b, accelerationSensor.flange);
     annotation(experiment(StopTime = 2));
   end TorqueSpinUp;
+
+  model ForceDrivenMass "Constant force plus a force step on a mass with position sensing"
+    Modelica.Mechanics.Translational.Sources.ConstantForce bias(f_constant = 2);
+    Modelica.Mechanics.Translational.Sources.ForceStep drive(offsetForce = 0, stepForce = 4, startTime = 0.25);
+    Modelica.Mechanics.Translational.Components.Mass body(m = 2, s(start = 0, fixed = true),
+      v(start = 0, fixed = true));
+    Modelica.Mechanics.Translational.Sensors.PositionSensor positionSensor;
+  equation
+    connect(bias.flange, body.flange_a);
+    connect(drive.flange, body.flange_a);
+    connect(body.flange_b, positionSensor.flange);
+    annotation(experiment(StopTime = 1));
+  end ForceDrivenMass;
+
+  model CommandedLinearMotion "A 6 N signal force driving a 2 kg mass from rest"
+    Modelica.Mechanics.Translational.Sources.Force drive;
+    Modelica.Mechanics.Translational.Components.Mass body(m = 2, s(start = 0, fixed = true),
+      v(start = 0, fixed = true));
+    Modelica.Mechanics.Translational.Sensors.PositionSensor positionSensor;
+    Modelica.Mechanics.Translational.Sensors.SpeedSensor speedSensor;
+    Modelica.Mechanics.Translational.Sensors.AccSensor accelerationSensor;
+  equation
+    drive.f = 6;
+    connect(drive.flange, body.flange_a);
+    connect(body.flange_b, positionSensor.flange);
+    connect(body.flange_b, speedSensor.flange);
+    connect(body.flange_b, accelerationSensor.flange);
+    annotation(experiment(StopTime = 1));
+  end CommandedLinearMotion;
 end Elan8Tests;

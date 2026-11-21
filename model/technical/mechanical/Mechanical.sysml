@@ -16,6 +16,10 @@ package Mechanical {
 
         port def MechanicalPort;
 
+        port def MechanicalPowerSignalPort {
+            out attribute power : PowerValue;
+        }
+
         port def RotationalMechanicalPort :> MechanicalPort {
             attribute angle : AngularMeasureValue;
             attribute angularVelocity : AngularVelocityValue;

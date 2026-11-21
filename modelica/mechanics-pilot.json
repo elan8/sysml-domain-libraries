@@ -1,0 +1,533 @@
+{
+  "catalogPackages": [
+    "Modelica.Mechanics.Rotational.Components",
+    "Modelica.Mechanics.Rotational.Sensors",
+    "Modelica.Mechanics.Rotational.Sources",
+    "Modelica.Mechanics.Translational.Components",
+    "Modelica.Mechanics.Translational.Sensors",
+    "Modelica.Mechanics.Translational.Sources"
+  ],
+  "files": {
+    "model/technical/mechanical/rotational/RotationalDomain.sysml": {
+      "Modelica.Mechanics.Rotational.Sensors.AngleSensor": {
+        "part": "ShaftAngleSensor",
+        "doc": "Measures the shaft's absolute angle without exerting torque.",
+        "ports": {
+          "flange": "shaft"
+        },
+        "signals": {
+          "phi": "signal"
+        }
+      },
+      "Modelica.Mechanics.Rotational.Sensors.AccSensor": {
+        "part": "ShaftAccelerationSensor",
+        "doc": "Measures the shaft's absolute angular acceleration without exerting torque.",
+        "ports": {
+          "flange": "shaft"
+        },
+        "signals": {
+          "a": "signal"
+        }
+      },
+      "Modelica.Mechanics.Rotational.Sensors.SpeedSensor": {
+        "part": "ShaftSpeedSensor",
+        "doc": "Measures the shaft's absolute angular velocity without exerting torque.",
+        "ports": {
+          "flange": "shaft"
+        },
+        "signals": {
+          "w": "signal"
+        }
+      },
+      "Modelica.Mechanics.Rotational.Sensors.RelAngleSensor": {
+        "part": "RelativeShaftAngleSensor",
+        "doc": "Measures relative angle between the shafts.",
+        "ports": {
+          "flange_a": "sideA",
+          "flange_b": "sideB"
+        },
+        "signals": {
+          "phi_rel": "signal"
+        }
+      },
+      "Modelica.Mechanics.Rotational.Sensors.RelSpeedSensor": {
+        "part": "RelativeShaftSpeedSensor",
+        "doc": "Measures relative angular velocity between the shafts.",
+        "ports": {
+          "flange_a": "sideA",
+          "flange_b": "sideB"
+        },
+        "signals": {
+          "w_rel": "signal"
+        }
+      },
+      "Modelica.Mechanics.Rotational.Sensors.RelAccSensor": {
+        "part": "RelativeShaftAccelerationSensor",
+        "doc": "Measures relative angular acceleration between the shafts.",
+        "ports": {
+          "flange_a": "sideA",
+          "flange_b": "sideB"
+        },
+        "signals": {
+          "a_rel": "signal"
+        }
+      },
+      "Modelica.Mechanics.Rotational.Sensors.TorqueSensor": {
+        "part": "ShaftTorqueSensor",
+        "doc": "Measures torque through a rigid connection between the shafts.",
+        "ports": {
+          "flange_a": "sideA",
+          "flange_b": "sideB"
+        },
+        "signals": {
+          "tau": "signal"
+        }
+      },
+      "Modelica.Mechanics.Rotational.Sensors.PowerSensor": {
+        "part": "ShaftPowerSensor",
+        "doc": "Measures power transmitted through a rigid connection between the shafts.",
+        "ports": {
+          "flange_a": "sideA",
+          "flange_b": "sideB"
+        },
+        "signals": {
+          "power": "signal"
+        }
+      },
+      "Modelica.Mechanics.Rotational.Sensors.MultiSensor": {
+        "part": "ShaftMultiSensor",
+        "doc": "Measures power, angular velocity and torque through a rigid shaft connection.",
+        "ports": {
+          "flange_a": "sideA",
+          "flange_b": "sideB"
+        },
+        "signals": {
+          "power": "powerSignal",
+          "w": "speedSignal",
+          "tau": "torqueSignal"
+        }
+      },
+      "Modelica.Mechanics.Rotational.Sources.ConstantSpeed": {
+        "part": "ConstantShaftSpeedSource",
+        "doc": "Prescribes a constant velocity relative to its fixed support.",
+        "ports": {
+          "flange": "side"
+        },
+        "parameters": {
+          "w_fixed": "speed"
+        },
+        "modelicaDefaults": {
+          "useSupport": false
+        }
+      },
+      "Modelica.Mechanics.Rotational.Sources.LinearSpeedDependentTorque": {
+        "part": "LinearSpeedDependentTorqueSource",
+        "doc": "Applies the MSL linear speed-dependent torque law relative to its fixed support.",
+        "ports": {
+          "flange": "side"
+        },
+        "parameters": {
+          "tau_nominal": "nominalTorque",
+          "w_nominal": "nominalSpeed"
+        },
+        "modelicaDefaults": {
+          "useSupport": false,
+          "TorqueDirection": true
+        }
+      },
+      "Modelica.Mechanics.Rotational.Sources.QuadraticSpeedDependentTorque": {
+        "part": "QuadraticSpeedDependentTorqueSource",
+        "doc": "Applies the MSL quadratic speed-dependent torque law relative to its fixed support.",
+        "ports": {
+          "flange": "side"
+        },
+        "parameters": {
+          "tau_nominal": "nominalTorque",
+          "w_nominal": "nominalSpeed"
+        },
+        "modelicaDefaults": {
+          "useSupport": false,
+          "TorqueDirection": true
+        }
+      },
+      "Modelica.Mechanics.Rotational.Sources.InverseSpeedDependentTorque": {
+        "part": "InverseSpeedDependentTorqueSource",
+        "doc": "Applies the MSL inverse speed-dependent torque law relative to its fixed support.",
+        "ports": {
+          "flange": "side"
+        },
+        "parameters": {
+          "tau_nominal": "nominalTorque",
+          "w_nominal": "nominalSpeed",
+          "w0": "regularizationSpeed"
+        },
+        "modelicaDefaults": {
+          "useSupport": false,
+          "TorqueDirection": true
+        }
+      },
+      "Modelica.Mechanics.Rotational.Sources.Torque": {
+        "part": "SignalTorqueSource",
+        "doc": "Applies the commanded torque relative to its fixed support.",
+        "ports": {
+          "flange": "side"
+        },
+        "inputs": {
+          "tau": "command"
+        },
+        "modelicaDefaults": {
+          "useSupport": false
+        }
+      },
+      "Modelica.Mechanics.Rotational.Sources.Torque2": {
+        "part": "TwoFlangeTorqueSource",
+        "doc": "Applies the commanded torque between two flanges.",
+        "ports": {
+          "flange_a": "sideA",
+          "flange_b": "sideB"
+        },
+        "inputs": {
+          "tau": "command"
+        }
+      },
+      "Modelica.Mechanics.Rotational.Sources.TorqueStep": {
+        "part": "StepTorqueSource",
+        "doc": "Applies initialTorque before stepTime, then initialTorque plus stepHeight.",
+        "ports": {
+          "flange": "side"
+        },
+        "parameters": {
+          "offsetTorque": "initialTorque",
+          "stepTorque": "stepHeight",
+          "startTime": "stepTime"
+        },
+        "modelicaDefaults": {
+          "useSupport": false
+        }
+      },
+      "Modelica.Mechanics.Rotational.Components.Disc": {
+        "part": "RigidShaftOffset",
+        "doc": "Couples two shafts with a fixed angle offset and no inertia.",
+        "ports": {
+          "flange_a": "sideA",
+          "flange_b": "sideB"
+        },
+        "parameters": {
+          "deltaPhi": "angleOffset"
+        }
+      },
+      "Modelica.Mechanics.Rotational.Components.SpringDamper": {
+        "part": "TorsionalSpringDamper",
+        "doc": "Couples two shafts with a parallel linear spring and damper.",
+        "ports": {
+          "flange_a": "sideA",
+          "flange_b": "sideB"
+        },
+        "parameters": {
+          "c": "stiffness",
+          "d": "damping",
+          "phi_rel0": "unstretchedAngle",
+          "phi_nominal": "nominalAngle"
+        },
+        "modelicaDefaults": {
+          "useHeatPort": false
+        }
+      },
+      "Modelica.Mechanics.Rotational.Sources.Accelerate": {
+        "part": "CommandedShaftAcceleration",
+        "doc": "Prescribes acceleration relative to the fixed support.",
+        "ports": {
+          "flange": "side"
+        },
+        "inputs": {
+          "a_ref": "command"
+        },
+        "modelicaDefaults": {
+          "useSupport": false
+        }
+      },
+      "Modelica.Mechanics.Rotational.Components.IdealPlanetary": {
+        "part": "IdealPlanetaryGear",
+        "doc": "An ideal planetary gear with sun, carrier and ring shafts.",
+        "ports": {
+          "sun": "sun",
+          "carrier": "carrier",
+          "ring": "ring"
+        },
+        "parameters": {
+          "ratio": "ringToSunRatio"
+        },
+        "dimensionlessParameters": [
+          "ratio"
+        ]
+      },
+      "Modelica.Mechanics.Rotational.Components.IdealGearR2T": {
+        "part": "IdealRotationToTranslationGear",
+        "doc": "Couples shaft angle to linear displacement through a fixed ratio.",
+        "ports": {
+          "flangeR": "shaft",
+          "flangeT": "side"
+        },
+        "parameters": {
+          "ratio": "rotationPerLength"
+        },
+        "modelicaDefaults": {
+          "useSupportR": false,
+          "useSupportT": false
+        }
+      }
+    },
+    "model/technical/mechanical/translational/TranslationalDomain.sysml": {
+      "Modelica.Mechanics.Translational.Sources.ConstantForce": {
+        "part": "ConstantForceSource",
+        "doc": "Applies a constant force. Positive force accelerates the connected side in the positive direction.",
+        "ports": {
+          "flange": "side"
+        },
+        "parameters": {
+          "f_constant": "force"
+        },
+        "modelicaDefaults": {
+          "useSupport": false
+        }
+      },
+      "Modelica.Mechanics.Translational.Sources.ForceStep": {
+        "part": "StepForceSource",
+        "doc": "Applies initialForce before stepTime, then initialForce plus stepHeight.",
+        "ports": {
+          "flange": "side"
+        },
+        "parameters": {
+          "offsetForce": "initialForce",
+          "stepForce": "stepHeight",
+          "startTime": "stepTime"
+        },
+        "modelicaDefaults": {
+          "useSupport": false
+        }
+      },
+      "Modelica.Mechanics.Translational.Sensors.PositionSensor": {
+        "part": "LinearPositionSensor",
+        "doc": "Measures absolute position without exerting force.",
+        "ports": {
+          "flange": "side"
+        },
+        "signals": {
+          "s": "signal"
+        }
+      },
+      "Modelica.Mechanics.Translational.Sensors.SpeedSensor": {
+        "part": "LinearSpeedSensor",
+        "doc": "Measures absolute velocity without exerting force.",
+        "ports": {
+          "flange": "side"
+        },
+        "signals": {
+          "v": "signal"
+        }
+      },
+      "Modelica.Mechanics.Translational.Sensors.AccSensor": {
+        "part": "LinearAccelerationSensor",
+        "doc": "Measures absolute acceleration without exerting force.",
+        "ports": {
+          "flange": "side"
+        },
+        "signals": {
+          "a": "signal"
+        }
+      },
+      "Modelica.Mechanics.Translational.Sensors.RelPositionSensor": {
+        "part": "RelativeLinearPositionSensor",
+        "doc": "Measures relative position between the two flanges.",
+        "ports": {
+          "flange_a": "sideA",
+          "flange_b": "sideB"
+        },
+        "signals": {
+          "s_rel": "signal"
+        }
+      },
+      "Modelica.Mechanics.Translational.Sensors.RelSpeedSensor": {
+        "part": "RelativeLinearSpeedSensor",
+        "doc": "Measures relative velocity between the two flanges.",
+        "ports": {
+          "flange_a": "sideA",
+          "flange_b": "sideB"
+        },
+        "signals": {
+          "v_rel": "signal"
+        }
+      },
+      "Modelica.Mechanics.Translational.Sensors.RelAccSensor": {
+        "part": "RelativeLinearAccelerationSensor",
+        "doc": "Measures relative acceleration between the two flanges.",
+        "ports": {
+          "flange_a": "sideA",
+          "flange_b": "sideB"
+        },
+        "signals": {
+          "a_rel": "signal"
+        }
+      },
+      "Modelica.Mechanics.Translational.Sensors.ForceSensor": {
+        "part": "LinearForceSensor",
+        "doc": "Measures force through a rigid connection between the flanges.",
+        "ports": {
+          "flange_a": "sideA",
+          "flange_b": "sideB"
+        },
+        "signals": {
+          "f": "signal"
+        }
+      },
+      "Modelica.Mechanics.Translational.Sensors.PowerSensor": {
+        "part": "LinearPowerSensor",
+        "doc": "Measures power transmitted through a rigid connection between the flanges.",
+        "ports": {
+          "flange_a": "sideA",
+          "flange_b": "sideB"
+        },
+        "signals": {
+          "power": "signal"
+        }
+      },
+      "Modelica.Mechanics.Translational.Sensors.MultiSensor": {
+        "part": "LinearMultiSensor",
+        "doc": "Measures power, velocity and force through a rigid connection.",
+        "ports": {
+          "flange_a": "sideA",
+          "flange_b": "sideB"
+        },
+        "signals": {
+          "power": "powerSignal",
+          "v": "speedSignal",
+          "f": "forceSignal"
+        }
+      },
+      "Modelica.Mechanics.Translational.Sources.ConstantSpeed": {
+        "part": "ConstantLinearSpeedSource",
+        "doc": "Prescribes a constant velocity relative to its fixed support.",
+        "ports": {
+          "flange": "side"
+        },
+        "parameters": {
+          "v_fixed": "speed"
+        },
+        "modelicaDefaults": {
+          "useSupport": false
+        }
+      },
+      "Modelica.Mechanics.Translational.Sources.LinearSpeedDependentForce": {
+        "part": "LinearSpeedDependentForceSource",
+        "doc": "Applies the MSL linear speed-dependent force law relative to its fixed support.",
+        "ports": {
+          "flange": "side"
+        },
+        "parameters": {
+          "f_nominal": "nominalForce",
+          "v_nominal": "nominalSpeed"
+        },
+        "modelicaDefaults": {
+          "useSupport": false,
+          "ForceDirection": true
+        }
+      },
+      "Modelica.Mechanics.Translational.Sources.QuadraticSpeedDependentForce": {
+        "part": "QuadraticSpeedDependentForceSource",
+        "doc": "Applies the MSL quadratic speed-dependent force law relative to its fixed support.",
+        "ports": {
+          "flange": "side"
+        },
+        "parameters": {
+          "f_nominal": "nominalForce",
+          "v_nominal": "nominalSpeed"
+        },
+        "modelicaDefaults": {
+          "useSupport": false,
+          "ForceDirection": true
+        }
+      },
+      "Modelica.Mechanics.Translational.Sources.InverseSpeedDependentForce": {
+        "part": "InverseSpeedDependentForceSource",
+        "doc": "Applies the MSL inverse speed-dependent force law relative to its fixed support.",
+        "ports": {
+          "flange": "side"
+        },
+        "parameters": {
+          "f_nominal": "nominalForce",
+          "v_nominal": "nominalSpeed",
+          "v0": "regularizationSpeed"
+        },
+        "modelicaDefaults": {
+          "useSupport": false,
+          "ForceDirection": true
+        }
+      },
+      "Modelica.Mechanics.Translational.Sources.Force": {
+        "part": "SignalForceSource",
+        "doc": "Applies the commanded force relative to its fixed support.",
+        "ports": {
+          "flange": "side"
+        },
+        "inputs": {
+          "f": "command"
+        },
+        "modelicaDefaults": {
+          "useSupport": false
+        }
+      },
+      "Modelica.Mechanics.Translational.Sources.Force2": {
+        "part": "TwoFlangeForceSource",
+        "doc": "Applies the commanded force between two flanges.",
+        "ports": {
+          "flange_a": "sideA",
+          "flange_b": "sideB"
+        },
+        "inputs": {
+          "f": "command"
+        }
+      },
+      "Modelica.Mechanics.Translational.Components.SpringDamper": {
+        "part": "LinearSpringDamper",
+        "doc": "Couples two flanges with a parallel linear spring and damper.",
+        "ports": {
+          "flange_a": "sideA",
+          "flange_b": "sideB"
+        },
+        "parameters": {
+          "c": "stiffness",
+          "d": "damping",
+          "s_rel0": "unstretchedLength",
+          "s_nominal": "nominalDisplacement"
+        },
+        "modelicaDefaults": {
+          "useHeatPort": false
+        }
+      },
+      "Modelica.Mechanics.Translational.Components.Rod": {
+        "part": "RigidRod",
+        "doc": "Couples two flanges with fixed length and no inertia.",
+        "ports": {
+          "flange_a": "sideA",
+          "flange_b": "sideB"
+        },
+        "parameters": {
+          "L": "length"
+        }
+      },
+      "Modelica.Mechanics.Translational.Sources.Accelerate": {
+        "part": "CommandedLinearAcceleration",
+        "doc": "Prescribes acceleration relative to the fixed support.",
+        "ports": {
+          "flange": "side"
+        },
+        "inputs": {
+          "a_ref": "command"
+        },
+        "modelicaDefaults": {
+          "useSupport": false
+        }
+      }
+    }
+  }
+}

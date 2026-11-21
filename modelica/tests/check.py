@@ -86,6 +86,9 @@ check("TorsionalOscillator", max(abs(r["rotor.phi"] - 0.1 * math.exp(-2 * r["tim
 # A constant torque tau on an inertia J from rest: w = tau t / J.
 rows = load("TorqueSpinUp")
 check("TorqueSpinUp", max(abs(r["rotor.w"] - 0.5 * r["time"] / 0.25) for r in rows), 1e-9, "angular velocity [rad/s]")
+check("TorqueSpinUp", max(abs(r["speedSensor.w"] - 2 * r["time"]) for r in rows), 1e-9, "measured speed [rad/s]")
+check("TorqueSpinUp", max(abs(r["angleSensor.phi"] - r["time"]**2) for r in rows), 1e-7, "measured angle [rad]")
+check("TorqueSpinUp", max(abs(r["accelerationSensor.a"] - 2) for r in rows), 1e-9, "measured acceleration [rad/s²]")
 
 # Transistor: MSL NPN static equations (no temperature dependency, substrate grounded).
 IS, BF, BR, VAK, VT, G = 1e-16, 200.0, 0.1, 0.02, 0.02585, 1e-15
