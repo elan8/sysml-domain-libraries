@@ -17,10 +17,31 @@ for the few the MSL has no class for.
 | `Components::NpnTransistor` | `Modelica.Electrical.Analog.Semiconductors.NPN` |
 | `Components::PnpTransistor` | `Modelica.Electrical.Analog.Semiconductors.PNP` |
 | `Power::PrimaryCell` | `Elan8.Electronics.Power.PrimaryCell` (this directory) |
+| `Translational::Mass` | `Modelica.Mechanics.Translational.Components.Mass` |
+| `Translational::Spring` | `Modelica.Mechanics.Translational.Components.Spring` |
+| `Translational::Damper` | `Modelica.Mechanics.Translational.Components.Damper` |
+| `Translational::FixedSupport` | `Modelica.Mechanics.Translational.Components.Fixed` |
 
 Specializations use their supertype's binding: a `TantalumCapacitor` is a
 `Modelica.Electrical.Analog.Basic.Capacitor`. Parts without a binding, such as `Diode`
 (whose ratings are not the MSL diode's parameters), are not simulated.
+
+## Initial values
+
+A SysML attribute paired with a Modelica *variable* instead of a parameter names a state of
+the component: `Translational::Mass` pairs `position` with `s` and `velocity` with `v`. A
+simulation tool starts that state at the attribute's initial value, written with `:=`, and at
+the Modelica class's default when there is none. `=` binds a parameter, so it is an error on a
+state:
+
+```sysml
+part body : Mass {
+    attribute :>> mass = 1 [kg];            // parameter m
+    attribute :>> position := 0.1 [m];      // state s, starts at 0.1 m
+}
+```
+
+See [`examples/mass-spring-damper`](../model/technical/mechanical/examples/mass-spring-damper/mass-spring-damper.sysml).
 
 ## Names
 
