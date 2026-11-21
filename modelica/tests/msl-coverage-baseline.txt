@@ -1,0 +1,25 @@
+# Direct MSL bindings that CI expects to remain available.
+Modelica.Electrical.Analog.Basic.Capacitor
+Modelica.Electrical.Analog.Basic.Ground
+Modelica.Electrical.Analog.Basic.Inductor
+Modelica.Electrical.Analog.Basic.Resistor
+Modelica.Electrical.Analog.Basic.RotationalEMF
+Modelica.Electrical.Analog.Semiconductors.NPN
+Modelica.Electrical.Analog.Semiconductors.PNP
+Modelica.Electrical.Analog.Sensors.CurrentSensor
+Modelica.Electrical.Analog.Sources.ConstantCurrent
+Modelica.Electrical.Analog.Sources.ConstantVoltage
+Modelica.Electrical.Analog.Sources.SignalVoltage
+Modelica.Electrical.Analog.Sources.StepVoltage
+Modelica.Mechanics.Rotational.Components.Damper
+Modelica.Mechanics.Rotational.Components.Fixed
+Modelica.Mechanics.Rotational.Components.IdealGear
+Modelica.Mechanics.Rotational.Components.IdealRollingWheel
+Modelica.Mechanics.Rotational.Components.Inertia
+Modelica.Mechanics.Rotational.Components.Spring
+Modelica.Mechanics.Rotational.Sensors.SpeedSensor
+Modelica.Mechanics.Rotational.Sources.ConstantTorque
+Modelica.Mechanics.Translational.Components.Damper
+Modelica.Mechanics.Translational.Components.Fixed
+Modelica.Mechanics.Translational.Components.Mass
+Modelica.Mechanics.Translational.Components.Spring

@@ -17,6 +17,7 @@ Use these packages when a model needs vocabulary for purely mechanical component
 - `drivetrain/` - gearbox, wheel, and caster-wheel vocabulary (`Elan8::Mechanical::Drivetrain`).
 - `translational/` - one-dimensional mass, spring, damper and fixed support (`Elan8::Mechanical::Translational`), bound to Modelica classes; see `examples/mass-spring-damper/`.
 - `rotational/` - inertia, torsional spring and damper, fixed support and torque source (`Elan8::Mechanical::Rotational`), bound to Modelica classes; see `examples/drive-wheel/` for a motor, gearbox, wheel and body.
+- [DC motor drive](examples/dc-motor-drive/README.md) - simulate a motor under viscous load, measure current and shaft speed, and verify a speed requirement with Run42.
 
 ## Related Layers
 

@@ -109,6 +109,45 @@ package Components {
         attribute sourceCurrent : ElectricCurrentValue;
     }
 
+    port def VoltageSignalPort {
+        out attribute voltage : ElectricPotentialValue;
+    }
+
+    port def CurrentSignalPort {
+        out attribute current : ElectricCurrentValue;
+    }
+
+    part def SignalControlledVoltageSource :> TwoTerminalElectronicComponent {
+        doc /* Applies the command voltage across terminal1 and terminal2. */
+        @Elan8::PhysicalModeling::ModelicaModel {
+            className = "Modelica.Electrical.Analog.Sources.SignalVoltage";
+            pins = ("terminal1=p", "terminal2=n", "command=v");
+        }
+        port command : ~VoltageSignalPort;
+    }
+
+    part def StepVoltageSource :> TwoTerminalElectronicComponent {
+        doc /* At stepTime, the voltage changes from initialVoltage to initialVoltage plus stepHeight. */
+        @Elan8::PhysicalModeling::ModelicaModel {
+            className = "Modelica.Electrical.Analog.Sources.StepVoltage";
+            parameters = ("stepHeight=V", "stepTime=startTime", "initialVoltage=offset");
+            pins = ("terminal1=p", "terminal2=n");
+        }
+        attribute stepHeight : ElectricPotentialValue;
+        attribute stepTime : DurationValue;
+        attribute initialVoltage : ElectricPotentialValue;
+    }
+
+    part def CurrentSensor :> TwoTerminalElectronicComponent {
+        doc /* Ideal series sensor. Current is positive from terminal1 to terminal2. */
+        @Elan8::PhysicalModeling::ModelicaModel {
+            className = "Modelica.Electrical.Analog.Sensors.CurrentSensor";
+            pins = ("terminal1=p", "terminal2=n", "signal=i");
+        }
+        port signal : CurrentSignalPort;
+        attribute i : ElectricCurrentValue;
+    }
+
     part def Ground :> BoardLevelElectronicComponent {
         @Elan8::PhysicalModeling::ModelicaModel {
             className = "Modelica.Electrical.Analog.Basic.Ground";

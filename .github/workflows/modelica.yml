@@ -22,3 +22,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: bash modelica/tests/run.sh
+      - name: Publish MSL coverage summary
+        if: always()
+        run: |
+          report=modelica/tests/out/msl-coverage.md
+          if [[ -f "$report" ]]; then
+            cat "$report" >> "$GITHUB_STEP_SUMMARY"
+          fi
