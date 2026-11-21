@@ -31,7 +31,9 @@ roots=(--source-root "$repo/modelica/Elan8" --source-root "$msl/Modelica $MSL_NU
        --source-root "$msl/Complex.mo" --source-root "$msl/ModelicaServices $MSL_NUMBER")
 tol=(--rtol 1e-9 --atol 1e-12)
 
-python3 "$repo/scripts/check_modelica_bindings.py" --msl "$msl/Modelica $MSL_NUMBER"
+python3 -B "$here/test_msl_catalog.py"
+python3 "$repo/scripts/check_modelica_bindings.py" --msl "$msl/Modelica $MSL_NUMBER" \
+  --coverage-report "$out/msl-coverage.md" --coverage-baseline "$here/msl-coverage-baseline.txt"
 "$rumoca" --version
 sim() { # model output-step
   "$rumoca" sim "$here/Elan8Tests.mo" -m "Elan8Tests.$1" "${roots[@]}" "${tol[@]}" --dt "$2" -o "$out/$1.csv"

@@ -12,7 +12,10 @@ for the few the MSL has no class for.
 | `Components::Capacitor` | `Modelica.Electrical.Analog.Basic.Capacitor` |
 | `Components::Inductor` | `Modelica.Electrical.Analog.Basic.Inductor` |
 | `Components::VoltageSource` | `Modelica.Electrical.Analog.Sources.ConstantVoltage` |
+| `Components::SignalControlledVoltageSource` | `Modelica.Electrical.Analog.Sources.SignalVoltage` |
+| `Components::StepVoltageSource` | `Modelica.Electrical.Analog.Sources.StepVoltage` |
 | `Components::CurrentSource` | `Modelica.Electrical.Analog.Sources.ConstantCurrent` |
+| `Components::CurrentSensor` | `Modelica.Electrical.Analog.Sensors.CurrentSensor` |
 | `Components::Ground` | `Modelica.Electrical.Analog.Basic.Ground` |
 | `Components::NpnTransistor` | `Modelica.Electrical.Analog.Semiconductors.NPN` |
 | `Components::PnpTransistor` | `Modelica.Electrical.Analog.Semiconductors.PNP` |
@@ -26,9 +29,14 @@ for the few the MSL has no class for.
 | `Rotational::TorsionalDamper` | `Modelica.Mechanics.Rotational.Components.Damper` |
 | `Rotational::RotationalFixedSupport` | `Modelica.Mechanics.Rotational.Components.Fixed` |
 | `Rotational::TorqueSource` | `Modelica.Mechanics.Rotational.Sources.ConstantTorque` |
+| `Rotational::ShaftSpeedSensor` | `Modelica.Mechanics.Rotational.Sensors.SpeedSensor` |
 | `Drivetrain::Gearbox` | `Modelica.Mechanics.Rotational.Components.IdealGear` |
 | `Drivetrain::RollingWheel` | `Modelica.Mechanics.Rotational.Components.IdealRollingWheel` |
 | `Actuation::BrushedDcMotor` | `Elan8.Electronics.Actuation.BrushedDcMotor` (this directory) |
+| `Actuation::RotationalElectromechanicalConverter` | `Modelica.Electrical.Analog.Basic.RotationalEMF` |
+
+The [DC motor drive](../model/technical/mechanical/examples/dc-motor-drive/README.md) composes
+the brushed motor, a step voltage source, a rotational load and two sensors in SysML.
 
 Specializations use their supertype's binding: a `TantalumCapacitor` is a
 `Modelica.Electrical.Analog.Basic.Capacitor`. Parts without a binding, such as `Diode`
@@ -89,3 +97,27 @@ circuits of the bound classes (`tests/Elan8Tests.mo`) and the mass-spring exampl
 compares the results with references derived without a simulator (`tests/check.py`):
 closed-form circuit solutions, and the MSL transistor's Ebers-Moll equations solved with
 Newton's method. This directory is not part of the KPAR bundle.
+
+## MSL binding coverage
+
+The Modelica CI job publishes covered and missing class counts by MSL domain.
+Expand a domain in the job summary to see the names of both sets, grouped by
+package. The comparison scans the pinned MSL release for public, non-partial
+models and blocks declared in packages. It excludes `Resources` source files
+and classes under `BaseClasses`, `Examples`, `Icons`, `Interfaces`, `Internal`,
+and `UsersGuide`.
+
+An MSL class counts as covered when a reusable domain-library part binds directly
+to it and passes the binding check. The reference simulations exercise individual
+models separately.
+
+CI checks every class listed in [the coverage baseline](tests/msl-coverage-baseline.txt).
+New bindings appear in the report automatically. Add a class to the baseline when
+its continued availability should be checked in CI.
+
+To generate the same report locally using the pinned MSL release:
+
+```bash
+python3 scripts/check_modelica_bindings.py --msl "/path/to/Modelica 4.1.0" \
+  --coverage-report msl-coverage.md --coverage-baseline modelica/tests/msl-coverage-baseline.txt
+```

@@ -82,4 +82,19 @@ package Rotational {
         attribute torque : TorqueValue;
         port side : RotationalMechanicalPort;
     }
+
+    port def AngularVelocitySignalPort {
+        out attribute angularVelocity : AngularVelocityValue;
+    }
+
+    part def ShaftSpeedSensor :> MechanicalComponent {
+        doc /* Measures the shaft's absolute angular velocity without exerting torque. */
+        @Elan8::PhysicalModeling::ModelicaModel {
+            className = "Modelica.Mechanics.Rotational.Sensors.SpeedSensor";
+            pins = ("shaft=flange", "signal=w");
+        }
+        port shaft : RotationalMechanicalPort;
+        port signal : AngularVelocitySignalPort;
+        attribute w : AngularVelocityValue;
+    }
 }

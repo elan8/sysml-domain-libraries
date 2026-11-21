@@ -17,6 +17,8 @@ the enclosing packages, innermost first.
 This is a lint on source text, not a SysML or Modelica parser: it reads part definitions, their
 `:>` supertypes by simple name, and the public `parameter` and pin declarations of the classes.
 Spec42 validates the SysML; rumoca compiles and simulates the Modelica (`modelica/tests/run.sh`).
+`--coverage-report` writes a Markdown inventory of validated direct MSL bindings, and
+`--coverage-baseline` checks that every listed MSL class is still covered.
 
 Usage:
     python3 scripts/check_modelica_bindings.py --msl "<MSL directory>/Modelica <version>"
@@ -40,7 +42,7 @@ ATTRIBUTE = re.compile(r"\battribute\s+(?::>>\s*)?(\w+)")
 PORT = re.compile(r"\bport\s+(\w+)")
 
 PARAMETER = re.compile(r"^\s*(?:final\s+)?parameter\s+([\w.]+)(\s*\([^;]*?\))?\s+(\w+)([^;]*);", re.M)
-PIN_TYPES = ("Pin", "PositivePin", "NegativePin", "Flange_a", "Flange_b")
+PIN_TYPES = ("Pin", "PositivePin", "NegativePin", "Flange_a", "Flange_b", "RealInput", "RealOutput")
 VARIABLE = re.compile(
     r"^\s*(?:input\s+|output\s+)?((?:Modelica\.Units\.)?SI\.\w+|Real)(?:\s*\([^;]*?\))?\s+(\w+)\b[^;]*;", re.M
 )
@@ -277,10 +279,116 @@ def pairs(entries, kind, where, problems):
     return mapping
 
 
+MSL_EXCLUDED_PACKAGES = {"BaseClasses", "Examples", "Icons", "Interfaces", "Internal", "UsersGuide"}
+MSL_COMMENT_OR_STRING = re.compile(r'//[^\n]*|/\*.*?\*/|"(?:\\.|[^"\\])*"', re.S)
+MSL_CLASS_EVENT = re.compile(
+    r"^[ \t]*(?:"
+    r"(?P<flags>(?:(?:encapsulated|partial|replaceable|final|redeclare|expandable|pure|impure)[ \t]+)*)"
+    r"(?P<kind>operator[ \t]+record|operator[ \t]+function|package|model|block|class|record|connector|function|type|operator)"
+    r"\s+(?P<extends>extends\s+)?(?P<name>\w+)\b(?:\s*(?P<suffix>[=.(]))?"
+    r"|end[ \t]+(?P<end>\w+)[ \t]*;"
+    r"|(?P<visibility>public|protected)[ \t]*$)",
+    re.M,
+)
+
+
+def msl_catalog(root: Path) -> set[str]:
+    """Inventory public, non-partial models and blocks declared in MSL packages."""
+    classes = set()
+    for path in sorted(root.rglob("*.mo")):
+        if "Resources" in path.relative_to(root).parts:
+            continue
+        text = path.read_text(encoding="utf-8-sig")
+        text = MSL_COMMENT_OR_STRING.sub(lambda match: re.sub(r"[^\n]", " ", match[0]), text)
+        within = re.search(r"^\s*within\s*([\w.]*)\s*;", text)
+        if within is None:
+            continue
+        parents = within[1].split(".") if within[1] else []
+        if MSL_EXCLUDED_PACKAGES.intersection(parents):
+            continue
+        stack: list[tuple[str, str, bool]] = []
+        public = True
+        for event in MSL_CLASS_EVENT.finditer(text):
+            if event["end"]:
+                if stack and event["end"] == stack[-1][0]:
+                    _, _, public = stack.pop()
+            elif event["visibility"]:
+                public = event["visibility"] == "public"
+            else:
+                name, kind = event["name"], event["kind"]
+                # Function partial applications can also start a line with "function Name(".
+                if event["suffix"] in {".", "("} and not event["extends"]:
+                    continue
+                if public and kind in {"model", "block"} and "partial" not in event["flags"].split():
+                    if all(parent_kind == "package" and visible for _, parent_kind, visible in stack):
+                        qualified = [*parents, *(parent for parent, _, _ in stack), name]
+                        if qualified[0] == "Modelica" and not MSL_EXCLUDED_PACKAGES.intersection(qualified[:-1]):
+                            classes.add(".".join(qualified))
+                if event["suffix"] != "=":
+                    stack.append((name, kind, public))
+                    public = True
+        if stack:
+            raise ValueError(f"{path}: unclosed declaration {stack[-1][0]} while reading the MSL catalog")
+    return classes
+
+
+def write_coverage_report(path: Path, msl: Path, covered: set[str], missing: set[str]) -> None:
+    catalog = msl_catalog(msl)
+    if not catalog:
+        raise ValueError(f"{msl}: no models or blocks found for the MSL coverage catalog")
+    by_domain: dict[str, set[str]] = {}
+    for class_name in sorted(catalog):
+        by_domain.setdefault(".".join(class_name.split(".")[:2]), set()).add(class_name)
+    lines = [
+        "# Modelica Standard Library binding coverage",
+        "",
+        f"Source library: `{msl.name}`",
+        "",
+        f"**{len(covered)} distinct MSL classes** have validated direct bindings.",
+        "",
+        f"**{len(covered & catalog)} of {len(catalog)} catalog classes covered**.",
+        "",
+        "The catalog includes public, non-partial models and blocks declared in packages.",
+        "It excludes auxiliary source files in Resources and classes under "
+        + ", ".join(f"`{name}`" for name in sorted(MSL_EXCLUDED_PACKAGES)) + ".",
+        "",
+        "| MSL domain | Covered | Missing | Catalog |",
+        "| --- | ---: | ---: | ---: |",
+    ]
+    for domain, classes in by_domain.items():
+        lines.append(f"| `{domain}` | {len(classes & covered)} | {len(classes - covered)} | {len(classes)} |")
+
+    for domain, classes in by_domain.items():
+        lines.extend(["", "<details>", f"<summary>{domain} class inventory</summary>", "",
+                      "| MSL package | Covered | Missing |", "| --- | --- | --- |"])
+        by_package: dict[str, set[str]] = {}
+        for class_name in sorted(classes):
+            package, name = class_name.rsplit(".", 1)
+            by_package.setdefault(package, set()).add(name)
+        for package, names in by_package.items():
+            bound = {name for name in names if f"{package}.{name}" in covered}
+            covered_names = ", ".join(f"`{name}`" for name in sorted(bound)) or "—"
+            missing_names = ", ".join(f"`{name}`" for name in sorted(names - bound)) or "—"
+            lines.append(f"| `{package}` | {covered_names} | {missing_names} |")
+        lines.extend(["", "</details>"])
+
+    if outside_catalog := covered - catalog:
+        lines.extend(["", "## Validated direct bindings outside the catalog scope", ""])
+        lines.extend(f"- `{name}`" for name in sorted(outside_catalog))
+    if missing:
+        lines.extend(["", "## Missing baseline classes", ""])
+        lines.extend(f"- `{name}`" for name in sorted(missing))
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--msl", type=Path, help="the Modelica Standard Library's `Modelica <version>` directory")
+    parser.add_argument("--coverage-report", type=Path, help="write the direct MSL binding inventory as Markdown")
+    parser.add_argument("--coverage-baseline", type=Path, help="require these MSL classes, one qualified name per line")
     args = parser.parse_args()
+    if (args.coverage_report or args.coverage_baseline) and not args.msl:
+        parser.error("coverage options require --msl")
     roots = {"Elan8": ELAN8}
     if args.msl:
         roots["Modelica"] = args.msl
@@ -288,13 +396,16 @@ def main() -> int:
 
     defs = part_definitions()
     problems, checked = [], 0
+    covered: set[str] = set()
     for name, definitions in sorted(defs.items()):
         for definition in definitions:
             binding = definition["binding"]
             if binding is None:
                 continue
             checked += 1
-            where = f"{definition['file'].relative_to(ROOT)}: part def {name}"
+            source = definition["file"].relative_to(ROOT)
+            where = f"{source}: part def {name}"
+            problems_before = len(problems)
             class_name = binding.get("className")
             if not class_name:
                 problems.append(f"{where}: @ModelicaModel without className")
@@ -345,6 +456,22 @@ def main() -> int:
             connected = set(pin_map.values()) | (ports & pins)
             for pin in sorted(pins - connected):
                 problems.append(f"{where}: pin `{pin}` of {class_name} is no port of {name}")
+            if (
+                len(problems) == problems_before
+                and class_name.startswith("Modelica.")
+                and "resourceUri" not in binding
+                and "examples" not in source.parts
+            ):
+                covered.add(class_name)
+
+    missing: set[str] = set()
+    if args.coverage_baseline:
+        lines = args.coverage_baseline.read_text(encoding="utf-8").splitlines()
+        expected = {line.strip() for line in lines if line.strip() and not line.lstrip().startswith("#")}
+        missing = expected - covered
+        problems.extend(f"MSL coverage baseline: missing valid binding for `{name}`" for name in sorted(missing))
+    if args.coverage_report:
+        write_coverage_report(args.coverage_report, args.msl, covered, missing)
     for problem in problems:
         print(problem)
     print(f"{checked} binding(s) checked, {len(problems)} problem(s)")

@@ -13,6 +13,22 @@ package Actuation {
          */
     }
 
+    part def RotationalElectromechanicalConverter :> ElectronicsComponent {
+        doc /*
+         * Ideal conversion between electrical and shaft power with a fixed housing.
+         * Positive current into terminal1 produces positive shaft torque.
+         */
+        @Elan8::PhysicalModeling::ModelicaModel {
+            className = "Modelica.Electrical.Analog.Basic.RotationalEMF";
+            parameters = ("torqueConstant=k");
+            pins = ("terminal1=p", "terminal2=n", "shaft=flange");
+        }
+        attribute torqueConstant : TorqueConstantValue;
+        port terminal1 : ElectricalTerminalPort;
+        port terminal2 : ElectricalTerminalPort;
+        port shaft : RotationalMechanicalPort;
+    }
+
     abstract part def ElectricalActuator :> ElectronicsComponent {
         attribute ratedPower : PowerValue;
     }
