@@ -4,7 +4,7 @@ model ThreePhaseBldcMotor "Elan8::Electronics::Actuation::ThreePhaseBldcMotor: s
   parameter Modelica.Units.SI.Inductance phaseInductance "SysML: phaseInductance. Self minus mutual inductance, per phase";
   parameter Modelica.Units.SI.MagneticFlux permanentMagnetFlux "SysML: permanentMagnetFlux. Rotor magnet flux linked by a phase, peak";
   parameter Real polePairs "SysML: polePairs. Number of pole pairs, a positive whole number";
-  parameter Real emfShape(min = 0, max = 1) = 0 "SysML: emfShape. 0 gives sinusoidal back-EMF, 1 trapezoidal back-EMF with 120 degree flat tops";
+  parameter Real emfShape(min = 0, max = 1) = 0 "SysML: emfShape. 0 gives sinusoidal back-EMF, 1 trapezoidal back-EMF with 120 degree flat tops" annotation(Evaluate = true);
   parameter Modelica.Units.SI.Inertia rotorInertia "SysML: rotorInertia";
   parameter Modelica.Units.SI.Voltage dcLinkVoltage "SysML: dcLinkVoltage. Supply of the inverter";
   Modelica.Mechanics.Rotational.Interfaces.Flange_b mechanicalOutput "SysML: mechanicalOutput";
