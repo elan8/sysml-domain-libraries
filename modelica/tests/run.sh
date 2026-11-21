@@ -46,6 +46,9 @@ sim DcMotorSpinUp 1e-3
 sim DriveWheel 1e-3
 sim PmsmLockedRotor 1e-4
 sim PmsmFreeSpin 1e-4
+sim BldcLockedSine 1e-4
+sim BldcLockedTrapezoid 1e-4
+sim BldcFreeSpinSine 1e-4
 sim TorsionalOscillator 0.01
 sim TorqueSpinUp 0.01
 "$rumoca" sim "$repo/model/generic/physical-modeling/examples/mass-spring/models/MassSpring.mo" \

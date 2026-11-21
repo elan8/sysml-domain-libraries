@@ -102,13 +102,13 @@ check("PmsmLockedRotor", max(abs(r["motor.iq"] - iq_(r["time"])) for r in rows),
 check("PmsmLockedRotor", max(abs(r["motor.electricalTorque"] - 1.5 * P_P * (PSI * iq_(r["time"]) + (L_D - L_Q) * id_(r["time"]) * iq_(r["time"]))) for r in rows), 1e-6, "torque [N m]")
 
 
-def pmsm_free_spin(vd, vq, t_end, step=1e-6):
+def pmsm_free_spin(vd, vq, t_end, step=1e-6, l_d=L_D, l_q=L_Q):
     """Classical fourth-order Runge-Kutta, written here and not taken from a simulator."""
     def f(x):
         i_d, i_q, w = x
         we = P_P * w
-        torque = 1.5 * P_P * (PSI * i_q + (L_D - L_Q) * i_d * i_q)
-        return [(vd - R_S * i_d + we * L_Q * i_q) / L_D, (vq - R_S * i_q - we * (L_D * i_d + PSI)) / L_Q, torque / J_TOTAL]
+        torque = 1.5 * P_P * (PSI * i_q + (l_d - l_q) * i_d * i_q)
+        return [(vd - R_S * i_d + we * l_q * i_q) / l_d, (vq - R_S * i_q - we * (l_d * i_d + PSI)) / l_q, torque / J_TOTAL]
     x, t, out = [0.0, 0.0, 0.0], 0.0, {}
     while t < t_end - 1e-12:
         k1 = f(x)
@@ -130,6 +130,45 @@ assert len(sampled) > 100, "the free-spin check must compare many samples"
 check("PmsmFreeSpin", max(abs(r["motor.id"] - ref[round(r["time"], 6)][0]) for r in sampled), 1e-4, "d-axis current [A]")
 check("PmsmFreeSpin", max(abs(r["motor.iq"] - ref[round(r["time"], 6)][1]) for r in sampled), 1e-4, "q-axis current [A]")
 check("PmsmFreeSpin", max(abs(r["load.w"] - ref[round(r["time"], 6)][2]) for r in sampled), 1e-3, "shaft speed [rad/s]")
+
+
+# ThreePhaseBldcMotor, R = 0.5 ohm, L = 1 mH, flux 0.01 Wb, 4 pole pairs, 24 V link, rotor held at 0.3 rad
+# on duties 0.7 / 0.4 / 0.5. With the rotor held there is no back-EMF, so each phase current is a first-order
+# circuit driven by its leg voltage relative to the mean of the three (the isolated neutral takes the mean).
+R_B, L_B, PSI_B, VDC_B, THETA = 0.5, 1e-3, 0.01, 24.0, 4 * 0.3
+legs = [(0.7 - 0.5) * VDC_B, (0.4 - 0.5) * VDC_B, (0.5 - 0.5) * VDC_B]
+mean = sum(legs) / 3
+for name, trapezoid in (("BldcLockedSine", False), ("BldcLockedTrapezoid", True)):
+    rows = load(name)
+    for k, phase in enumerate("ABC"):
+        check(name, max(abs(r[f"motor.current{phase}"] - (legs[k] - mean) / R_B * (1 - math.exp(-R_B * r["time"] / L_B))) for r in rows), 1e-6, f"phase {phase} current [A]")
+
+    def shape(angle):
+        if trapezoid:
+            return max(-1.0, min(1.0, 6 / math.pi * math.asin(math.sin(angle))))
+        return math.sin(angle)
+
+    f = [shape(THETA), shape(THETA - 2 * math.pi / 3), shape(THETA + 2 * math.pi / 3)]
+    check(name, max(abs(r["motor.electricalTorque"] - PSI_B * 4 * sum(f[k] * (legs[k] - mean) / R_B * (1 - math.exp(-R_B * r["time"] / L_B)) for k in range(3))) for r in rows), 1e-6, "torque [N m]")
+
+# The sinusoidal phase model, driven by the same dq voltages (rotated to duties) as the dq model, must follow
+# the dq model's coupled equations: the independent integration above with equal inductances.
+rows = load("BldcFreeSpinSine")
+ref = pmsm_free_spin(-2, 10, 0.1, l_d=1.5e-3, l_q=1.5e-3)
+sampled = [r for r in rows if round(r["time"], 6) in ref and r["time"] > 0]
+assert len(sampled) > 100, "the phase-model check must compare many samples"
+
+
+def park(r):
+    theta = r["motor.electricalAngle"]
+    angles = (theta, theta - 2 * math.pi / 3, theta + 2 * math.pi / 3)
+    currents = (r["motor.currentA"], r["motor.currentB"], r["motor.currentC"])
+    return (-2 / 3 * sum(i * math.cos(a) for i, a in zip(currents, angles)), 2 / 3 * sum(i * math.sin(a) for i, a in zip(currents, angles)))
+
+
+check("BldcFreeSpinSine", max(abs(park(r)[0] - ref[round(r["time"], 6)][0]) for r in sampled), 1e-3, "d-axis current [A]")
+check("BldcFreeSpinSine", max(abs(park(r)[1] - ref[round(r["time"], 6)][1]) for r in sampled), 1e-3, "q-axis current [A]")
+check("BldcFreeSpinSine", max(abs(r["motor.rotorSpeed"] - ref[round(r["time"], 6)][2]) for r in sampled), 1e-2, "shaft speed [rad/s]")
 
 
 def driver(vrail=3.0, vdrive=3.0, rb=47000.0, rc=1000.0):

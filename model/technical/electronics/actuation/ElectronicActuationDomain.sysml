@@ -68,6 +68,29 @@ package Actuation {
     }
 
     part def BldcMotor :> DcMotor {
+        doc /*
+         * A star-connected brushless DC motor with an isolated neutral, modelled phase by phase
+         * and fed by an averaged three-phase inverter: each phase has a resistance, an
+         * inductance and a back-EMF that follows the rotor angle. `emfShape` selects the
+         * back-EMF waveform, 0 for sinusoidal or 1 for trapezoidal with 120 degree flat tops, so
+         * a simulation can compare field-oriented control with block commutation on the same
+         * motor. The Modelica class takes one duty-cycle input per phase (`dutyA`, `dutyB`,
+         * `dutyC`, 0 to 1, each the average of a half bridge on `dcLinkVoltage`) and offers the
+         * rotor angle and speed, the three phase currents and the air-gap torque as variables.
+         * Switching and its ripple are not modelled. With sinusoidal back-EMF it is equivalent
+         * to `PermanentMagnetSynchronousMotor` with equal direct and quadrature inductances.
+         * `electricalInput` is the architecture-level three-phase view and carries no Modelica.
+         */
+        @Elan8::PhysicalModeling::ModelicaModel {
+            className = "Elan8.Electronics.Actuation.ThreePhaseBldcMotor";
+        }
+        attribute phaseResistance : ResistanceValue;
+        attribute phaseInductance : InductanceValue;
+        attribute permanentMagnetFlux : MagneticFluxValue;
+        attribute polePairs : Real;
+        attribute emfShape : Real;
+        attribute rotorInertia : MomentOfInertiaValue;
+        attribute dcLinkVoltage : ElectricPotentialValue;
         port electricalInput : ~ThreePhaseDrivePort;
     }
 
