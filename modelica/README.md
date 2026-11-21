@@ -21,10 +21,25 @@ for the few the MSL has no class for.
 | `Translational::Spring` | `Modelica.Mechanics.Translational.Components.Spring` |
 | `Translational::Damper` | `Modelica.Mechanics.Translational.Components.Damper` |
 | `Translational::FixedSupport` | `Modelica.Mechanics.Translational.Components.Fixed` |
+| `Rotational::Inertia` | `Modelica.Mechanics.Rotational.Components.Inertia` |
+| `Rotational::TorsionalSpring` | `Modelica.Mechanics.Rotational.Components.Spring` |
+| `Rotational::TorsionalDamper` | `Modelica.Mechanics.Rotational.Components.Damper` |
+| `Rotational::RotationalFixedSupport` | `Modelica.Mechanics.Rotational.Components.Fixed` |
+| `Rotational::TorqueSource` | `Modelica.Mechanics.Rotational.Sources.ConstantTorque` |
+| `Drivetrain::Gearbox` | `Modelica.Mechanics.Rotational.Components.IdealGear` |
+| `Drivetrain::RollingWheel` | `Modelica.Mechanics.Rotational.Components.IdealRollingWheel` |
+| `Actuation::BrushedDcMotor` | `Elan8.Electronics.Actuation.BrushedDcMotor` (this directory) |
 
 Specializations use their supertype's binding: a `TantalumCapacitor` is a
 `Modelica.Electrical.Analog.Basic.Capacitor`. Parts without a binding, such as `Diode`
 (whose ratings are not the MSL diode's parameters), are not simulated.
+
+`BrushedDcMotor` has its own class because the MSL's DC machine is a loss and thermal model whose
+parameters are a datasheet's nominal point, not the plain resistance, inductance, torque constant
+and rotor inertia that sizing a drive starts from. The class composes MSL elements: a `Resistor`, an
+`Inductor`, a `RotationalEMF` and an `Inertia`. It is also the torque-level equivalent of a brushless
+or permanent-magnet synchronous motor under ideal commutation or field-oriented control; a model of
+the three phases themselves is not in the libraries yet.
 
 ## Initial values
 
