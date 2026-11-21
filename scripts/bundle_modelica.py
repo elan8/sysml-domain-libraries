@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 import zipfile
 from pathlib import Path
@@ -27,6 +28,14 @@ PROJECT_FILE = REPO_ROOT / ".project.json"
 PACKAGE = REPO_ROOT / "modelica" / "Elan8"
 LICENSE = REPO_ROOT / "LICENSE"
 TIMESTAMP = (2020, 1, 1, 0, 0, 0)
+
+
+def required_msl() -> str:
+    """The Standard Library version the package declares, the one place it is stated."""
+    found = re.search(r'uses\(Modelica\(version\s*=\s*"([0-9.]+)"\)\)', (PACKAGE / "package.mo").read_text(encoding="utf-8"))
+    if not found:
+        raise SystemExit(f"{PACKAGE / 'package.mo'} declares no uses(Modelica(version=...))")
+    return found.group(1)
 
 
 def members() -> list[tuple[str, Path]]:
@@ -81,7 +90,7 @@ def main() -> int:
     stem = project["name"].replace("-libraries", "")
     output = Path(args.output or f"{stem}-modelica-{version}.zip").resolve()
     count = write(output)
-    print(f"Wrote {output.name}: {count} files")
+    print(f"Wrote {output.name}: {count} files, for Modelica Standard Library {required_msl()}")
     return 0
 
 
