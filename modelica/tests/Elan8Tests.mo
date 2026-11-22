@@ -235,4 +235,70 @@ package Elan8Tests "Circuits of the classes the Elan8 part definitions bind to, 
     connect(body.flange_b, accelerationSensor.flange);
     annotation(experiment(StopTime = 1));
   end CommandedLinearMotion;
+
+  model StepperLockedRotor "StepperMotor with its rotor held 0.5 electrical rad from the zero of the field, on a field commanded at 0.8 rad and 1.5 A"
+    Elan8.Electronics.Actuation.StepperMotor motor(phaseResistance = 1.6, phaseInductance = 3.4e-3,
+      torqueConstant = 0.3, rotorTeeth = 50, rotorInertia = 5.7e-6, supplyVoltage = 24);
+    Modelica.Mechanics.Rotational.Components.Fixed rotorHold(phi0 = 0.01);
+  equation
+    motor.fieldAngle = 0.8;
+    motor.currentCommand = 1.5;
+    connect(motor.mechanicalOutput, rotorHold.flange);
+    annotation(experiment(StopTime = 5e-3));
+  end StepperLockedRotor;
+
+  model StepperOscillation "StepperMotor with a 4.3e-6 kg.m2 load, released at rest on a field commanded 0.02 electrical rad ahead: a small step"
+    Elan8.Electronics.Actuation.StepperMotor motor(phaseResistance = 1.6, phaseInductance = 3.4e-3,
+      torqueConstant = 0.3, rotorTeeth = 50, rotorInertia = 5.7e-6, supplyVoltage = 24);
+    Modelica.Mechanics.Rotational.Components.Inertia load(J = 4.3e-6);
+  equation
+    motor.fieldAngle = 0.02;
+    motor.currentCommand = 1.5;
+    connect(motor.mechanicalOutput, load.flange_a);
+    annotation(experiment(StopTime = 0.03));
+  end StepperOscillation;
+
+  model StepperTorqueSlow "StepperMotor turned at 20 rad/s with the field a quarter cycle ahead of the rotor (closed-loop commutation), on a supply that does not limit"
+    Elan8.Electronics.Actuation.StepperMotor motor(phaseResistance = 1.6, phaseInductance = 3.4e-3,
+      torqueConstant = 0.3, rotorTeeth = 50, rotorInertia = 5.7e-6, supplyVoltage = 1000);
+    Modelica.Mechanics.Rotational.Sources.ConstantSpeed drive(w_fixed = 20);
+  equation
+    motor.fieldAngle = 50 * motor.rotorAngle + Modelica.Constants.pi / 2;
+    motor.currentCommand = 1.5;
+    connect(motor.mechanicalOutput, drive.flange);
+    annotation(experiment(StopTime = 5e-3));
+  end StepperTorqueSlow;
+
+  model StepperTorqueFast "As StepperTorqueSlow at 60 rad/s, where the back-EMF is three times as large"
+    Elan8.Electronics.Actuation.StepperMotor motor(phaseResistance = 1.6, phaseInductance = 3.4e-3,
+      torqueConstant = 0.3, rotorTeeth = 50, rotorInertia = 5.7e-6, supplyVoltage = 1000);
+    Modelica.Mechanics.Rotational.Sources.ConstantSpeed drive(w_fixed = 60);
+  equation
+    motor.fieldAngle = 50 * motor.rotorAngle + Modelica.Constants.pi / 2;
+    motor.currentCommand = 1.5;
+    connect(motor.mechanicalOutput, drive.flange);
+    annotation(experiment(StopTime = 5e-3));
+  end StepperTorqueFast;
+
+  model StepperOpenLoopRun "StepperMotor on a 24 V supply with the field turning at 300 electrical rad/s from the first instant, a 4.3e-6 kg.m2 load: it pulls in, overshoots and settles into step"
+    Elan8.Electronics.Actuation.StepperMotor motor(phaseResistance = 1.6, phaseInductance = 3.4e-3,
+      torqueConstant = 0.3, rotorTeeth = 50, rotorInertia = 5.7e-6, supplyVoltage = 24);
+    Modelica.Mechanics.Rotational.Components.Inertia load(J = 4.3e-6);
+  equation
+    motor.fieldAngle = 300 * time;
+    motor.currentCommand = 1.5;
+    connect(motor.mechanicalOutput, load.flange_a);
+    annotation(experiment(StopTime = 0.05));
+  end StepperOpenLoopRun;
+
+  model StepperSaturated "StepperMotor on a 24 V supply turned at 100 rad/s, where the back-EMF (30 V) is more than the supply, with the field a quarter cycle ahead"
+    Elan8.Electronics.Actuation.StepperMotor motor(phaseResistance = 1.6, phaseInductance = 3.4e-3,
+      torqueConstant = 0.3, rotorTeeth = 50, rotorInertia = 5.7e-6, supplyVoltage = 24);
+    Modelica.Mechanics.Rotational.Sources.ConstantSpeed drive(w_fixed = 100);
+  equation
+    motor.fieldAngle = 50 * motor.rotorAngle + Modelica.Constants.pi / 2;
+    motor.currentCommand = 1.5;
+    connect(motor.mechanicalOutput, drive.flange);
+    annotation(experiment(StopTime = 5e-3));
+  end StepperSaturated;
 end Elan8Tests;

@@ -121,6 +121,33 @@ package Actuation {
     }
 
     part def StepperMotor :> Motor {
+        doc /*
+         * A two-phase hybrid stepper motor on two current-regulated full bridges, the way a
+         * microstepping driver feeds it. The Modelica class takes two inputs: `fieldAngle`, the
+         * electrical angle of the stator field in radians (a driver turns its step count into it,
+         * one full step being a quarter of a cycle), and `currentCommand`, the peak phase
+         * current. Each phase has a resistance, an inductance and a back-EMF that follows the
+         * rotor angle times `rotorTeeth`, and each bridge regulates its phase current with a gain
+         * of `chopperGain` volts per ampere of error, limited to `supplyVoltage`: the torque
+         * therefore falls with speed once the back-EMF and the inductance use up the supply.
+         * `detentTorque` is the cogging torque of the unpowered motor. The class offers the rotor
+         * angle and speed, the two phase currents and voltages and the air-gap torque as
+         * variables. Switching and its ripple are not modelled. A closed-loop stepper takes its
+         * `fieldAngle` from the rotor angle plus a quarter of a cycle; an open-loop one from the
+         * step count. `electricalInput` is the architecture-level two-phase view and carries no
+         * Modelica.
+         */
+        @Elan8::PhysicalModeling::ModelicaModel {
+            className = "Elan8.Electronics.Actuation.StepperMotor";
+        }
+        attribute phaseResistance : ResistanceValue;
+        attribute phaseInductance : InductanceValue;
+        attribute torqueConstant : TorqueConstantValue;
+        attribute rotorTeeth : Real;
+        attribute detentTorque : TorqueValue;
+        attribute rotorInertia : MomentOfInertiaValue;
+        attribute supplyVoltage : ElectricPotentialValue;
+        attribute chopperGain : Real;
         port electricalInput : ~TwoPhaseDrivePort;
     }
 

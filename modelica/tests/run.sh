@@ -53,6 +53,12 @@ sim PmsmFreeSpin 1e-4
 sim BldcLockedSine 1e-4
 sim BldcLockedTrapezoid 1e-4
 sim BldcFreeSpinSine 1e-4
+sim StepperLockedRotor 1e-5
+sim StepperOscillation 1e-5
+sim StepperTorqueSlow 1e-5
+sim StepperTorqueFast 1e-5
+sim StepperOpenLoopRun 1e-5
+sim StepperSaturated 1e-5
 sim TorsionalOscillator 0.01
 sim TorqueSpinUp 0.01
 sim ForceDrivenMass 0.01
