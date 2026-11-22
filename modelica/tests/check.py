@@ -216,5 +216,112 @@ rows = load("MassSpring")
 omega = math.sqrt(10 / 1)
 check("MassSpring", max(abs(r["s"] - 0.1 * math.cos(omega * r["time"])) for r in rows), 1e-6, "position [m]")
 
+# StepperMotor, R = 1.6 ohm, L = 3.4 mH, torque constant 0.3 N m/A, 50 rotor teeth, rotor inertia 5.7e-6 kg m2,
+# current regulation with a gain of 500 V/A on a 24 V supply, 1.5 A.
+R_T, L_T, KT, NR, J_T, KC, I_T = 1.6, 3.4e-3, 0.3, 50, 5.7e-6, 500.0, 1.5
+
+# With the rotor held at 0.5 electrical rad and the field at 0.8 rad, the regulated phase currents settle to
+# I (cos 0.8, sin 0.8) (the bridge adds the voltage drop of the reference, so there is no steady error), and the
+# torque is torque constant x I x sin(field angle - rotor angle).
+rows = [r for r in load("StepperLockedRotor") if r["time"] >= 2e-3]
+check("StepperLockedRotor", max(abs(r["motor.currentA"] - I_T * math.cos(0.8)) for r in rows), 1e-6, "phase A current [A]")
+check("StepperLockedRotor", max(abs(r["motor.currentB"] - I_T * math.sin(0.8)) for r in rows), 1e-6, "phase B current [A]")
+check("StepperLockedRotor", max(abs(r["motor.electricalTorque"] - KT * I_T * math.sin(0.8 - 0.5)) for r in rows), 1e-6, "holding torque [N m]")
+
+
+def stepper_reference(psi, load_inertia, supply, t_end, step=2e-6, amplitude=I_T):
+    """Classical fourth-order Runge-Kutta of the two phase currents, the rotor angle and speed, written here and not
+    taken from a simulator. `psi(t)` is the commanded field angle."""
+    j_total = J_T + load_inertia
+
+    def f(t, x):
+        i_a, i_b, theta, w = x
+        phi = NR * theta
+        ref_a, ref_b = amplitude * math.cos(psi(t)), amplitude * math.sin(psi(t))
+        v_a = max(-supply, min(supply, R_T * ref_a + KC * (ref_a - i_a)))
+        v_b = max(-supply, min(supply, R_T * ref_b + KC * (ref_b - i_b)))
+        torque = KT * (-i_a * math.sin(phi) + i_b * math.cos(phi))
+        return [(v_a - R_T * i_a + KT * w * math.sin(phi)) / L_T, (v_b - R_T * i_b - KT * w * math.cos(phi)) / L_T, w, torque / j_total]
+
+    x, t, out = [0.0, 0.0, 0.0, 0.0], 0.0, {}
+    while t < t_end - 1e-12:
+        k1 = f(t, x)
+        k2 = f(t + step / 2, [a + step / 2 * b for a, b in zip(x, k1)])
+        k3 = f(t + step / 2, [a + step / 2 * b for a, b in zip(x, k2)])
+        k4 = f(t + step, [a + step * b for a, b in zip(x, k3)])
+        x = [a + step / 6 * (b + 2 * c + 2 * d + e) for a, b, c, d, e in zip(x, k1, k2, k3, k4)]
+        t += step
+        out[round(t, 6)] = list(x)
+    return out
+
+
+# A small step of the field: torque = k (psi - p theta) with k = torque constant x I, so the rotor rings about its
+# new rest angle psi / p at sqrt(KT I p / J) rad/s, and the finite gain of the current regulation damps it with the
+# viscous coefficient KT^2 / (R + KC). The first peak is at pi / (damped frequency), the amplitude twice the step.
+rows = load("StepperOscillation")
+j_all = J_T + 4.3e-6
+w0 = math.sqrt(KT * I_T * NR / j_all)
+zeta = (KT ** 2 / (R_T + KC)) / (2 * math.sqrt(KT * I_T * NR * j_all))
+wd = w0 * math.sqrt(1 - zeta ** 2)
+rest = 0.02 / NR
+peak = max(rows, key=lambda r: r["load.phi"])
+check("StepperOscillation", abs(peak["time"] - math.pi / wd) / (math.pi / wd), 5e-3, "time of the first peak, relative")
+check("StepperOscillation", abs(peak["load.phi"] - rest * (1 + math.exp(-zeta * math.pi / math.sqrt(1 - zeta ** 2)))) / rest, 5e-3, "first peak over the rest angle, relative")
+ref = stepper_reference(lambda t: 0.02, 4.3e-6, 24, 0.03)
+sampled = [r for r in rows if round(r["time"], 6) in ref and r["time"] > 0]
+assert len(sampled) > 1000, "the oscillation check must compare many samples"
+check("StepperOscillation", max(abs(r["load.phi"] - ref[round(r["time"], 6)][2]) for r in sampled), 2e-7, "rotor angle against the integrated model [rad]")
+
+# Turned at a constant speed w with the field a quarter cycle ahead and no saturation, the regulated currents are
+# a phasor S e^(j p theta) with S (R + KC + j p w L) = j ((R + KC) I - KT w) (the bridge adds R x reference and KC x the
+# error), so the torque is KT ((R + KC) I - KT w) (R + KC) / ((R + KC)^2 + (p w L)^2).
+for name, w in (("StepperTorqueSlow", 20), ("StepperTorqueFast", 60)):
+    rows = [r for r in load(name) if r["time"] >= 1e-3]
+    drop = ((R_T + KC) * I_T - KT * w) * (R_T + KC) / ((R_T + KC) ** 2 + (NR * w * L_T) ** 2)
+    check(name, max(abs(r["motor.electricalTorque"] - KT * drop) for r in rows), 2e-4, "torque [N m]")
+    check(name, max(abs(r["motor.rotorSpeed"] - w) for r in rows), 1e-9, "speed [rad/s]")
+
+# The field turning at 300 electrical rad/s from rest on a 24 V supply: the integrated model includes the voltage
+# limit, and the rotor pulls in with a lag and overshoot before it runs in step.
+rows = load("StepperOpenLoopRun")
+ref = stepper_reference(lambda t: 300 * t, 4.3e-6, 24, 0.05)
+sampled = [r for r in rows if round(r["time"], 6) in ref and r["time"] > 0]
+assert len(sampled) > 1000, "the open-loop run must compare many samples"
+check("StepperOpenLoopRun", max(abs(r["load.phi"] - ref[round(r["time"], 6)][2]) for r in sampled), 2e-6, "rotor angle against the integrated model [rad]")
+check("StepperOpenLoopRun", max(abs(r["motor.currentA"] - ref[round(r["time"], 6)][0]) for r in sampled), 5e-3, "phase A current against the integrated model [A]")
+
+# At 100 rad/s the back-EMF (30 V) and the inductive drop (p w L I = 25 V) exceed the 24 V supply, so the current
+# cannot follow: the torque is a fraction of what the regulation would give. The reference integrates the two phase
+# currents alone with the rotor angle forced to w t and the field a quarter cycle ahead, saturating at the supply.
+def stepper_forced(w, supply, t_end, step=2e-6):
+    def f(t, x):
+        i_a, i_b = x
+        phi = NR * w * t
+        ref_a, ref_b = I_T * math.cos(phi + math.pi / 2), I_T * math.sin(phi + math.pi / 2)
+        v_a = max(-supply, min(supply, R_T * ref_a + KC * (ref_a - i_a)))
+        v_b = max(-supply, min(supply, R_T * ref_b + KC * (ref_b - i_b)))
+        return [(v_a - R_T * i_a + KT * w * math.sin(phi)) / L_T, (v_b - R_T * i_b - KT * w * math.cos(phi)) / L_T]
+
+    x, t, torques = [0.0, 0.0], 0.0, []
+    while t < t_end - 1e-12:
+        k1 = f(t, x)
+        k2 = f(t + step / 2, [a + step / 2 * b for a, b in zip(x, k1)])
+        k3 = f(t + step / 2, [a + step / 2 * b for a, b in zip(x, k2)])
+        k4 = f(t + step, [a + step * b for a, b in zip(x, k3)])
+        x = [a + step / 6 * (b + 2 * c + 2 * d) + step / 6 * e for a, b, c, d, e in zip(x, k1, k2, k3, k4)]
+        t += step
+        phi = NR * w * t
+        torques.append((t, KT * (-x[0] * math.sin(phi) + x[1] * math.cos(phi))))
+    return torques
+
+
+rows = [r for r in load("StepperSaturated") if r["time"] >= 2e-3]
+saturated = sum(r["motor.electricalTorque"] for r in rows) / len(rows)
+ref = [torque for t, torque in stepper_forced(100, 24, 5e-3) if t >= 2e-3]
+unsaturated = KT * ((R_T + KC) * I_T - KT * 100) * (R_T + KC) / ((R_T + KC) ** 2 + (NR * 100 * L_T) ** 2)
+check("StepperSaturated", abs(saturated - sum(ref) / len(ref)), 1e-3, "mean torque against the integrated model [N m]")
+check("StepperSaturated", 0.0 if saturated < 0.5 * unsaturated else 1.0, 0.5, "torque is less than half the unsaturated one (0 = yes)")
+check("StepperSaturated", 0.0 if all(abs(r["motor.voltageA"]) <= 24 + 1e-9 and abs(r["motor.voltageB"]) <= 24 + 1e-9 for r in rows) else 1.0, 0.5, "bridge voltages stay within the supply (0 = yes)")
+
 print(f"{sum(results)}/{len(results)} checks pass")
 sys.exit(0 if all(results) else 1)
