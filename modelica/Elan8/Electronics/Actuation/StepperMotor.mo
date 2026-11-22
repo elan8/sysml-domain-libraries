@@ -7,7 +7,7 @@ model StepperMotor "Elan8::Electronics::Actuation::StepperMotor: two-phase hybri
   parameter Modelica.Units.SI.Torque detentTorque = 0 "SysML: detentTorque. Peak torque with the windings unpowered, four periods per electrical cycle";
   parameter Modelica.Units.SI.Inertia rotorInertia "SysML: rotorInertia";
   parameter Modelica.Units.SI.Voltage supplyVoltage "SysML: supplyVoltage. Of the two full bridges";
-  parameter Real chopperGain(unit = "V/A") = 500 "SysML: chopperGain. Gain of the current regulation: the bridge voltage per ampere of current error, before it saturates at the supply";
+  parameter Modelica.Units.SI.Resistance chopperGain = 500 "SysML: chopperGain. Gain of the current regulation, a transresistance: the bridge voltage per ampere of current error, before it saturates at the supply";
   Modelica.Mechanics.Rotational.Interfaces.Flange_b mechanicalOutput "SysML: mechanicalOutput";
   input Real fieldAngle(unit = "rad") "Electrical angle of the stator field the driver commands; one full step is a quarter of a cycle";
   input Real currentCommand(unit = "A") "Peak phase current the driver regulates to";

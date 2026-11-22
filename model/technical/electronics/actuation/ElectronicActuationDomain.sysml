@@ -128,7 +128,7 @@ package Actuation {
          * one full step being a quarter of a cycle), and `currentCommand`, the peak phase
          * current. Each phase has a resistance, an inductance and a back-EMF that follows the
          * rotor angle times `rotorTeeth`, and each bridge regulates its phase current with a gain
-         * of `chopperGain` volts per ampere of error, limited to `supplyVoltage`: the torque
+         * of `chopperGain` (volts per ampere of error, so in ohms), limited to `supplyVoltage`: the torque
          * therefore falls with speed once the back-EMF and the inductance use up the supply.
          * `detentTorque` is the cogging torque of the unpowered motor. The class offers the rotor
          * angle and speed, the two phase currents and voltages and the air-gap torque as
@@ -147,7 +147,7 @@ package Actuation {
         attribute detentTorque : TorqueValue;
         attribute rotorInertia : MomentOfInertiaValue;
         attribute supplyVoltage : ElectricPotentialValue;
-        attribute chopperGain : Real;
+        attribute chopperGain : ResistanceValue;
         port electricalInput : ~TwoPhaseDrivePort;
     }
 
